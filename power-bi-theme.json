@@ -1,0 +1,150 @@
+{
+  "name": "FRT Dashboard Theme - Exact Match",
+  "dataColors": [
+    "#0078D4",
+    "#FF8C00",
+    "#107C10",
+    "#D13438",
+    "#8764B8",
+    "#FFB900",
+    "#00BCF2",
+    "#E3008C"
+  ],
+  "background": "#FAF9F8",
+  "foreground": "#323130",
+  "tableAccent": "#0078D4",
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            }
+          }
+        ],
+        "border": [
+          {
+            "color": {
+              "solid": {
+                "color": "#EDEBE9"
+              }
+            },
+            "show": true,
+            "radius": 4
+          }
+        ],
+        "shadow": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "rgba(0, 0, 0, 0.13)"
+              }
+            },
+            "blur": 3.6,
+            "offsetX": 0,
+            "offsetY": 1.6
+          }
+        ]
+      }
+    },
+    "card": {
+      "*": {
+        "calloutValueFontSize": 24,
+        "calloutValueFontWeight": "Semibold",
+        "calloutValueColor": {
+          "solid": {
+            "color": "#323130"
+          }
+        },
+        "categoryLabelFontSize": 9,
+        "categoryLabelFontWeight": "Semibold",
+        "categoryLabelColor": {
+          "solid": {
+            "color": "#605E5C"
+          }
+        },
+        "cardPadding": 12
+      }
+    },
+    "tableEx": {
+      "*": {
+        "grid": [
+          {
+            "showVerticalGridlines": false,
+            "showHorizontalGridlines": true,
+            "rowPadding": 0,
+            "outlineColor": {
+              "solid": {
+                "color": "#F3F2F1"
+              }
+            },
+            "outlineWeight": 1
+          }
+        ],
+        "header": [
+          {
+            "fontSize": 9,
+            "fontWeight": "Semibold",
+            "fontColor": {
+              "solid": {
+                "color": "#323130"
+              }
+            },
+            "background": "#FAF9F8",
+            "outline": "Bottom",
+            "outlineColor": {
+              "solid": {
+                "color": "#EDEBE9"
+              }
+            },
+            "outlineWeight": 2
+          }
+        ],
+        "values": [
+          {
+            "fontSize": 10,
+            "fontColor": {
+              "solid": {
+                "color": "#323130"
+              }
+            }
+          }
+        ],
+        "total": [
+          {
+            "fontSize": 10,
+            "fontWeight": "Semibold",
+            "background": "#FAF9F8"
+          }
+        ]
+      }
+    },
+    "slicer": {
+      "*": {
+        "*": {
+          "items": [
+            {
+              "fontSize": 10,
+              "fontWeight": "Medium"
+            }
+          ],
+          "selectedItemColor": {
+            "solid": {
+              "color": "#0078D4"
+            }
+          },
+          "unselectedItemColor": {
+            "solid": {
+              "color": "#FAF9F8"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

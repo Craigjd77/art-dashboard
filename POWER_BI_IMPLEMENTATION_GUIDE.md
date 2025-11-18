@@ -1,21 +1,63 @@
 # Power BI Implementation Guide
 ## FRT Work Tools Dashboard - Step-by-Step Build Instructions
 
-This guide walks you through recreating the HTML dashboard visuals in Power BI Desktop.
+This guide walks you through recreating the HTML dashboard visuals in Power BI Desktop **to match exactly** what you see in the HTML version.
+
+**Goal**: Build Power BI reports that look identical to the HTML dashboard for client presentations and as a reference for Power BI development.
 
 ---
 
 ## Table of Contents
-1. [Setup & Data Model](#setup--data-model)
-2. [KPI Cards](#kpi-cards)
-3. [New Opt-in Opportunities Table](#new-opt-in-opportunities-table)
-4. [Document Tracking Table](#document-tracking-table)
-5. [Charts (Donut & Bar)](#charts-donut--bar)
-6. [Filtering & Slicers](#filtering--slicers)
-7. [Conditional Formatting & Risk Colors](#conditional-formatting--risk-colors)
-8. [Styling & Theme](#styling--theme)
-9. [Export Functionality](#export-functionality)
-10. [Case Details Page](#case-details-page)
+1. [Visual Reference - Exact Match Checklist](#visual-reference---exact-match-checklist)
+2. [Setup & Data Model](#setup--data-model)
+3. [KPI Cards - Exact Styling](#kpi-cards---exact-styling)
+4. [New Opt-in Opportunities Table - Pixel Perfect](#new-opt-in-opportunities-table---pixel-perfect)
+5. [Document Tracking Table](#document-tracking-table)
+6. [Charts (Donut & Bar) - Exact Colors](#charts-donut--bar---exact-colors)
+7. [Filtering & Slicers](#filtering--slicers)
+8. [Conditional Formatting & Risk Colors](#conditional-formatting--risk-colors)
+9. [Styling & Theme JSON](#styling--theme-json)
+10. [Export Functionality](#export-functionality)
+11. [Case Details Page](#case-details-page)
+12. [Layout & Spacing - Exact Measurements](#layout--spacing---exact-measurements)
+
+---
+
+## Visual Reference - Exact Match Checklist
+
+Before building, reference the HTML dashboard to match:
+
+### Page Layout
+- [ ] Header: Blue gradient (#0078D4 to #005A9E), 48px height
+- [ ] Navigation tabs: White background, 40px height, blue underline for active
+- [ ] Main container: 12px padding, 12px gap between cards
+- [ ] Left sidebar: 280px width
+- [ ] Cards: 4px border radius, white background, subtle shadow
+- [ ] Footer: 28px height, white background
+
+### KPI Cards (Top Row)
+- [ ] **Total Organizer Damages**: Blue gradient background, white text, 24px value
+- [ ] **New Opportunities**: White background, orange left border (4px), orange value
+- [ ] **Recoveries**: White background, standard styling
+- [ ] **Disbursements**: White background, green left border (4px), green value
+- [ ] All cards: 12px padding, 110px min height
+
+### New Opt-in Opportunities Section
+- [ ] White card (NOT yellow/orange background)
+- [ ] Blue left border (4px solid #0078D4)
+- [ ] Header with icon, title, subtitle, and badge
+- [ ] Filter badges: Pill-shaped, blue when active
+- [ ] Table with priority dots, risk-colored country badges
+- [ ] Days Until Deadline column with color coding
+- [ ] Export and Print buttons in header
+
+### Typography
+- [ ] Font: Segoe UI (or closest Power BI equivalent)
+- [ ] Card titles: 11-13px, Semibold
+- [ ] Table headers: 9px, Uppercase, Semibold
+- [ ] Table data: 10px
+- [ ] KPI values: 24px, Semibold
+- [ ] KPI labels: 9px, Uppercase
 
 ---
 
@@ -82,39 +124,80 @@ SWITCH(
 
 ---
 
-## KPI Cards
+## KPI Cards - Exact Styling
 
 ### Creating KPI Cards
 
 1. **Insert → Card visual**
 2. Drag measure to the **Fields** well
-3. Format the card:
-   - **Visualizations pane → Format visual**
-   - **Card**: Turn on "Category label"
-   - **Callout value**: 
-     - Font size: 24px
-     - Font weight: Semibold
-   - **Category label**:
-     - Font size: 9px
-     - Text: "Total Organizer Damages" (or your label)
-     - Uppercase: ON
-   - **Background**: White (#FFFFFF)
-   - **Border**: 1px solid #EDEBE9
-   - **Border radius**: 4px
+3. Format the card to match exactly:
 
-### Featured KPI Card (Blue Gradient)
+**General Settings**:
+- **Visualizations pane → Format visual → General**
+- **Width**: Auto (or set to match grid)
+- **Height**: 110px minimum
+- **Position X/Y**: Align in 4-column grid
+- **Background**: #FFFFFF
+- **Border**: 
+  - Show: ON
+  - Color: #EDEBE9
+  - Width: 1px
+  - Style: Solid
+- **Border radius**: 4px (top-left, top-right, bottom-right, bottom-left)
+- **Shadow**: 
+  - Show: ON
+  - Color: rgba(0, 0, 0, 0.13)
+  - Blur: 3.6px
+  - X offset: 0px
+  - Y offset: 1.6px
+
+**Callout Value**:
+- **Format → Callout value**
+- Font family: Segoe UI
+- Font size: **24px**
+- Font weight: **Semibold**
+- Font color: #323130 (or white for featured card)
+- Horizontal alignment: Center
+- Vertical alignment: Center
+
+**Category Label**:
+- **Format → Category label**
+- Show: ON
+- Font family: Segoe UI
+- Font size: **9px**
+- Font weight: **Semibold**
+- Font color: #605E5C
+- Text: "TOTAL ORGANIZER DAMAGES" (uppercase)
+- Horizontal alignment: Center
+- Letter spacing: 0.5px
+
+**Subtitle/Description** (if using):
+- Font size: 9px
+- Font color: #605E5C
+- Position: Below value
+
+### Featured KPI Card (Blue Gradient) - Exact Match
 
 1. Create card as above
-2. **Format visual → Visual**:
-   - **Background**: Gradient
-   - **Color 1**: #0078D4
-   - **Color 2**: #005A9E
-   - **Direction**: Diagonal (135°)
+2. **Format visual → Visual → Background**:
+   - **Style**: Gradient
+   - **Color 1**: #0078D4 (top-left)
+   - **Color 2**: #005A9E (bottom-right)
+   - **Direction**: 135° (diagonal from top-left to bottom-right)
+   - **Border**: None (remove border for gradient card)
 3. **Callout value**:
-   - Font color: White
+   - Font color: #FFFFFF (white)
    - Font size: 24px
+   - Font weight: Semibold
 4. **Category label**:
-   - Font color: White (90% opacity)
+   - Font color: #FFFFFF (white, 90% opacity)
+   - Font size: 9px
+   - Uppercase: ON
+5. **Shadow** (for gradient card):
+   - Show: ON
+   - Color: rgba(0, 120, 212, 0.3) - Blue shadow
+   - Blur: 8px
+   - Y offset: 2px
 
 ### Measures for KPI Cards
 
@@ -152,73 +235,179 @@ CALCULATE(
 
 ---
 
-## New Opt-in Opportunities Table
+## New Opt-in Opportunities Table - Pixel Perfect
 
 ### Building the Table
 
 1. **Insert → Table visual**
-2. Add columns in this order:
-   - Priority (calculated column)
+2. Add columns in this exact order:
+   - Priority indicator (calculated column - dot icon)
    - Case Name
    - Country
    - Organizer Damages (measure)
    - Deadline Date
    - Days Until Deadline (calculated column)
    - Claim Status
-   - Action (placeholder text column)
+   - Action (button or text)
+
+### Exact Formatting to Match HTML
+
+**General Table Settings**:
+- **Format → General**:
+  - Background: #FFFFFF
+  - Border: 
+    - Show: ON
+    - Color: #EDEBE9
+    - Width: 1px
+  - Border radius: 4px (all corners)
+  - Shadow: Same as cards (subtle)
+  - Padding: 16px (outer padding)
+
+**Header Row**:
+- **Format → Column headers**:
+  - Font family: Segoe UI
+  - Font size: **9px**
+  - Font weight: **Semibold**
+  - Font color: #323130
+  - Background: #FAF9F8 (light gray gradient)
+  - Text transform: **UPPERCASE**
+  - Letter spacing: 0.5px
+  - Padding: 8px vertical, 10px horizontal
+  - Border bottom: 2px solid #EDEBE9
+
+**Data Rows**:
+- **Format → Values**:
+  - Font family: Segoe UI
+  - Font size: **10px**
+  - Font color: #323130
+  - Padding: 8px vertical, 10px horizontal
+  - Row padding: 0px (tight spacing)
+  - Border bottom: 1px solid #F3F2F1 (very light gray)
+  - Row height: Auto (compact)
+
+**Left Border (Risk Color)**:
+- Power BI doesn't support per-row left borders directly
+- **Workaround**: Use conditional formatting on a thin first column
+- Create a measure that returns the risk color
+- Apply as background color to first column (30px width)
+- Or use a calculated column with Unicode/icon for visual indicator
 
 ### Conditional Formatting
 
-**Priority Column**:
-1. Select Priority column
-2. **Format → Conditional formatting → Background color**
-3. Use rules:
-   - "High" → #D13438 (Red)
-   - "Medium" → #FF8C00 (Orange)
-   - "Low" → #107C10 (Green)
-
-**Country Column**:
-1. Select Country column
-2. **Format → Conditional formatting → Background color**
-3. Use field value: `Risk Level` from Case Lookup
-4. Rules:
-   - "Low" → #E8F5E9 (Light Green)
-   - "Medium" → #FFF4E5 (Light Amber)
-   - "High" → #FFEBEE (Light Red)
-
-**Days Until Deadline Column**:
-1. Select Days Until Deadline column
-2. **Format → Conditional formatting → Font color**
-3. Use rules:
-   - If < 0 → #D13438 (Red, Bold)
-   - If < 30 → #FF8C00 (Orange, Bold)
-   - If < 90 → #FF8C00 (Orange)
-   - Else → Default
-
-**Row Border (Left)**:
-1. **Format → Style → Row headers**
-2. Use conditional formatting on row background
-3. Create measure for border color:
+**Priority Column (Dot Indicator)**:
+1. Create calculated column for priority dot:
 ```DAX
-Row Border Color = 
+Priority Dot = 
 SWITCH(
-    RELATED('Case Lookup'[Risk Level]),
-    "Low", "#107C10",
-    "High", "#D13438",
-    "#FF8C00"
+    [Priority],
+    "High", "●",
+    "Medium", "●",
+    "Low", "●",
+    ""
 )
 ```
 
-### Filtering with Slicers
+2. Format Priority column:
+   - Font size: 12px
+   - Font family: Segoe UI Symbol
+   - Conditional formatting → Font color:
+     - "High" → #D13438 (Red)
+     - "Medium" → #FF8C00 (Orange)
+     - "Low" → #107C10 (Green)
+   - Horizontal alignment: Center
+   - Column width: 30px
+
+**Country Column (Badge Style)**:
+1. Select Country column
+2. **Format → Values**:
+   - Font size: 9px
+   - Font weight: Semibold
+   - Horizontal alignment: Center
+3. **Conditional formatting → Background color**:
+   - Use field value: `Risk Level` from Case Lookup
+   - Rules:
+     - "Low" → #E8F5E9 (Light Green)
+     - "Medium" → #FFF4E5 (Light Amber)
+     - "High" → #FFEBEE (Light Red)
+4. **Conditional formatting → Font color**:
+   - Use field value: `Risk Level`
+   - Rules:
+     - "Low" → #107C10 (Dark Green)
+     - "Medium" → #FF8C00 (Orange)
+     - "High" → #D13438 (Red)
+5. **Cell elements → Padding**:
+   - Top: 2px
+   - Bottom: 2px
+   - Left: 8px
+   - Right: 8px
+   - This creates the "badge" look with padding
+
+**Days Until Deadline Column**:
+1. Select Days Until Deadline column
+2. **Format → Values**:
+   - Font size: 10px
+   - Horizontal alignment: Left
+3. **Conditional formatting → Font color**:
+   - Use rules based on value:
+     - If value < 0 → #D13438 (Red)
+     - If value < 30 → #FF8C00 (Orange)
+     - If value < 90 → #FF8C00 (Orange, lighter)
+     - Else → #323130 (Default)
+4. **Conditional formatting → Font weight**:
+   - If value < 0 → Bold
+   - If value < 30 → Semibold
+   - Else → Regular
+5. Create calculated column for display text:
+```DAX
+Days Until Deadline Display = 
+VAR Days = [Days Until Deadline]
+RETURN
+IF(
+    Days < 0,
+    "OVERDUE (" & ABS(Days) & " days)",
+    Days & " days"
+)
+```
+
+**Row Border (Left) - Workaround**:
+Power BI doesn't support per-row left borders. Use one of these methods:
+
+**Method 1: First Column as Border Indicator**
+1. Add a thin (8px width) first column
+2. Use conditional formatting for background color based on risk
+3. This creates the visual effect of a left border
+
+**Method 2: Use Icons Column**
+1. Create an icon column (8px width)
+2. Use Unicode characters or icons
+3. Color code based on risk level
+
+**Method 3: Row Striping with Risk Colors**
+1. Use conditional formatting on entire row background
+2. Very subtle background tint based on risk
+3. Less prominent but still visible
+
+### Filtering with Slicers - Exact Match
 
 1. **Insert → Slicer**
 2. Add "Claim Status" field
-3. Format as **Buttons**:
+3. Format as **Buttons** to match filter badges:
    - **Format → Slicer settings → Style → Tiles**
    - **Items**: Horizontal
-   - **Font size**: 11px
-   - **Selected**: Blue background (#0078D4)
-   - **Unselected**: White with border
+   - **Font family**: Segoe UI
+   - **Font size**: 10px
+   - **Font weight**: Medium (500)
+   - **Selected**: 
+     - Background: #0078D4 (Blue)
+     - Font color: White
+     - Border: None
+   - **Unselected**: 
+     - Background: #FAF9F8 (Light gray)
+     - Font color: #605E5C
+     - Border: 1px solid #EDEBE9
+   - **Border radius**: 12px (pill shape)
+   - **Padding**: 4px vertical, 10px horizontal
+   - **Spacing**: 8px between items
 
 ---
 
@@ -369,7 +558,46 @@ SWITCH(
 
 ---
 
-## Styling & Theme
+## Layout & Spacing - Exact Measurements
+
+### Page Layout Settings
+
+**Main Container**:
+- **View → Page size → Custom**
+- Width: 1920px (or your screen width)
+- Height: Auto
+- **View → Gridlines**: Turn ON for alignment
+- **View → Snap to grid**: Turn ON
+- Grid size: 8px (matches our 8px gap)
+
+**Card Spacing**:
+- Gap between cards: **12px**
+- Card padding: **12px** (or 16px for larger cards)
+- Card border radius: **4px**
+
+**Table Spacing**:
+- Header padding: 8px vertical, 10px horizontal
+- Cell padding: 8px vertical, 10px horizontal
+- Row height: Auto (compact)
+
+### KPI Dashboard Layout
+
+1. Create 4 KPI cards
+2. **Format → General → Position**:
+   - Arrange in a row
+   - Equal widths (divide page width by 4, minus gaps)
+   - Gap between: 12px
+   - Align top edges
+
+### Section Spacing
+
+- Section title margin bottom: 12px
+- Table margin top: 8px
+- Filter controls margin bottom: 12px
+
+---
+
+## Styling & Theme JSON
 
 ### Creating Custom Theme JSON
 
@@ -378,12 +606,12 @@ SWITCH(
 
 ```json
 {
-  "name": "FRT Dashboard Theme",
+  "name": "FRT Dashboard Theme - Exact Match",
   "dataColors": [
     "#0078D4",  // Primary Blue
-    "#FF8C00",  // Orange
-    "#107C10",  // Green
-    "#D13438",  // Red
+    "#FF8C00",  // Orange (Medium Risk)
+    "#107C10",  // Green (Low Risk)
+    "#D13438",  // Red (High Risk)
     "#8764B8",  // Purple
     "#FFB900",  // Yellow
     "#00BCF2",  // Teal
@@ -414,14 +642,39 @@ SWITCH(
             "show": true,
             "radius": 4
           }
+        ],
+        "shadow": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "rgba(0, 0, 0, 0.13)"
+              }
+            },
+            "blur": 3.6,
+            "offsetX": 0,
+            "offsetY": 1.6
+          }
         ]
       }
     },
     "card": {
       "*": {
         "calloutValueFontSize": 24,
+        "calloutValueFontWeight": "Semibold",
+        "calloutValueColor": {
+          "solid": {
+            "color": "#323130"
+          }
+        },
         "categoryLabelFontSize": 9,
-        "categoryLabelFontWeight": "Semibold"
+        "categoryLabelFontWeight": "Semibold",
+        "categoryLabelColor": {
+          "solid": {
+            "color": "#605E5C"
+          }
+        },
+        "cardPadding": 12
       }
     },
     "tableEx": {
@@ -430,21 +683,73 @@ SWITCH(
           {
             "showVerticalGridlines": false,
             "showHorizontalGridlines": true,
-            "rowPadding": 8
+            "rowPadding": 0,
+            "outlineColor": {
+              "solid": {
+                "color": "#F3F2F1"
+              }
+            },
+            "outlineWeight": 1
           }
         ],
         "header": [
           {
             "fontSize": 9,
             "fontWeight": "Semibold",
-            "background": "#FAF9F8"
+            "fontColor": {
+              "solid": {
+                "color": "#323130"
+              }
+            },
+            "background": "#FAF9F8",
+            "outline": "Bottom",
+            "outlineColor": {
+              "solid": {
+                "color": "#EDEBE9"
+              }
+            },
+            "outlineWeight": 2
           }
         ],
         "values": [
           {
-            "fontSize": 10
+            "fontSize": 10,
+            "fontColor": {
+              "solid": {
+                "color": "#323130"
+              }
+            }
+          }
+        ],
+        "total": [
+          {
+            "fontSize": 10,
+            "fontWeight": "Semibold",
+            "background": "#FAF9F8"
           }
         ]
+      }
+    },
+    "slicer": {
+      "*": {
+        "*": {
+          "items": [
+            {
+              "fontSize": 10,
+              "fontWeight": "Medium"
+            }
+          ],
+          "selectedItemColor": {
+            "solid": {
+              "color": "#0078D4"
+            }
+          },
+          "unselectedItemColor": {
+            "solid": {
+              "color": "#FAF9F8"
+            }
+          }
+        }
       }
     }
   }
@@ -521,28 +826,58 @@ Format each with conditional color:
 
 ---
 
-## Pro Tips
+## Pro Tips for Exact Match
 
 ### 1. Use Bookmarks for Filter States
 - Create bookmarks for common filter combinations
 - Add buttons to jump to bookmarks
+- Style buttons to match export buttons (transparent with border)
 
 ### 2. Tooltips
 - Create tooltip pages for detailed information
 - Hover over visuals to see details
+- Match tooltip styling to card styling
 
 ### 3. Buttons for Navigation
 - Use buttons to navigate between pages
-- Style buttons to match your theme
+- Style buttons to match export buttons:
+  - Background: Transparent
+  - Border: 1px solid #EDEBE9
+  - Font size: 10px
+  - Padding: 6px 12px
+  - Border radius: 2px
 
-### 4. Mobile Layout
-- Create separate mobile-optimized pages
-- Use **View → Mobile layout** to design
+### 4. Export Buttons (Power BI Service)
+- In Power BI Service, add **Action buttons**
+- Link to export functionality
+- Style to match HTML export buttons
 
-### 5. Performance
+### 5. Print Layout
+- **File → Print**
+- Set page size to match your needs
+- Hide navigation elements in print view
+- Use **View → Page view** to preview
+
+### 6. Matching Fonts
+- Power BI uses Segoe UI by default (perfect match!)
+- If different, go to **View → Themes → Customize → Text font**
+- Set to: Segoe UI
+
+### 7. Exact Color Matching
+- Use the hex codes provided in this guide
+- Test colors side-by-side with HTML version
+- Use Power BI's color picker with hex input
+
+### 8. Spacing Consistency
+- Use gridlines (View → Gridlines) for alignment
+- Set grid to 8px or 12px to match HTML gaps
+- Snap visuals to grid for consistent spacing
+
+### 9. Performance Optimization
 - Use aggregations for large datasets
 - Limit visuals per page (max 8-10)
 - Use DirectQuery for real-time data
+- Hide unused visuals to improve load time
 
 ---
 
