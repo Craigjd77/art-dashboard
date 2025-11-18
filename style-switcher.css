@@ -1,0 +1,210 @@
+/* Style Switcher Panel */
+#styleSwitcher {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10000;
+}
+
+.style-switcher-toggle {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: var(--pbi-primary);
+    color: white;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 4px 0 0 4px;
+    box-shadow: -2px 0 8px rgba(0,0,0,0.15);
+    transition: all 0.3s;
+}
+
+.style-switcher-toggle:hover {
+    background: var(--pbi-primary-dark);
+    width: 52px;
+}
+
+.style-switcher-toggle i {
+    font-size: 20px;
+}
+
+.style-switcher-panel {
+    position: absolute;
+    right: -400px;
+    top: 0;
+    width: 380px;
+    max-height: 90vh;
+    background: var(--pbi-card-bg);
+    box-shadow: -4px 0 16px rgba(0,0,0,0.2);
+    border-radius: 4px 0 0 4px;
+    transition: right 0.3s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.style-switcher-panel.open {
+    right: 48px;
+}
+
+.style-switcher-header {
+    background: var(--pbi-primary);
+    color: white;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.style-switcher-header h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.close-btn {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 2px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+}
+
+.close-btn:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+.style-switcher-content {
+    padding: 16px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.style-section {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--pbi-border-light);
+}
+
+.style-section:last-child {
+    border-bottom: none;
+}
+
+.style-section h4 {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--pbi-text-primary);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.style-control {
+    margin-bottom: 12px;
+}
+
+.style-control label {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--pbi-text-secondary);
+    margin-bottom: 6px;
+}
+
+.style-control input[type="color"] {
+    width: 60px;
+    height: 32px;
+    border: 1px solid var(--pbi-border);
+    border-radius: 2px;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+.style-control input[type="text"].color-text {
+    width: calc(100% - 76px);
+    padding: 6px 8px;
+    border: 1px solid var(--pbi-border);
+    border-radius: 2px;
+    font-size: 11px;
+    font-family: monospace;
+}
+
+.style-control input[type="range"] {
+    width: calc(100% - 60px);
+    margin-right: 8px;
+}
+
+.style-control select {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid var(--pbi-border);
+    border-radius: 2px;
+    font-size: 12px;
+    font-family: inherit;
+    background: var(--pbi-card-bg);
+    color: var(--pbi-text-primary);
+}
+
+.style-control span {
+    font-size: 11px;
+    color: var(--pbi-text-secondary);
+    font-weight: 500;
+    min-width: 50px;
+    display: inline-block;
+}
+
+.action-btn {
+    width: 100%;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    background: var(--pbi-primary);
+    color: white;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: background 0.15s;
+    font-family: inherit;
+}
+
+.action-btn:hover {
+    background: var(--pbi-primary-dark);
+}
+
+.action-btn#resetStyles:hover {
+    background: #a4262c;
+}
+
+.action-btn:last-child {
+    margin-bottom: 0;
+}
+
+/* Scrollbar for style switcher */
+.style-switcher-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.style-switcher-content::-webkit-scrollbar-track {
+    background: var(--pbi-background);
+}
+
+.style-switcher-content::-webkit-scrollbar-thumb {
+    background: var(--pbi-border);
+    border-radius: 3px;
+}
+

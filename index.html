@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRT Work Tools Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #323130;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #605e5c;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .dashboard-links {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .dashboard-link {
+            display: block;
+            padding: 20px;
+            background: #f3f2f1;
+            border: 2px solid transparent;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #323130;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .dashboard-link:hover {
+            background: #e1dfdd;
+            border-color: #0078d4;
+            transform: translateX(4px);
+        }
+
+        .dashboard-link i {
+            margin-right: 12px;
+            color: #0078d4;
+        }
+
+        .coming-soon {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .coming-soon:hover {
+            transform: none;
+            border-color: transparent;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>FRT Work Tools Dashboard</h1>
+        <p class="subtitle">Financial Recovery Technologies LLC - Dashboard Sandbox</p>
+        
+        <div class="dashboard-links">
+            <a href="opt-in-monitoring.html" class="dashboard-link">
+                <i class="fas fa-chart-pie"></i>
+                Client Opt-in Monitoring
+            </a>
+            <a href="eligibility-filings.html" class="dashboard-link">
+                <i class="fas fa-file-invoice"></i>
+                Eligibility & Filings
+            </a>
+        </div>
+    </div>
+</body>
+</html>

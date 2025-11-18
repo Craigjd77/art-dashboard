@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Non-US Opt-in/Group Monitoring | FRT Work Tools</title>
+    
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Shared Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style-switcher.css">
+    
+    <style>
+        /* Workflow-focused layout */
+        .workflow-header {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .kpi-dashboard {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .kpi-card-featured {
+            background: linear-gradient(135deg, var(--pbi-primary) 0%, var(--pbi-primary-dark) 100%);
+            color: white;
+            border: none;
+            box-shadow: 0 2px 8px rgba(0, 120, 212, 0.3);
+        }
+        
+        .kpi-card-featured .kpi-label,
+        .kpi-card-featured .kpi-value {
+            color: white;
+        }
+        
+        .kpi-card-warning {
+            background: linear-gradient(135deg, #fff4e5 0%, #ffe8cc 100%);
+            border-left: 4px solid #ff8c00;
+            border: 1px solid #ff8c00;
+        }
+        
+        .kpi-card-success {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid var(--chart-green);
+            border: 1px solid var(--chart-green);
+        }
+        
+        .kpi-dashboard .kpi-card {
+            min-height: 110px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .new-opportunities-section {
+            background: linear-gradient(135deg, #fff4e5 0%, #ffe8cc 100%);
+            border: 2px solid #ff8c00;
+            border-radius: 4px;
+            padding: 12px;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 8px rgba(255, 140, 0, 0.2);
+        }
+        
+        .new-opportunities-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .badge {
+            background: linear-gradient(135deg, #ff8c00 0%, #e67300 100%);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            box-shadow: 0 1px 3px rgba(255, 140, 0, 0.3);
+        }
+        
+        .case-status-badge {
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-size: 9px;
+            font-weight: 600;
+            text-transform: uppercase;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .status-eligible { background: #e8f5e9; color: #2e7d32; }
+        .status-not-eligible { background: #ffebee; color: #c62828; }
+        .status-requested { background: #fff3e0; color: #e65100; }
+        .status-confirmed { background: #e3f2fd; color: #1565c0; }
+        .status-registered { background: #f3e5f5; color: #6a1b9a; }
+        
+        .doc-status-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
+            margin-top: 4px;
+        }
+        
+        .doc-status-item {
+            text-align: center;
+            padding: 4px;
+            font-size: 8px;
+            border-radius: 2px;
+        }
+        
+        .doc-complete {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .doc-pending {
+            background: #fff3e0;
+            color: #e65100;
+        }
+        
+        .doc-missing {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .workflow-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .updates-section {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .update-item {
+            padding: 10px;
+            border-left: 3px solid var(--pbi-primary);
+            background: var(--pbi-background);
+            margin-bottom: 6px;
+            font-size: 10px;
+            border-radius: 2px;
+            transition: background 0.2s ease;
+        }
+        
+        .update-item:hover {
+            background: var(--pbi-hover);
+        }
+        
+        .update-date {
+            color: var(--pbi-text-secondary);
+            font-size: 9px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <div class="logo">FRT Work Tools</div>
+            <div class="header-title">Non-US Opt-in/Group Monitoring</div>
+        </div>
+        <div class="header-right">
+            <div class="user-info">Craig D'Alessio</div>
+            <button>Share</button>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+        <button class="nav-tab">CLIENT ELIGIBILITY & FILINGS</button>
+        <button class="nav-tab">CLIENT STATUS REPORTS</button>
+        <button class="nav-tab active">Client Opt-in Monitoring</button>
+        <button class="nav-tab">AGGREGATE ACCOUNT LOOKUP</button>
+        <button class="nav-tab">Client Recoveries</button>
+        <button class="nav-tab">Client Remittance</button>
+        <button class="nav-tab">Data Update</button>
+        <button class="nav-tab" style="background: var(--pbi-hover); border: 1px dashed var(--pbi-border); border-radius: 2px; margin-left: 8px;">+</button>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Left Sidebar -->
+        <div class="sidebar">
+            <!-- Client Selector -->
+            <div class="client-selector">
+                <label>Select a Client</label>
+                <select id="clientSelect">
+                    <option value="DEMOFRTCLIENT" selected>DEMOFRTCLIENT</option>
+                    <option value="CLIENT2">Client 2</option>
+                    <option value="CLIENT3">Client 3</option>
+                </select>
+            </div>
+
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="content-area">
+            <!-- KPI Dashboard - Focal Point -->
+            <div class="kpi-dashboard">
+                <div class="kpi-card kpi-card-featured">
+                    <div class="kpi-label">Total Organizer Damages</div>
+                    <div class="kpi-value" style="font-size: 24px;">$218.0M</div>
+                    <div style="font-size: 9px; opacity: 0.9; margin-top: 4px;">Across all cases</div>
+                </div>
+                <div class="kpi-card kpi-card-warning">
+                    <div class="kpi-label">New Opt-in Opportunities</div>
+                    <div class="kpi-value" style="font-size: 24px; color: #ff8c00;">3</div>
+                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">Require attention</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Total Recoveries Received</div>
+                    <div class="kpi-value" style="font-size: 24px;">$2.4M</div>
+                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">YTD</div>
+                </div>
+                <div class="kpi-card kpi-card-success">
+                    <div class="kpi-label">Upcoming Disbursements</div>
+                    <div class="kpi-value" style="font-size: 24px; color: var(--chart-green);">$1.2M</div>
+                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">Next 30 days</div>
+                </div>
+            </div>
+
+            <!-- New Opt-in Opportunities - Prominent Section -->
+            <div class="new-opportunities-section">
+                <div class="new-opportunities-header">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-exclamation-circle" style="color: #ff8c00; font-size: 16px;"></i>
+                        <div class="viz-title" style="margin: 0; color: #ff8c00;">New Opt-in Opportunities</div>
+                        <span class="badge">3 NEW</span>
+                    </div>
+                    <button class="toggle-btn" style="font-size: 10px; padding: 4px 8px;">View All</button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Case Name</th>
+                                <th>Country</th>
+                                <th>Organizer Damages</th>
+                                <th>Deadline</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                            <tbody>
+                            <tr style="border-left: 4px solid #d13438;">
+                                <td><a href="case-details.html?case=British%20American%20Tobacco%20Plc" style="color: var(--pbi-primary); text-decoration: none; font-weight: 600;"><strong>British American Tobacco Plc</strong></a></td>
+                                <td><span style="background: #ffebee; color: #d13438; padding: 2px 6px; border-radius: 2px; font-weight: 600; font-size: 9px;">GB</span></td>
+                                <td class="currency">$194,115</td>
+                                <td class="date-cell">4/14/2026</td>
+                                <td><span class="case-status-badge status-eligible">ELIGIBLE</span></td>
+                                <td><a href="case-details.html?case=British%20American%20Tobacco%20Plc"><button class="toggle-btn active" style="font-size: 9px; padding: 2px 6px;">Review</button></a></td>
+                            </tr>
+                            <tr style="border-left: 4px solid #d13438;">
+                                <td><a href="case-details.html?case=Kingspan%20Group%20PLC" style="color: var(--pbi-primary); text-decoration: none; font-weight: 600;"><strong>Kingspan Group PLC</strong></a></td>
+                                <td><span style="background: #ffebee; color: #d13438; padding: 2px 6px; border-radius: 2px; font-weight: 600; font-size: 9px;">GB</span></td>
+                                <td class="currency">$105,732</td>
+                                <td class="date-cell">10/31/2025</td>
+                                <td><span class="case-status-badge status-eligible">ELIGIBLE</span></td>
+                                <td><a href="case-details.html?case=Kingspan%20Group%20PLC"><button class="toggle-btn active" style="font-size: 9px; padding: 2px 6px;">Review</button></a></td>
+                            </tr>
+                            <tr style="border-left: 4px solid #ff8c00;">
+                                <td><a href="case-details.html?case=Atos%20SE" style="color: var(--pbi-primary); text-decoration: none; font-weight: 600;"><strong>Atos SE</strong></a></td>
+                                <td><span style="background: #fff4e5; color: #ff8c00; padding: 2px 6px; border-radius: 2px; font-weight: 600; font-size: 9px;">FR</span></td>
+                                <td class="currency">$3,702,082</td>
+                                <td class="date-cell">9/30/2025</td>
+                                <td><span class="case-status-badge status-requested">REQUESTED</span></td>
+                                <td><a href="case-details.html?case=Atos%20SE"><button class="toggle-btn active" style="font-size: 9px; padding: 2px 6px;">Review</button></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Workflow Grid: Document Tracking & Case Updates -->
+            <div class="workflow-grid">
+                <!-- Document Tracking & Requirements -->
+                <div class="viz-card">
+                    <div class="viz-title">
+                        Document Tracking & Requirements
+                        <span style="font-size: 9px; color: var(--pbi-text-secondary);">Cases Under Review</span>
+                    </div>
+                    <div style="overflow-x: auto; max-height: 400px;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Case Name</th>
+                                    <th>Status</th>
+                                    <th>Organizer Damages</th>
+                                    <th colspan="5" style="text-align: center;">Required Documents</th>
+                                </tr>
+                                <tr style="background: var(--pbi-background);">
+                                    <th colspan="3"></th>
+                                    <th style="font-size: 8px; padding: 4px;">ASL</th>
+                                    <th style="font-size: 8px; padding: 4px;">BOT</th>
+                                    <th style="font-size: 8px; padding: 4px;">POA</th>
+                                    <th style="font-size: 8px; padding: 4px;">Trades</th>
+                                    <th style="font-size: 8px; padding: 4px;">Other</th>
+                                </tr>
+                            </thead>
+                            <tbody id="docTrackingBody">
+                                <!-- Populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Recent Updates & Case Activity -->
+                <div class="viz-card">
+                    <div class="viz-title">
+                        Recent Updates & Case Activity
+                        <span class="badge" style="background: var(--pbi-primary);">5 NEW</span>
+                    </div>
+                    <div class="updates-section">
+                        <div class="update-item">
+                            <div style="font-weight: 600; margin-bottom: 2px;">Vestas Wind - Documents Received</div>
+                            <div class="update-date">2 hours ago</div>
+                            <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">
+                                All required documents have been received. Status updated to CONFIRMED.
+                            </div>
+                        </div>
+                        <div class="update-item">
+                            <div style="font-weight: 600; margin-bottom: 2px;">Petrobras - Organizer Confirmation</div>
+                            <div class="update-date">1 day ago</div>
+                            <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">
+                                Organizer confirmed participation. Organizer Damages: $19.0M
+                            </div>
+                        </div>
+                        <div class="update-item">
+                            <div style="font-weight: 600; margin-bottom: 2px;">STADA Arzneimittel AG - New Opportunity</div>
+                            <div class="update-date">2 days ago</div>
+                            <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">
+                                Case now eligible. Organizer Damages: $4.6M. Deadline: 9/1/2025
+                            </div>
+                        </div>
+                        <div class="update-item">
+                            <div style="font-weight: 600; margin-bottom: 2px;">Barclays Plc - Disbursement Scheduled</div>
+                            <div class="update-date">3 days ago</div>
+                            <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">
+                                Recovery payment of $180,750 scheduled for 8/20/2025
+                            </div>
+                        </div>
+                        <div class="update-item">
+                            <div style="font-weight: 600; margin-bottom: 2px;">Bayer AG - Registration Complete</div>
+                            <div class="update-date">5 days ago</div>
+                            <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">
+                                Case registered. Organizer Damages: $81.0M. Awaiting settlement.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row: Bar Chart and Donut Chart -->
+            <div class="grid-2">
+                <!-- All Cases Overview -->
+                <div class="viz-card">
+                    <div class="viz-title">
+                        All Cases Overview
+                        <span style="font-size: 9px; font-weight: 400; color: var(--pbi-text-secondary);">Organizer Damages by Case</span>
+                    </div>
+                    <div class="bar-chart-container" style="height: 250px;">
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- FRT Damages by Country -->
+                <div class="viz-card">
+                    <div class="viz-title">FRT Damages by Country</div>
+                    <div class="donut-container" style="height: 250px;">
+                        <canvas id="donutChart"></canvas>
+                        <div class="donut-center">
+                            <div class="donut-total" style="font-size: 16px;">$218M</div>
+                            <div class="donut-label" style="font-size: 9px;">Total</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Risk Level Legend - Moved to bottom near charts -->
+            <div class="viz-card" style="padding: 8px 12px;">
+                <div style="display: flex; align-items: center; gap: 16px; font-size: 9px; flex-wrap: wrap;">
+                    <div style="font-weight: 600; color: var(--pbi-text-secondary);">Jurisdiction Risk Level:</div>
+                    <div style="display: flex; align-items: center; gap: 4px;">
+                        <span style="width: 12px; height: 12px; background: #107c10; border-radius: 2px; display: inline-block;"></span>
+                        <span>Low Risk (AU, NL)</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 4px;">
+                        <span style="width: 12px; height: 12px; background: #ff8c00; border-radius: 2px; display: inline-block;"></span>
+                        <span>Medium Risk (Others)</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 4px;">
+                        <span style="width: 12px; height: 12px; background: #d13438; border-radius: 2px; display: inline-block;"></span>
+                        <span>High Risk (GB)</span>
+                    </div>
+                    <div style="margin-left: auto; color: var(--pbi-text-secondary); font-size: 8px;">
+                        Based on: Anonymity, Cost, Discovery burden
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Cases Table -->
+            <div class="viz-card">
+                <div class="viz-title">Non-US Opt-in and Group Cases</div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table" id="casesTable">
+                        <thead>
+                            <tr>
+                                <th>Case Name</th>
+                                <th>Country</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Organizer Damages</th>
+                                <th>Deadline</th>
+                                <th>Participation Date</th>
+                                <th style="text-align: center;">Accts</th>
+                            </tr>
+                        </thead>
+                        <tbody id="casesTableBody">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="page-info">
+            <span>Page 7 of 21</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <span>Zoom: 80%</span>
+        </div>
+    </div>
+
+    <!-- Style Switcher -->
+    <script src="style-switcher.js"></script>
+
+    <script>
+        // Sample data - Excluding CA and US cases
+        const casesData = [
+            { country: 'GB', caseName: 'British American Tobacco Plc (Master Case)', damages: 194115, deadline: '4/14/2026', filed: '', accounts: 3, status: 'ELIGIBLE' },
+            { country: 'GB', caseName: 'Kingspan Group PLC (Master Case)', damages: 105732, deadline: '10/31/2025', filed: '', accounts: 2, status: 'ELIGIBLE' },
+            { country: 'AU', caseName: 'a2 Milk (Slater & Gordon & Shine Lawyers)', damages: 0, deadline: '10/2/2025', filed: '', accounts: 3, status: 'NOT ELIGIBLE' },
+            { country: 'FR', caseName: 'Atos SE (Master Case)', damages: 3702082, deadline: '9/30/2025', filed: '', accounts: 1, status: 'REQUESTED' },
+            { country: 'DE', caseName: 'Entain plc (Master Case)', damages: 0, deadline: '9/19/2025', filed: '', accounts: 1, status: 'NOT ELIGIBLE' },
+            { country: 'AU', caseName: 'Downer EDI Ltd (Maurice Blackburn&William Roberts)', damages: 660261, deadline: '9/9/2025', filed: '', accounts: 2, status: 'CONFIRMED' },
+            { country: 'DE', caseName: 'STADA Arzneimittel AG (Master Case)', damages: 4556720, deadline: '9/1/2025', filed: '', accounts: 2, status: 'ELIGIBLE' },
+            { country: 'GB', caseName: 'Barclays Plc (Staley Action) (Master Case)', damages: 180750, deadline: '7/3/2025', filed: '', accounts: 4, status: 'REGISTERED' },
+            { country: 'DE', caseName: 'DWS Group (Master Case)', damages: 783416, deadline: '11/15/2024', filed: '', accounts: 3, status: 'CONFIRMED' },
+        ];
+
+        const docTrackingData = [
+            { case: 'Vestas Wind', status: 'CONFIRMED', damages: 194115, docs: { asl: true, bot: true, poa: true, trades: true, other: true } },
+            { case: 'Petrobras', status: 'CONFIRMED', damages: 19000000, docs: { asl: true, bot: true, poa: true, trades: true, other: false } },
+            { case: 'Atos SE', status: 'REQUESTED', damages: 3702082, docs: { asl: false, bot: false, poa: true, trades: false, other: false } },
+            { case: 'STADA Arzneimittel AG', status: 'ELIGIBLE', damages: 4556720, docs: { asl: false, bot: false, poa: false, trades: false, other: false } },
+            { case: 'Downer EDI Ltd', status: 'CONFIRMED', damages: 660261, docs: { asl: true, bot: true, poa: false, trades: true, other: true } },
+            { case: 'DWS Group', status: 'CONFIRMED', damages: 783416, docs: { asl: true, bot: false, poa: true, trades: true, other: false } },
+        ];
+
+        const barChartData = [
+            { case: 'Bayer AG (Master Case)', amount: 81000000, country: 'GB' },
+            { case: 'Danske (Master Case)', amount: 18000000, country: 'NL' },
+            { case: 'Petrobras (Direct Action - Nethe...)', amount: 19000000, country: 'AU' },
+            { case: 'Volkswagen Bonds (Master Case)', amount: 13000000, country: 'DE' },
+            { case: 'Petrobras Dutch Foundation Liti...', amount: 11000000, country: 'AU' },
+            { case: 'Treasury Wine Estates (2020)(M...)', amount: 8000000, country: 'AU' },
+        ];
+
+        // Donut data - Excluding CA and US
+        const donutData = {
+            GB: 194000000,
+            AU: 15000000,
+            FR: 3700000,
+            DE: 6000000,
+            NL: 2000000,
+            DK: 500000
+        };
+        
+        // Risk level mapping based on: Anonymity, Cost, Discovery burden
+        const riskLevels = {
+            'AU': 'low',      // Low risk: Green
+            'NL': 'low',      // Low risk: Green
+            'GB': 'high',     // High risk: Red
+            // All others are medium risk: Amber
+        };
+        
+        function getRiskLevel(country) {
+            return riskLevels[country] || 'medium';
+        }
+        
+        function getRiskColor(country) {
+            const risk = getRiskLevel(country);
+            if (risk === 'low') return '#107c10';      // Green
+            if (risk === 'high') return '#d13438';    // Red
+            return '#ff8c00';                          // Amber
+        }
+        
+        function getRiskBackgroundColor(country) {
+            const risk = getRiskLevel(country);
+            if (risk === 'low') return '#e8f5e9';      // Light green
+            if (risk === 'high') return '#ffebee';     // Light red
+            return '#fff4e5';                          // Light amber
+        }
+
+        function formatCurrency(amount) {
+            if (amount >= 1000000) {
+                return '$' + (amount / 1000000).toFixed(1) + 'M';
+            } else if (amount >= 1000) {
+                return '$' + (amount / 1000).toFixed(0) + 'K';
+            }
+            return '$' + amount.toLocaleString();
+        }
+
+        function getStatusClass(status) {
+            const statusMap = {
+                'ELIGIBLE': 'status-eligible',
+                'NOT ELIGIBLE': 'status-not-eligible',
+                'REQUESTED': 'status-requested',
+                'CONFIRMED': 'status-confirmed',
+                'REGISTERED': 'status-registered'
+            };
+            return statusMap[status] || 'status-eligible';
+        }
+
+        function populateCasesTable() {
+            const tbody = document.getElementById('casesTableBody');
+            tbody.innerHTML = '';
+            
+            casesData.forEach(caseItem => {
+                const tr = document.createElement('tr');
+                const riskColor = getRiskColor(caseItem.country);
+                const riskBg = getRiskBackgroundColor(caseItem.country);
+                tr.style.borderLeft = `4px solid ${riskColor}`;
+                const caseId = encodeURIComponent(caseItem.caseName);
+                tr.innerHTML = `
+                    <td>
+                        <a href="case-details.html?case=${caseId}" style="color: var(--pbi-primary); text-decoration: none; font-weight: 600;">
+                            ${caseItem.caseName}
+                        </a>
+                    </td>
+                    <td>
+                        <span style="background: ${riskBg}; color: ${riskColor}; padding: 2px 6px; border-radius: 2px; font-weight: 600; font-size: 9px;">
+                            ${caseItem.country}
+                        </span>
+                    </td>
+                    <td><span class="case-status-badge ${getStatusClass(caseItem.status)}">${caseItem.status}</span></td>
+                    <td class="currency">${formatCurrency(caseItem.damages)}</td>
+                    <td class="date-cell">${caseItem.deadline}</td>
+                    <td class="date-cell">${caseItem.filed || '—'}</td>
+                    <td style="text-align: center;">${caseItem.accounts}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function populateDocTracking() {
+            const tbody = document.getElementById('docTrackingBody');
+            tbody.innerHTML = '';
+            
+            docTrackingData.forEach(item => {
+                const tr = document.createElement('tr');
+                const docStatus = (doc) => {
+                    if (item.docs[doc]) {
+                        return '<div class="doc-status-item doc-complete"><i class="fas fa-check"></i></div>';
+                    }
+                    return '<div class="doc-status-item doc-pending"><i class="fas fa-clock"></i></div>';
+                };
+                const caseId = encodeURIComponent(item.case);
+                
+                tr.innerHTML = `
+                    <td>
+                        <a href="case-details.html?case=${caseId}" style="color: var(--pbi-primary); text-decoration: none; font-weight: 600;">
+                            <strong>${item.case}</strong>
+                        </a>
+                    </td>
+                    <td><span class="case-status-badge ${getStatusClass(item.status)}">${item.status}</span></td>
+                    <td class="currency">${formatCurrency(item.damages)}</td>
+                    <td>${docStatus('asl')}</td>
+                    <td>${docStatus('bot')}</td>
+                    <td>${docStatus('poa')}</td>
+                    <td>${docStatus('trades')}</td>
+                    <td>${docStatus('other')}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function createDonutChart() {
+            const ctx = document.getElementById('donutChart').getContext('2d');
+            
+            // Use risk-based colors
+            const chartColors = Object.keys(donutData).map(country => getRiskColor(country));
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(donutData),
+                    datasets: [{
+                        data: Object.values(donutData),
+                        backgroundColor: chartColors,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: { 
+                                padding: 10, 
+                                font: { size: 9 },
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const country = context.label;
+                                    const risk = getRiskLevel(country);
+                                    const riskLabel = risk === 'low' ? 'Low Risk' : risk === 'high' ? 'High Risk' : 'Medium Risk';
+                                    return `${context.label} (${riskLabel}): ${formatCurrency(context.parsed)}`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '60%'
+                }
+            });
+        }
+
+        function createBarChart() {
+            const ctx = document.getElementById('barChart').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: barChartData.map(d => d.case),
+                    datasets: [{
+                        label: 'Organizer Damages',
+                        data: barChartData.map(d => d.amount),
+                        backgroundColor: barChartData.map(d => getRiskColor(d.country)),
+                        borderRadius: 2
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return 'Organizer Damages: ' + formatCurrency(context.parsed.x);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                },
+                                font: { size: 9 }
+                            },
+                            grid: { color: 'var(--pbi-border-light)' }
+                        },
+                        y: {
+                            ticks: { font: { size: 9 } },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Tab navigation
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                if (this.textContent.includes('ELIGIBILITY & FILINGS')) {
+                    window.location.href = 'eligibility-filings.html';
+                } else {
+                    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            populateCasesTable();
+            populateDocTracking();
+            createDonutChart();
+            createBarChart();
+        });
+    </script>
+</body>
+</html>
