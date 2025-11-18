@@ -103,6 +103,9 @@ class StyleSwitcher {
                     
                     <div class="style-section">
                         <h4>Actions</h4>
+                        <button class="action-btn" id="randomizeStyles" style="background: linear-gradient(135deg, #8764b8 0%, #e3008c 100%);">
+                            <i class="fas fa-dice"></i> Randomize All
+                        </button>
                         <button class="action-btn" id="resetStyles" style="background: #d13438;">Reset to Original</button>
                         <button class="action-btn" id="exportStyles">Export CSS</button>
                         <button class="action-btn" id="importStyles">Import CSS</button>
@@ -190,6 +193,7 @@ class StyleSwitcher {
         });
 
         // Actions
+        document.getElementById('randomizeStyles').addEventListener('click', () => this.randomizeStyles());
         document.getElementById('resetStyles').addEventListener('click', () => this.resetStyles());
         document.getElementById('exportStyles').addEventListener('click', () => this.exportStyles());
         document.getElementById('importStyles').addEventListener('click', () => {
@@ -268,6 +272,127 @@ class StyleSwitcher {
                 }
             });
         }
+    }
+
+    randomizeStyles() {
+        // Generate random hex color
+        const randomColor = () => {
+            return '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+        };
+        
+        // Generate random colors
+        const randomPrimary = randomColor();
+        const randomBackground = randomColor();
+        const randomCardBg = randomColor();
+        const randomBorder = randomColor();
+        
+        // For text colors, ensure good contrast (darker for primary, lighter for secondary)
+        const randomTextPrimary = '#' + Math.floor(Math.random() * 0x333333).toString(16).padStart(6, '0');
+        const randomTextSecondary = '#' + Math.floor(Math.random() * 0x666666 + 0x666666).toString(16).padStart(6, '0');
+        
+        // Random font family
+        const fontFamilies = [
+            "'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Helvetica Neue', sans-serif",
+            "Arial, sans-serif",
+            "'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "'Roboto', sans-serif",
+            "'Open Sans', sans-serif",
+            "'Inter', sans-serif",
+            "'Georgia', serif",
+            "'Times New Roman', serif",
+            "'Courier New', monospace",
+            "'Comic Sans MS', cursive"
+        ];
+        const randomFontFamily = fontFamilies[Math.floor(Math.random() * fontFamilies.length)];
+        
+        // Random font size (10-18px)
+        const randomFontSize = Math.floor(Math.random() * 9) + 10;
+        
+        // Random card padding (4-24px)
+        const randomCardPadding = Math.floor(Math.random() * 21) + 4;
+        
+        // Random card gap (4-24px)
+        const randomCardGap = Math.floor(Math.random() * 21) + 4;
+        
+        // Random shadow intensity (0-20)
+        const randomShadowIntensity = Math.floor(Math.random() * 21);
+        
+        // Apply random colors
+        this.applyColor('primary', randomPrimary);
+        this.applyColor('background', randomBackground);
+        this.applyColor('cardBg', randomCardBg);
+        this.applyColor('border', randomBorder);
+        this.applyColor('textPrimary', randomTextPrimary);
+        this.applyColor('textSecondary', randomTextSecondary);
+        
+        // Update color inputs
+        document.getElementById('primaryColor').value = randomPrimary;
+        document.getElementById('primaryColorText').value = randomPrimary;
+        document.getElementById('backgroundColor').value = randomBackground;
+        document.getElementById('backgroundColorText').value = randomBackground;
+        document.getElementById('cardBgColor').value = randomCardBg;
+        document.getElementById('cardBgColorText').value = randomCardBg;
+        document.getElementById('borderColor').value = randomBorder;
+        document.getElementById('borderColorText').value = randomBorder;
+        document.getElementById('textPrimaryColor').value = randomTextPrimary;
+        document.getElementById('textPrimaryColorText').value = randomTextPrimary;
+        document.getElementById('textSecondaryColor').value = randomTextSecondary;
+        document.getElementById('textSecondaryColorText').value = randomTextSecondary;
+        
+        // Apply random font family
+        document.body.style.fontFamily = randomFontFamily;
+        document.getElementById('fontFamily').value = randomFontFamily;
+        
+        // Apply random font size
+        document.body.style.fontSize = randomFontSize + 'px';
+        document.getElementById('fontSize').value = randomFontSize;
+        document.getElementById('fontSizeValue').textContent = randomFontSize + 'px';
+        
+        // Apply random card padding
+        const paddingValue = randomCardPadding + 'px';
+        document.documentElement.style.setProperty('--card-padding', paddingValue);
+        document.querySelectorAll('.viz-card, .client-selector, .kpi-card').forEach(card => {
+            card.style.padding = paddingValue;
+        });
+        document.getElementById('cardPadding').value = randomCardPadding;
+        document.getElementById('cardPaddingValue').textContent = paddingValue;
+        
+        // Apply random card gap
+        const gapValue = randomCardGap + 'px';
+        document.querySelectorAll('.content-area, .sidebar').forEach(container => {
+            container.style.gap = gapValue;
+        });
+        document.getElementById('cardGap').value = randomCardGap;
+        document.getElementById('cardGapValue').textContent = gapValue;
+        
+        // Apply random shadow intensity
+        const shadowOpacity = randomShadowIntensity / 100;
+        const shadow = `0 1.6px 3.6px rgba(0, 0, 0, ${shadowOpacity * 0.13}), 0 0.3px 0.9px rgba(0, 0, 0, ${shadowOpacity * 0.11})`;
+        document.querySelectorAll('.viz-card, .client-selector, .kpi-card').forEach(card => {
+            card.style.boxShadow = shadow;
+        });
+        document.getElementById('shadowIntensity').value = randomShadowIntensity;
+        document.getElementById('shadowIntensityValue').textContent = randomShadowIntensity + '%';
+        
+        // Save styles
+        this.saveStyles();
+        
+        // Show confirmation with animation
+        const btn = document.getElementById('randomizeStyles');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i> Randomized!';
+        btn.style.background = '#107c10';
+        
+        // Add a fun animation
+        btn.style.transform = 'scale(1.1)';
+        setTimeout(() => {
+            btn.style.transform = 'scale(1)';
+        }, 200);
+        
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.style.background = '';
+        }, 1500);
     }
 
     resetStyles() {

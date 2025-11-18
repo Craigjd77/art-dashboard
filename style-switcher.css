@@ -190,6 +190,21 @@
     background: #a4262c;
 }
 
+.action-btn#randomizeStyles {
+    background: linear-gradient(135deg, #8764b8 0%, #e3008c 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.action-btn#randomizeStyles:hover {
+    background: linear-gradient(135deg, #9c7ac8 0%, #ff1ba3 100%);
+    transform: scale(1.02);
+}
+
+.action-btn#randomizeStyles i {
+    margin-right: 6px;
+}
+
 .action-btn:last-child {
     margin-bottom: 0;
 }
