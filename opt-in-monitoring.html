@@ -63,19 +63,102 @@
         }
         
         .new-opportunities-section {
-            background: linear-gradient(135deg, #fff4e5 0%, #ffe8cc 100%);
-            border: 2px solid #ff8c00;
+            background: var(--pbi-card-bg);
+            border: 1px solid var(--pbi-border);
+            border-left: 4px solid var(--pbi-primary);
             border-radius: 4px;
-            padding: 12px;
-            margin-bottom: 8px;
-            box-shadow: 0 2px 8px rgba(255, 140, 0, 0.2);
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 1.6px 3.6px rgba(0, 0, 0, 0.13), 0 0.3px 0.9px rgba(0, 0, 0, 0.11);
         }
         
         .new-opportunities-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--pbi-border);
+        }
+        
+        .filter-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid var(--pbi-border);
+            background: var(--pbi-background);
+            color: var(--pbi-text-secondary);
+        }
+        
+        .filter-badge.active {
+            background: var(--pbi-primary);
+            color: white;
+            border-color: var(--pbi-primary);
+        }
+        
+        .filter-badge:hover {
+            background: var(--pbi-hover);
+        }
+        
+        .export-button {
+            background: transparent;
+            border: 1px solid var(--pbi-border);
+            color: var(--pbi-text-primary);
+            padding: 6px 12px;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .export-button:hover {
+            background: var(--pbi-hover);
+            border-color: var(--pbi-primary);
+        }
+        
+        .priority-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+        }
+        
+        .priority-high { background: #d13438; }
+        .priority-medium { background: #ff8c00; }
+        .priority-low { background: #107c10; }
+        
+        @media print {
+            .new-opportunities-header button,
+            .export-button,
+            .filter-controls,
+            .style-switcher-toggle,
+            .style-switcher-panel {
+                display: none !important;
+            }
+            
+            .new-opportunities-section {
+                page-break-inside: avoid;
+            }
+            
+            .viz-card {
+                page-break-inside: avoid;
+            }
         }
         
         .badge {
@@ -230,53 +313,57 @@
                 </div>
             </div>
 
-            <!-- New Opt-in Opportunities - Prominent Section -->
+            <!-- New Opt-in Opportunities - Professional Design -->
             <div class="new-opportunities-section">
                 <div class="new-opportunities-header">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-exclamation-circle" style="color: #ff8c00; font-size: 16px;"></i>
-                        <div class="viz-title" style="margin: 0; color: #ff8c00;">New Opt-in Opportunities</div>
-                        <span class="badge">3 NEW</span>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-briefcase" style="color: var(--pbi-primary); font-size: 16px;"></i>
+                        <div>
+                            <div class="viz-title" style="margin: 0; font-size: 13px;">New Opt-in Opportunities</div>
+                            <div style="font-size: 10px; color: var(--pbi-text-secondary); margin-top: 2px;">
+                                Cases requiring review or action
+                            </div>
+                        </div>
+                        <span class="badge" style="background: var(--pbi-primary);">3 NEW</span>
                     </div>
-                    <button class="toggle-btn" style="font-size: 10px; padding: 4px 8px;">View All</button>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="export-button" onclick="exportTable('opportunitiesTable', 'New_Opt-in_Opportunities')">
+                            <i class="fas fa-download"></i>
+                            Export
+                        </button>
+                        <button class="export-button" onclick="window.print()">
+                            <i class="fas fa-print"></i>
+                            Print
+                        </button>
+                    </div>
                 </div>
+                
+                <!-- Filter Controls -->
+                <div class="filter-controls">
+                    <span style="font-size: 10px; color: var(--pbi-text-secondary); font-weight: 600;">Filter:</span>
+                    <span class="filter-badge active" data-filter="all" onclick="filterOpportunities('all', this)">All (3)</span>
+                    <span class="filter-badge" data-filter="eligible" onclick="filterOpportunities('eligible', this)">Eligible (2)</span>
+                    <span class="filter-badge" data-filter="requested" onclick="filterOpportunities('requested', this)">Requested (1)</span>
+                    <span class="filter-badge" data-filter="high-risk" onclick="filterOpportunities('high-risk', this)">High Risk (2)</span>
+                    <span class="filter-badge" data-filter="high-value" onclick="filterOpportunities('high-value', this)">High Value ($1M+)</span>
+                </div>
+                
                 <div style="overflow-x: auto;">
-                    <table class="data-table">
+                    <table class="data-table" id="opportunitiesTable">
                         <thead>
                             <tr>
+                                <th style="width: 30px;"></th>
                                 <th>Case Name</th>
                                 <th>Country</th>
-                                <th>Organizer Damages</th>
+                                <th style="text-align: right;">Organizer Damages</th>
                                 <th>Deadline</th>
+                                <th>Days Until Deadline</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
-                            <tbody>
-                            <tr style="border-left: 4px solid #d13438;">
-                                <td><a href="case-details.html?case=British%20American%20Tobacco%20Plc" style="color: var(--pbi-primary); text-decoration: none; font-weight: 600;"><strong>British American Tobacco Plc</strong></a></td>
-                                <td><span style="background: #ffebee; color: #d13438; padding: 2px 6px; border-radius: 2px; font-weight: 600; font-size: 9px;">GB</span></td>
-                                <td class="currency">$194,115</td>
-                                <td class="date-cell">4/14/2026</td>
-                                <td><span class="case-status-badge status-eligible">ELIGIBLE</span></td>
-                                <td><a href="case-details.html?case=British%20American%20Tobacco%20Plc"><button class="toggle-btn active" style="font-size: 9px; padding: 2px 6px;">Review</button></a></td>
-                            </tr>
-                            <tr style="border-left: 4px solid #d13438;">
-                                <td><a href="case-details.html?case=Kingspan%20Group%20PLC" style="color: var(--pbi-primary); text-decoration: none; font-weight: 600;"><strong>Kingspan Group PLC</strong></a></td>
-                                <td><span style="background: #ffebee; color: #d13438; padding: 2px 6px; border-radius: 2px; font-weight: 600; font-size: 9px;">GB</span></td>
-                                <td class="currency">$105,732</td>
-                                <td class="date-cell">10/31/2025</td>
-                                <td><span class="case-status-badge status-eligible">ELIGIBLE</span></td>
-                                <td><a href="case-details.html?case=Kingspan%20Group%20PLC"><button class="toggle-btn active" style="font-size: 9px; padding: 2px 6px;">Review</button></a></td>
-                            </tr>
-                            <tr style="border-left: 4px solid #ff8c00;">
-                                <td><a href="case-details.html?case=Atos%20SE" style="color: var(--pbi-primary); text-decoration: none; font-weight: 600;"><strong>Atos SE</strong></a></td>
-                                <td><span style="background: #fff4e5; color: #ff8c00; padding: 2px 6px; border-radius: 2px; font-weight: 600; font-size: 9px;">FR</span></td>
-                                <td class="currency">$3,702,082</td>
-                                <td class="date-cell">9/30/2025</td>
-                                <td><span class="case-status-badge status-requested">REQUESTED</span></td>
-                                <td><a href="case-details.html?case=Atos%20SE"><button class="toggle-btn active" style="font-size: 9px; padding: 2px 6px;">Review</button></a></td>
-                            </tr>
+                        <tbody id="opportunitiesTableBody">
+                            <!-- Populated by JavaScript -->
                         </tbody>
                     </table>
                 </div>
@@ -286,12 +373,18 @@
             <div class="workflow-grid">
                 <!-- Document Tracking & Requirements -->
                 <div class="viz-card">
-                    <div class="viz-title">
-                        Document Tracking & Requirements
-                        <span style="font-size: 9px; color: var(--pbi-text-secondary);">Cases Under Review</span>
+                    <div class="viz-title" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <span>Document Tracking & Requirements</span>
+                            <span style="font-size: 9px; color: var(--pbi-text-secondary); margin-left: 8px;">Cases Under Review</span>
+                        </div>
+                        <button class="export-button" onclick="exportTable('docTrackingTable', 'Document_Tracking')">
+                            <i class="fas fa-download"></i>
+                            Export
+                        </button>
                     </div>
                     <div style="overflow-x: auto; max-height: 400px;">
-                        <table class="data-table">
+                        <table class="data-table" id="docTrackingTable">
                             <thead>
                                 <tr>
                                     <th>Case Name</th>
@@ -411,7 +504,19 @@
 
             <!-- Detailed Cases Table -->
             <div class="viz-card">
-                <div class="viz-title">Non-US Opt-in and Group Cases</div>
+                <div class="viz-title" style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>Non-US Opt-in and Group Cases</span>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="export-button" onclick="exportTable('casesTable', 'All_Opt-in_Cases')">
+                            <i class="fas fa-download"></i>
+                            Export
+                        </button>
+                        <button class="export-button" onclick="window.print()">
+                            <i class="fas fa-print"></i>
+                            Print
+                        </button>
+                    </div>
+                </div>
                 <div style="overflow-x: auto;">
                     <table class="data-table" id="casesTable">
                         <thead>
@@ -460,6 +565,151 @@
             { country: 'GB', caseName: 'Barclays Plc (Staley Action) (Master Case)', damages: 180750, deadline: '7/3/2025', filed: '', accounts: 4, status: 'REGISTERED' },
             { country: 'DE', caseName: 'DWS Group (Master Case)', damages: 783416, deadline: '11/15/2024', filed: '', accounts: 3, status: 'CONFIRMED' },
         ];
+
+        // New opportunities data with priority
+        const newOpportunitiesData = [
+            { case: 'British American Tobacco Plc', country: 'GB', damages: 194115, deadline: '4/14/2026', status: 'ELIGIBLE', priority: 'medium' },
+            { case: 'Kingspan Group PLC', country: 'GB', damages: 105732, deadline: '10/31/2025', status: 'ELIGIBLE', priority: 'low' },
+            { case: 'Atos SE', country: 'FR', damages: 3702082, deadline: '9/30/2025', status: 'REQUESTED', priority: 'high' },
+        ];
+        
+        function getDaysUntilDeadline(deadlineStr) {
+            const deadline = new Date(deadlineStr);
+            const today = new Date();
+            const diffTime = deadline - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays;
+        }
+        
+        function getPriorityClass(damages, country, daysUntil) {
+            if (damages >= 1000000 || daysUntil < 30) return 'high';
+            if (damages >= 200000 || country === 'GB') return 'medium';
+            return 'low';
+        }
+        
+        function populateOpportunitiesTable() {
+            const tbody = document.getElementById('opportunitiesTableBody');
+            tbody.innerHTML = '';
+            
+            newOpportunitiesData.forEach(opp => {
+                const tr = document.createElement('tr');
+                const riskColor = getRiskColor(opp.country);
+                const riskBg = getRiskBackgroundColor(opp.country);
+                const daysUntil = getDaysUntilDeadline(opp.deadline);
+                const priority = getPriorityClass(opp.damages, opp.country, daysUntil);
+                const caseId = encodeURIComponent(opp.case);
+                
+                tr.className = `opportunity-row ${opp.status.toLowerCase()} ${opp.country.toLowerCase()}`;
+                tr.style.borderLeft = `4px solid ${riskColor}`;
+                
+                let daysClass = '';
+                let daysText = `${daysUntil} days`;
+                if (daysUntil < 0) {
+                    daysClass = 'style="color: #d13438; font-weight: 600;"';
+                    daysText = `OVERDUE (${Math.abs(daysUntil)} days)`;
+                } else if (daysUntil < 30) {
+                    daysClass = 'style="color: #ff8c00; font-weight: 600;"';
+                } else if (daysUntil < 90) {
+                    daysClass = 'style="color: #ff8c00;"';
+                }
+                
+                tr.innerHTML = `
+                    <td>
+                        <span class="priority-indicator priority-${priority}" title="Priority: ${priority.toUpperCase()}"></span>
+                    </td>
+                    <td>
+                        <a href="case-details.html?case=${caseId}" style="color: var(--pbi-text-primary); text-decoration: none; font-weight: 600;">
+                            ${opp.case}
+                        </a>
+                    </td>
+                    <td>
+                        <span style="background: ${riskBg}; color: ${riskColor}; padding: 2px 8px; border-radius: 2px; font-weight: 600; font-size: 9px;">
+                            ${opp.country}
+                        </span>
+                    </td>
+                    <td class="currency" style="font-weight: 600;">${formatCurrency(opp.damages)}</td>
+                    <td class="date-cell">${opp.deadline}</td>
+                    <td ${daysClass}>${daysText}</td>
+                    <td><span class="case-status-badge ${getStatusClass(opp.status)}">${opp.status}</span></td>
+                    <td>
+                        <a href="case-details.html?case=${caseId}" style="text-decoration: none;">
+                            <button class="toggle-btn active" style="font-size: 9px; padding: 4px 10px; width: auto;">
+                                <i class="fas fa-eye" style="font-size: 8px; margin-right: 4px;"></i>Review
+                            </button>
+                        </a>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+        
+        function filterOpportunities(filter, element) {
+            // Update filter badges
+            document.querySelectorAll('.filter-badge').forEach(badge => {
+                badge.classList.remove('active');
+            });
+            if (element) {
+                element.classList.add('active');
+            } else {
+                document.querySelector(`[data-filter="${filter}"]`)?.classList.add('active');
+            }
+            
+            const rows = document.querySelectorAll('.opportunity-row');
+            rows.forEach(row => {
+                let show = false;
+                
+                switch(filter) {
+                    case 'all':
+                        show = true;
+                        break;
+                    case 'eligible':
+                        show = row.classList.contains('eligible');
+                        break;
+                    case 'requested':
+                        show = row.classList.contains('requested');
+                        break;
+                    case 'high-risk':
+                        show = row.classList.contains('gb');
+                        break;
+                    case 'high-value':
+                        const damagesText = row.querySelector('.currency').textContent;
+                        const damages = parseFloat(damagesText.replace(/[^0-9.]/g, ''));
+                        show = damages >= 1 || damagesText.includes('M');
+                        break;
+                }
+                
+                row.style.display = show ? '' : 'none';
+            });
+        }
+        
+        function exportTable(tableId, filename) {
+            const table = document.getElementById(tableId);
+            let csv = [];
+            const rows = table.querySelectorAll('tr');
+            
+            for (let i = 0; i < rows.length; i++) {
+                const row = [];
+                const cols = rows[i].querySelectorAll('td, th');
+                
+                for (let j = 0; j < cols.length; j++) {
+                    let data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/"/g, '""');
+                    row.push('"' + data + '"');
+                }
+                csv.push(row.join(','));
+            }
+            
+            const csvContent = csv.join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', filename + '_' + new Date().toISOString().split('T')[0] + '.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
 
         const docTrackingData = [
             { case: 'Vestas Wind', status: 'CONFIRMED', damages: 194115, docs: { asl: true, bot: true, poa: true, trades: true, other: true } },
@@ -706,6 +956,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             populateCasesTable();
             populateDocTracking();
+            populateOpportunitiesTable();
             createDonutChart();
             createBarChart();
         });

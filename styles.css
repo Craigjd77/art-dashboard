@@ -40,6 +40,46 @@ body {
     line-height: 1.5;
 }
 
+@media print {
+    body {
+        background: white;
+    }
+    
+    .header,
+    .nav-tabs,
+    .footer,
+    .sidebar,
+    .style-switcher-toggle,
+    .style-switcher-panel,
+    button:not(.print-keep),
+    .export-button,
+    .filter-controls {
+        display: none !important;
+    }
+    
+    .main-container {
+        grid-template-columns: 1fr !important;
+        padding: 0 !important;
+        gap: 0 !important;
+    }
+    
+    .viz-card {
+        page-break-inside: avoid;
+        margin-bottom: 12px;
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+    }
+    
+    .content-area {
+        gap: 12px !important;
+    }
+    
+    a {
+        color: var(--pbi-text-primary) !important;
+        text-decoration: none !important;
+    }
+}
+
 /* Power BI Header */
 .header {
     background: linear-gradient(to bottom, var(--pbi-primary) 0%, var(--pbi-primary-dark) 100%);
