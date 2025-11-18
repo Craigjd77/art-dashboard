@@ -143,6 +143,114 @@
         .priority-medium { background: #ff8c00; }
         .priority-low { background: #107c10; }
         
+        /* KPI Card Clickable */
+        .kpi-card {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--pbi-shadow-hover);
+        }
+        
+        /* Modal/Dialog for KPI Details */
+        .kpi-detail-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .kpi-detail-modal.active {
+            display: flex;
+        }
+        
+        .kpi-detail-content {
+            background: var(--pbi-card-bg);
+            border-radius: 4px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 24px;
+            position: relative;
+        }
+        
+        .kpi-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--pbi-border);
+        }
+        
+        .kpi-detail-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--pbi-text-primary);
+        }
+        
+        .kpi-detail-close {
+            background: transparent;
+            border: none;
+            font-size: 24px;
+            color: var(--pbi-text-secondary);
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        
+        .kpi-detail-close:hover {
+            background: var(--pbi-hover);
+            color: var(--pbi-text-primary);
+        }
+        
+        .kpi-detail-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .kpi-detail-stat {
+            background: var(--pbi-background);
+            padding: 12px;
+            border-radius: 4px;
+            border: 1px solid var(--pbi-border);
+        }
+        
+        .kpi-detail-stat-label {
+            font-size: 10px;
+            color: var(--pbi-text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        
+        .kpi-detail-stat-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--pbi-text-primary);
+        }
+        
+        .kpi-detail-table {
+            margin-top: 16px;
+        }
+        
         @media print {
             .new-opportunities-header button,
             .export-button,
@@ -291,25 +399,38 @@
         <div class="content-area">
             <!-- KPI Dashboard - Focal Point -->
             <div class="kpi-dashboard">
-                <div class="kpi-card kpi-card-featured">
+                <div class="kpi-card kpi-card-featured" onclick="showKPIDetails('damages')">
                     <div class="kpi-label">Total Organizer Damages</div>
                     <div class="kpi-value" style="font-size: 24px;">$218.0M</div>
                     <div style="font-size: 9px; opacity: 0.9; margin-top: 4px;">Across all cases</div>
                 </div>
-                <div class="kpi-card kpi-card-warning">
+                <div class="kpi-card kpi-card-warning" onclick="showKPIDetails('opportunities')">
                     <div class="kpi-label">New Opt-in Opportunities</div>
                     <div class="kpi-value" style="font-size: 24px; color: #ff8c00;">3</div>
                     <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">Require attention</div>
                 </div>
-                <div class="kpi-card">
+                <div class="kpi-card" onclick="showKPIDetails('recoveries')">
                     <div class="kpi-label">Total Recoveries Received</div>
                     <div class="kpi-value" style="font-size: 24px;">$2.4M</div>
                     <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">YTD</div>
                 </div>
-                <div class="kpi-card kpi-card-success">
+                <div class="kpi-card kpi-card-success" onclick="showKPIDetails('disbursements')">
                     <div class="kpi-label">Upcoming Disbursements</div>
                     <div class="kpi-value" style="font-size: 24px; color: var(--chart-green);">$1.2M</div>
                     <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">Next 30 days</div>
+                </div>
+            </div>
+            
+            <!-- KPI Detail Modals -->
+            <div class="kpi-detail-modal" id="kpiModal">
+                <div class="kpi-detail-content">
+                    <div class="kpi-detail-header">
+                        <div class="kpi-detail-title" id="kpiModalTitle">KPI Details</div>
+                        <button class="kpi-detail-close" onclick="closeKPIDetails()">&times;</button>
+                    </div>
+                    <div id="kpiModalBody">
+                        <!-- Content populated by JavaScript -->
+                    </div>
                 </div>
             </div>
 
@@ -952,6 +1073,355 @@
             });
         });
 
+        // KPI Detail Modal Functions
+        function showKPIDetails(kpiType) {
+            const modal = document.getElementById('kpiModal');
+            const title = document.getElementById('kpiModalTitle');
+            const body = document.getElementById('kpiModalBody');
+            
+            let titleText = '';
+            let content = '';
+            
+            switch(kpiType) {
+                case 'damages':
+                    titleText = 'Total Organizer Damages - Detailed Breakdown';
+                    content = getDamagesDetails();
+                    break;
+                case 'opportunities':
+                    titleText = 'New Opt-in Opportunities - Detailed View';
+                    content = getOpportunitiesDetails();
+                    break;
+                case 'recoveries':
+                    titleText = 'Total Recoveries Received - Breakdown';
+                    content = getRecoveriesDetails();
+                    break;
+                case 'disbursements':
+                    titleText = 'Upcoming Disbursements - Schedule';
+                    content = getDisbursementsDetails();
+                    break;
+            }
+            
+            title.textContent = titleText;
+            body.innerHTML = content;
+            modal.classList.add('active');
+            
+            // Prevent body scroll when modal is open
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeKPIDetails() {
+            const modal = document.getElementById('kpiModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        // Close modal when clicking outside
+        document.addEventListener('click', function(event) {
+            const modal = document.getElementById('kpiModal');
+            if (event.target === modal) {
+                closeKPIDetails();
+            }
+        });
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeKPIDetails();
+            }
+        });
+        
+        function getDamagesDetails() {
+            // Calculate totals by status
+            const eligible = casesData.filter(c => c.status === 'ELIGIBLE').reduce((sum, c) => sum + c.damages, 0);
+            const requested = casesData.filter(c => c.status === 'REQUESTED').reduce((sum, c) => sum + c.damages, 0);
+            const confirmed = casesData.filter(c => c.status === 'CONFIRMED').reduce((sum, c) => sum + c.damages, 0);
+            const registered = casesData.filter(c => c.status === 'REGISTERED').reduce((sum, c) => sum + c.damages, 0);
+            const total = casesData.reduce((sum, c) => sum + c.damages, 0);
+            
+            // Top cases by damages
+            const topCases = [...casesData]
+                .filter(c => c.damages > 0)
+                .sort((a, b) => b.damages - a.damages)
+                .slice(0, 5);
+            
+            return `
+                <div class="kpi-detail-summary">
+                    <div class="kpi-detail-stat">
+                        <div class="kpi-detail-stat-label">Total Across All Cases</div>
+                        <div class="kpi-detail-stat-value">${formatCurrency(total)}</div>
+                    </div>
+                    <div class="kpi-detail-stat">
+                        <div class="kpi-detail-stat-label">Eligible Cases</div>
+                        <div class="kpi-detail-stat-value">${formatCurrency(eligible)}</div>
+                    </div>
+                    <div class="kpi-detail-stat">
+                        <div class="kpi-detail-stat-label">Requested Cases</div>
+                        <div class="kpi-detail-stat-value">${formatCurrency(requested)}</div>
+                    </div>
+                    <div class="kpi-detail-stat">
+                        <div class="kpi-detail-stat-label">Confirmed Cases</div>
+                        <div class="kpi-detail-stat-value">${formatCurrency(confirmed)}</div>
+                    </div>
+                    <div class="kpi-detail-stat">
+                        <div class="kpi-detail-stat-label">Registered Cases</div>
+                        <div class="kpi-detail-stat-value">${formatCurrency(registered)}</div>
+                    </div>
+                </div>
+                
+                <div class="viz-title" style="margin-bottom: 12px;">Top 5 Cases by Organizer Damages</div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Case Name</th>
+                                <th>Country</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Organizer Damages</th>
+                                <th>Deadline</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${topCases.map(caseItem => {
+                                const riskColor = getRiskColor(caseItem.country);
+                                const riskBg = getRiskBackgroundColor(caseItem.country);
+                                const caseId = encodeURIComponent(caseItem.caseName);
+                                return `
+                                    <tr style="border-left: 4px solid ${riskColor};">
+                                        <td>
+                                            <a href="case-details.html?case=${caseId}" style="color: var(--pbi-primary); text-decoration: none; font-weight: 600;">
+                                                ${caseItem.caseName}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <span style="background: ${riskBg}; color: ${riskColor}; padding: 2px 8px; border-radius: 2px; font-weight: 600; font-size: 9px;">
+                                                ${caseItem.country}
+                                            </span>
+                                        </td>
+                                        <td><span class="case-status-badge ${getStatusClass(caseItem.status)}">${caseItem.status}</span></td>
+                                        <td class="currency" style="text-align: right; font-weight: 600;">${formatCurrency(caseItem.damages)}</td>
+                                        <td class="date-cell">${caseItem.deadline}</td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+        
+        function getOpportunitiesDetails() {
+            const eligible = newOpportunitiesData.filter(o => o.status === 'ELIGIBLE');
+            const requested = newOpportunitiesData.filter(o => o.status === 'REQUESTED');
+            
+            return `
+                <div class="kpi-detail-summary">
+                    <div class="kpi-detail-stat">
+                        <div class="kpi-detail-stat-label">Total New Opportunities</div>
+                        <div class="kpi-detail-stat-value">${newOpportunitiesData.length}</div>
+                    </div>
+                    <div class="kpi-detail-stat">
+                        <div class="kpi-detail-stat-label">Eligible Cases</div>
+                        <div class="kpi-detail-stat-value">${eligible.length}</div>
+                    </div>
+                    <div class="kpi-detail-stat">
+                        <div class="kpi-detail-stat-label">Requested Cases</div>
+                        <div class="kpi-detail-stat-value">${requested.length}</div>
+                    </div>
+                    <div class="kpi-detail-stat">
+                        <div class="kpi-detail-stat-label">Total Potential Damages</div>
+                        <div class="kpi-detail-stat-value">${formatCurrency(newOpportunitiesData.reduce((sum, o) => sum + o.damages, 0))}</div>
+                    </div>
+                </div>
+                
+                <div class="viz-title" style="margin-bottom: 12px;">All New Opt-in Opportunities</div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Case Name</th>
+                                <th>Country</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Organizer Damages</th>
+                                <th>Deadline</th>
+                                <th>Days Until</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${newOpportunitiesData.map(opp => {
+                                const riskColor = getRiskColor(opp.country);
+                                const riskBg = getRiskBackgroundColor(opp.country);
+                                const daysUntil = getDaysUntilDeadline(opp.deadline);
+                                const caseId = encodeURIComponent(opp.case);
+                                let daysClass = '';
+                                let daysText = `${daysUntil} days`;
+                                if (daysUntil < 0) {
+                                    daysClass = 'style="color: #d13438; font-weight: 600;"';
+                                    daysText = `OVERDUE (${Math.abs(daysUntil)} days)`;
+                                } else if (daysUntil < 30) {
+                                    daysClass = 'style="color: #ff8c00; font-weight: 600;"';
+                                }
+                                return `
+                                    <tr style="border-left: 4px solid ${riskColor};">
+                                        <td>
+                                            <a href="case-details.html?case=${caseId}" style="color: var(--pbi-primary); text-decoration: none; font-weight: 600;">
+                                                ${opp.case}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <span style="background: ${riskBg}; color: ${riskColor}; padding: 2px 8px; border-radius: 2px; font-weight: 600; font-size: 9px;">
+                                                ${opp.country}
+                                            </span>
+                                        </td>
+                                        <td><span class="case-status-badge ${getStatusClass(opp.status)}">${opp.status}</span></td>
+                                        <td class="currency" style="text-align: right; font-weight: 600;">${formatCurrency(opp.damages)}</td>
+                                        <td class="date-cell">${opp.deadline}</td>
+                                        <td ${daysClass}>${daysText}</td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+        
+        function getRecoveriesDetails() {
+            // Sample recovery data
+            const recoveries = [
+                { case: 'Barclays Plc (Staley Action)', amount: 180750, date: '8/20/2025', status: 'COMPLETED' },
+                { case: 'DWS Group', amount: 783416, date: '6/15/2025', status: 'COMPLETED' },
+                { case: 'Petrobras', amount: 1450000, date: '3/10/2025', status: 'COMPLETED' },
+            ];
+            const total = recoveries.reduce((sum, r) => sum + r.amount, 0);
+            
+            return `
+                <div class="kpi-detail-summary">
+                    <div class="kpi-detail-stat">
+                        <div class="kpi-detail-stat-label">Total Recoveries YTD</div>
+                        <div class="kpi-detail-stat-value">${formatCurrency(total)}</div>
+                    </div>
+                    <div class="kpi-detail-stat">
+                        <div class="kpi-detail-stat-label">Number of Recoveries</div>
+                        <div class="kpi-detail-stat-value">${recoveries.length}</div>
+                    </div>
+                    <div class="kpi-detail-stat">
+                        <div class="kpi-detail-stat-label">Average Recovery</div>
+                        <div class="kpi-detail-stat-value">${formatCurrency(total / recoveries.length)}</div>
+                    </div>
+                </div>
+                
+                <div class="viz-title" style="margin-bottom: 12px;">Recovery Details</div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Case Name</th>
+                                <th style="text-align: right;">Recovery Amount</th>
+                                <th>Date Received</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${recoveries.map(rec => `
+                                <tr>
+                                    <td><strong>${rec.case}</strong></td>
+                                    <td class="currency" style="text-align: right; font-weight: 600;">${formatCurrency(rec.amount)}</td>
+                                    <td class="date-cell">${rec.date}</td>
+                                    <td><span class="case-status-badge status-confirmed">${rec.status}</span></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                        <tfoot>
+                            <tr style="background: var(--pbi-background); font-weight: 600;">
+                                <td>Total</td>
+                                <td class="currency" style="text-align: right;">${formatCurrency(total)}</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            `;
+        }
+        
+        function getDisbursementsDetails() {
+            // Sample disbursement data
+            const disbursements = [
+                { case: 'Barclays Plc (Staley Action)', amount: 180750, date: '12/15/2025', status: 'SCHEDULED' },
+                { case: 'Downer EDI Ltd', amount: 660261, date: '1/10/2026', status: 'SCHEDULED' },
+                { case: 'STADA Arzneimittel AG', amount: 380000, date: '2/5/2026', status: 'PENDING' },
+            ];
+            const total = disbursements.reduce((sum, d) => sum + d.amount, 0);
+            
+            return `
+                <div class="kpi-detail-summary">
+                    <div class="kpi-detail-stat">
+                        <div class="kpi-detail-stat-label">Total Upcoming</div>
+                        <div class="kpi-detail-stat-value">${formatCurrency(total)}</div>
+                    </div>
+                    <div class="kpi-detail-stat">
+                        <div class="kpi-detail-stat-label">Scheduled Disbursements</div>
+                        <div class="kpi-detail-stat-value">${disbursements.filter(d => d.status === 'SCHEDULED').length}</div>
+                    </div>
+                    <div class="kpi-detail-stat">
+                        <div class="kpi-detail-stat-label">Next 30 Days</div>
+                        <div class="kpi-detail-stat-value">${formatCurrency(disbursements.filter(d => {
+                            const disbDate = new Date(d.date);
+                            const today = new Date();
+                            const daysDiff = Math.ceil((disbDate - today) / (1000 * 60 * 60 * 24));
+                            return daysDiff <= 30 && daysDiff >= 0;
+                        }).reduce((sum, d) => sum + d.amount, 0))}</div>
+                    </div>
+                </div>
+                
+                <div class="viz-title" style="margin-bottom: 12px;">Upcoming Disbursement Schedule</div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Case Name</th>
+                                <th style="text-align: right;">Disbursement Amount</th>
+                                <th>Expected Date</th>
+                                <th>Days Until</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${disbursements.map(disb => {
+                                const disbDate = new Date(disb.date);
+                                const today = new Date();
+                                const daysDiff = Math.ceil((disbDate - today) / (1000 * 60 * 60 * 24));
+                                let daysClass = '';
+                                if (daysDiff < 7) {
+                                    daysClass = 'style="color: #d13438; font-weight: 600;"';
+                                } else if (daysDiff < 30) {
+                                    daysClass = 'style="color: #ff8c00; font-weight: 600;"';
+                                }
+                                return `
+                                    <tr>
+                                        <td><strong>${disb.case}</strong></td>
+                                        <td class="currency" style="text-align: right; font-weight: 600;">${formatCurrency(disb.amount)}</td>
+                                        <td class="date-cell">${disb.date}</td>
+                                        <td ${daysClass}>${daysDiff} days</td>
+                                        <td><span class="case-status-badge ${disb.status === 'SCHEDULED' ? 'status-confirmed' : 'status-requested'}">${disb.status}</span></td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                        <tfoot>
+                            <tr style="background: var(--pbi-background); font-weight: 600;">
+                                <td>Total</td>
+                                <td class="currency" style="text-align: right;">${formatCurrency(total)}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            `;
+        }
+        
         // Initialize
         window.addEventListener('DOMContentLoaded', () => {
             populateCasesTable();
