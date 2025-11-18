@@ -2,6 +2,8 @@
 
 Financial Recovery Technologies LLC - Interactive Dashboard Sandbox
 
+**GitHub Repository**: `art-dashboard`
+
 ## Overview
 
 This is an interactive HTML/CSS/JavaScript dashboard sandbox designed to replicate and enhance Power BI reports for FRT Services. The dashboard provides a flexible environment for testing layouts, styles, and new modules before implementing changes in Power BI.

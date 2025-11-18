@@ -759,8 +759,13 @@ SWITCH(
 ### Applying Theme
 
 1. **View → Themes → Browse for themes**
-2. Select your JSON file
+2. Select your JSON file (`power-bi-theme.json` from the `art-dashboard` repository)
 3. Or manually set colors in **View → Themes → Customize current theme**
+
+**Download from GitHub**:
+- Repository: `art-dashboard`
+- File: `power-bi-theme.json` (in root directory)
+- Download via: Raw button on GitHub, or clone the repository
 
 ---
 
