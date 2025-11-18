@@ -101,14 +101,24 @@ class StyleSwitcher {
                         </div>
                     </div>
                     
-                    <div class="style-section">
-                        <h4>Actions</h4>
-                        <button class="action-btn" id="randomizeStyles" style="background: linear-gradient(135deg, #8764b8 0%, #e3008c 100%);">
-                            <i class="fas fa-dice"></i> Randomize All
+                    <div class="style-section" style="border-top: 3px solid var(--pbi-primary); padding-top: 16px; margin-top: 24px;">
+                        <h4 style="color: var(--pbi-primary); font-size: 13px; margin-bottom: 16px;">
+                            <i class="fas fa-magic"></i> Quick Actions
+                        </h4>
+                        <button class="action-btn" id="randomizeStyles" style="background: linear-gradient(135deg, #8764b8 0%, #e3008c 100%); margin-bottom: 10px; font-weight: 600;">
+                            <i class="fas fa-dice"></i> Randomize All Styles
                         </button>
-                        <button class="action-btn" id="resetStyles" style="background: #d13438;">Reset to Original</button>
-                        <button class="action-btn" id="exportStyles">Export CSS</button>
-                        <button class="action-btn" id="importStyles">Import CSS</button>
+                        <button class="action-btn" id="resetStyles" style="background: #d13438; margin-bottom: 10px; font-weight: 600;">
+                            <i class="fas fa-undo"></i> Reset to Original
+                        </button>
+                        <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--pbi-border-light);">
+                            <button class="action-btn" id="exportStyles" style="background: var(--pbi-primary); margin-bottom: 8px;">
+                                <i class="fas fa-download"></i> Export CSS
+                            </button>
+                            <button class="action-btn" id="importStyles" style="background: var(--pbi-primary);">
+                                <i class="fas fa-upload"></i> Import CSS
+                            </button>
+                        </div>
                         <input type="file" id="importFile" accept=".json" style="display: none;">
                     </div>
                 </div>
