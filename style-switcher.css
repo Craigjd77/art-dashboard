@@ -47,6 +47,7 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    height: auto;
 }
 
 .style-switcher-panel.open {
@@ -94,14 +95,17 @@
     overflow-y: auto;
     flex: 1;
     max-height: calc(90vh - 60px);
+    padding-bottom: 120px; /* Extra padding to ensure Actions section is scrollable */
 }
 
-/* Ensure Actions section is visible */
+/* Ensure Actions section is visible and prominent */
 .style-section:last-child {
-    position: sticky;
-    bottom: 0;
     background: var(--pbi-card-bg);
-    padding-bottom: 16px;
+    padding-bottom: 20px;
+    margin-bottom: 0;
+    border-top: 3px solid var(--pbi-primary) !important;
+    padding-top: 16px !important;
+    margin-top: 24px !important;
 }
 
 .style-section {
