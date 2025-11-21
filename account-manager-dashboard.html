@@ -1157,9 +1157,7 @@
                 } else if (this.textContent.includes('ELIGIBILITY & FILINGS')) {
                     window.location.href = 'eligibility-filings.html';
                 } else if (this.textContent.includes('CLIENT STATUS REPORTS')) {
-                    // Add navigation for status reports if needed
-                    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
+                    window.location.href = 'client-status-reports.html';
                 } else if (this.textContent.includes('Client Remittance')) {
                     // Add navigation for remittance if needed
                     document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
