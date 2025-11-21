@@ -328,6 +328,11 @@
 
             <!-- Key Metrics KPI Cards -->
             <div class="kpi-dashboard">
+                <div class="kpi-card kpi-card-featured">
+                    <div class="kpi-label">Total Recoveries</div>
+                    <div class="kpi-value" style="font-size: 24px; color: white;">$8.4M</div>
+                    <div style="font-size: 9px; opacity: 0.9; margin-top: 4px;">All time across all accounts</div>
+                </div>
                 <div class="kpi-card">
                     <div class="kpi-label">Claims Filed</div>
                     <div class="kpi-value" style="font-size: 24px;" id="claimsFiled">47</div>
@@ -339,42 +344,74 @@
                     <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">Currently eligible</div>
                 </div>
                 <div class="kpi-card">
-                    <div class="kpi-label">Total Recoveries</div>
-                    <div class="kpi-value" style="font-size: 24px; color: var(--chart-green);" id="totalRecoveries">$8.4M</div>
-                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">All time</div>
-                </div>
-                <div class="kpi-card">
                     <div class="kpi-label">Expected Recovery</div>
                     <div class="kpi-value" style="font-size: 24px;" id="expectedRecovery">$12.2M</div>
                     <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">Pending cases</div>
                 </div>
             </div>
 
-            <!-- Client Information Grid -->
-            <div class="info-grid">
-                <div class="info-card">
-                    <div class="info-card-label">Contract Date</div>
-                    <div class="info-card-value" id="contractDate">3/15/2020</div>
+            <!-- Charts Row -->
+            <div class="grid-2" style="margin-bottom: 12px;">
+                <!-- Recovery Trend Chart -->
+                <div class="viz-card">
+                    <div class="viz-title">Recovery Trend</div>
+                    <div class="bar-chart-container" style="height: 200px;">
+                        <canvas id="recoveryTrendChart"></canvas>
+                    </div>
                 </div>
-                <div class="info-card">
-                    <div class="info-card-label">ATF Signature Date</div>
-                    <div class="info-card-value" id="atfSignatureDate">3/22/2020</div>
+
+                <!-- Case Status Distribution -->
+                <div class="viz-card">
+                    <div class="viz-title">Case Status Distribution</div>
+                    <div class="donut-container" style="height: 200px;">
+                        <canvas id="caseStatusChart"></canvas>
+                        <div class="donut-center">
+                            <div class="donut-total" style="font-size: 16px;">47</div>
+                            <div class="donut-label" style="font-size: 9px;">Total Cases</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="info-card">
-                    <div class="info-card-label">Data Source</div>
-                    <div class="info-card-value" id="dataSource">Custodian Direct</div>
+            </div>
+
+            <!-- Client Information & Recovery by Account -->
+            <div class="grid-2" style="margin-bottom: 12px;">
+                <!-- Client Information -->
+                <div class="viz-card">
+                    <div class="viz-title">Client Information</div>
+                    <div class="info-grid" style="grid-template-columns: 1fr 1fr; gap: 8px; margin: 0;">
+                        <div class="info-card" style="padding: 10px;">
+                            <div class="info-card-label">Contract Date</div>
+                            <div class="info-card-value" style="font-size: 12px;" id="contractDate">3/15/2020</div>
+                        </div>
+                        <div class="info-card" style="padding: 10px;">
+                            <div class="info-card-label">ATF Signature</div>
+                            <div class="info-card-value" style="font-size: 12px;" id="atfSignatureDate">3/22/2020</div>
+                        </div>
+                        <div class="info-card" style="padding: 10px;">
+                            <div class="info-card-label">Data Source</div>
+                            <div class="info-card-value" style="font-size: 12px;" id="dataSource">Custodian Direct</div>
+                        </div>
+                        <div class="info-card" style="padding: 10px;">
+                            <div class="info-card-label">Refresh Frequency</div>
+                            <div class="info-card-value" style="font-size: 12px;" id="dataRefresh">Monthly</div>
+                        </div>
+                        <div class="info-card" style="padding: 10px;">
+                            <div class="info-card-label">CUSIP Client</div>
+                            <div class="info-card-value yes" style="font-size: 12px;" id="cusipClient">Yes</div>
+                        </div>
+                        <div class="info-card" style="padding: 10px;">
+                            <div class="info-card-label">Recognized Loss</div>
+                            <div class="info-card-value" style="font-size: 12px;" id="recognizedLoss">$45.8M</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="info-card">
-                    <div class="info-card-label">Data Refresh Frequency</div>
-                    <div class="info-card-value" id="dataRefresh">Monthly</div>
-                </div>
-                <div class="info-card">
-                    <div class="info-card-label">CUSIP Client</div>
-                    <div class="info-card-value yes" id="cusipClient">Yes</div>
-                </div>
-                <div class="info-card">
-                    <div class="info-card-label">Recognized Loss Filed</div>
-                    <div class="info-card-value" id="recognizedLoss">$45.8M</div>
+
+                <!-- Recovery by Child Account -->
+                <div class="viz-card">
+                    <div class="viz-title">Recovery by Child Account</div>
+                    <div class="bar-chart-container" style="height: 200px;">
+                        <canvas id="recoveryByAccountChart"></canvas>
+                    </div>
                 </div>
             </div>
 
@@ -839,6 +876,195 @@
             });
         });
 
+        // Chart creation functions
+        function createRecoveryTrendChart() {
+            const ctx = document.getElementById('recoveryTrendChart').getContext('2d');
+            
+            // Sample recovery data over time
+            const recoveryData = {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Recoveries',
+                    data: [0, 0, 1450000, 0, 0, 783416, 0, 180750, 0, 0, 0, 0],
+                    backgroundColor: 'rgba(16, 124, 16, 0.8)',
+                    borderColor: '#107c10',
+                    borderWidth: 2,
+                    borderRadius: 4
+                }]
+            };
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: recoveryData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return formatCurrency(context.parsed.y);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                },
+                                font: {
+                                    size: 9
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                font: {
+                                    size: 9
+                                }
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createCaseStatusChart() {
+            const ctx = document.getElementById('caseStatusChart').getContext('2d');
+            
+            const statusData = {
+                labels: ['Eligible', 'Not Eligible', 'Under Review', 'Pending', 'Filed'],
+                datasets: [{
+                    data: [32, 5, 8, 2, 0],
+                    backgroundColor: [
+                        '#107c10',
+                        '#d13438',
+                        '#ff8c00',
+                        '#605e5c',
+                        '#0078d4'
+                    ],
+                    borderWidth: 0
+                }]
+            };
+            
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: statusData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '60%',
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                font: {
+                                    size: 9
+                                },
+                                padding: 8,
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.parsed || 0;
+                                    return label + ': ' + value + ' cases';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createRecoveryByAccountChart() {
+            const ctx = document.getElementById('recoveryByAccountChart').getContext('2d');
+            
+            const accountData = {
+                labels: ['Hedge Funds', 'Mutual Funds', 'Global Funds', 'Trust Company'],
+                datasets: [{
+                    label: 'Recoveries',
+                    data: [5980750, 783416, 1450000, 194115],
+                    backgroundColor: [
+                        'rgba(0, 120, 212, 0.8)',
+                        'rgba(255, 140, 0, 0.8)',
+                        'rgba(16, 124, 16, 0.8)',
+                        'rgba(135, 100, 184, 0.8)'
+                    ],
+                    borderColor: [
+                        '#0078d4',
+                        '#ff8c00',
+                        '#107c10',
+                        '#8764b8'
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 4
+                }]
+            };
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: accountData,
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return formatCurrency(context.parsed.x);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                },
+                                font: {
+                                    size: 9
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                font: {
+                                    size: 9
+                                }
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
         // Initialize
         window.addEventListener('DOMContentLoaded', () => {
             populateClientHierarchy();
@@ -850,6 +1076,9 @@
             populatePortalUsers();
             populateNotificationSignups();
             populateEligibilitySnapshot();
+            createRecoveryTrendChart();
+            createCaseStatusChart();
+            createRecoveryByAccountChart();
         });
     </script>
 </body>
