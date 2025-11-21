@@ -634,10 +634,6 @@
                 </div>
             </div>
 
-                    </div>
-                </div>
-            </div>
-
             <!-- Page 3: Analysis -->
             <div class="dashboard-page" id="page3">
                 <div class="viz-card" style="margin-bottom: 12px;">
@@ -1064,16 +1060,34 @@
             });
             
             // Show selected page
-            document.getElementById(`page${pageNumber}`).classList.add('active');
+            const targetPage = document.getElementById(`page${pageNumber}`);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
             
             // Update navigation buttons
             document.querySelectorAll('.page-nav-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
-            event.target.classList.add('active');
+            const buttons = document.querySelectorAll('.page-nav-btn');
+            if (buttons[pageNumber - 1]) {
+                buttons[pageNumber - 1].classList.add('active');
+            }
             
             // Update page indicator
             document.getElementById('currentPageIndicator').textContent = `Page ${pageNumber} of 3`;
+            
+            // Initialize charts if showing Page 3
+            if (pageNumber === 3) {
+                setTimeout(() => {
+                    if (!window.chartsInitialized) {
+                        createRecoveryTrendChart();
+                        createCaseStatusChart();
+                        createRecoveryByAccountChart();
+                        window.chartsInitialized = true;
+                    }
+                }, 100);
+            }
         }
 
         function exportTable(tableId, filename) {
@@ -1328,9 +1342,10 @@
             populatePortalUsers();
             populateNotificationSignups();
             populateEligibilitySnapshot();
-            createRecoveryTrendChart();
-            createCaseStatusChart();
-            createRecoveryByAccountChart();
+            
+            // Only initialize charts if Page 3 is visible or when it's shown
+            // Charts will be created when user navigates to Page 3
+            window.chartsInitialized = false;
         });
     </script>
 </body>
