@@ -265,6 +265,73 @@
             background: var(--pbi-background);
             color: var(--pbi-text);
         }
+        
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .chart-card {
+            background: var(--pbi-card-bg);
+            border: 1px solid var(--pbi-border);
+            border-radius: 4px;
+            padding: 12px;
+            box-shadow: var(--pbi-shadow);
+        }
+        
+        .chart-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--pbi-text);
+            margin-bottom: 8px;
+        }
+        
+        .chart-container {
+            height: 200px;
+            position: relative;
+        }
+        
+        .frt-footer {
+            background: var(--pbi-primary);
+            color: white;
+            padding: 16px;
+            margin-top: 24px;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 11px;
+        }
+        
+        .frt-footer a {
+            color: white;
+            text-decoration: none;
+            margin: 0 8px;
+        }
+        
+        .frt-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .frt-logo-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .frt-logo {
+            width: 40px;
+            height: 40px;
+            background: var(--pbi-primary);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
@@ -319,9 +386,14 @@
 
         <!-- Report Header -->
         <div class="report-header">
-            <div class="report-title">FRT FINANCIAL RECOVERY TECH</div>
-            <div class="report-subtitle">Status Report for <span id="reportClientName">DEMOFRTCLIENT</span></div>
-            <div class="report-period">Period from <span id="reportPeriodStart">10/1/2024</span> to <span id="reportPeriodEnd">10/31/2024</span></div>
+            <div class="frt-logo-header">
+                <div class="frt-logo">FRT</div>
+                <div>
+                    <div class="report-title">FRT FINANCIAL RECOVERY TECH</div>
+                    <div class="report-subtitle">Status Report for <span id="reportClientName">DEMOFRTCLIENT</span></div>
+                    <div class="report-period">Period from <span id="reportPeriodStart">10/1/2024</span> to <span id="reportPeriodEnd">10/31/2024</span></div>
+                </div>
+            </div>
         </div>
 
         <!-- Report Tabs -->
@@ -370,6 +442,22 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <div class="chart-card">
+                    <div class="chart-title">Recovery by Month</div>
+                    <div class="chart-container">
+                        <canvas id="recoveryByMonthChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title">Top 10 Companies by Recovery</div>
+                    <div class="chart-container">
+                        <canvas id="topCompaniesChart"></canvas>
+                    </div>
+                </div>
             </div>
 
             <!-- Data Table -->
@@ -573,16 +661,45 @@
         </div>
     </div>
 
+    <!-- FRT Footer -->
+    <div class="frt-footer">
+        <div style="margin-bottom: 8px;">
+            <strong>FRT Financial Recovery Technologies LLC</strong> | 
+            <a href="https://www.frtservices.com" target="_blank">www.frtservices.com</a> | 
+            <a href="mailto:info@frtservices.com">info@frtservices.com</a>
+        </div>
+        <div style="opacity: 0.9; font-size: 10px;">
+            This report is confidential and proprietary. Unauthorized distribution is prohibited.
+        </div>
+    </div>
+
     <!-- Style Switcher -->
     <div id="styleSwitcher"></div>
     <script src="style-switcher.js"></script>
 
     <script>
-        // Sample data
+        // Sample data - Expanded with many more rows
         const settledData = [
             { company: 'APACHE CORP', cusip: '037411100', accountName: 'Account Name 1234', accountNumber: 'Account Number 1234', filedDate: '10-09-2024', fund: '$65,000,000.00', periodStart: '01-01-2018', periodEnd: '01-01-2020', recDate: '10-19-2024', recovered: '$1,065.95', fee: '$10.33', net: '$18,875.29', admin: 'A.B. Data, Ltd' },
             { company: 'APPLE INC', cusip: '037833100', accountName: 'Account Name 5678', accountNumber: 'Account Number 5678', filedDate: '10-10-2024', fund: '$490,000,000.00', periodStart: '11-01-2018', periodEnd: '01-02-2019', recDate: '10-20-2024', recovered: '$45,230.12', fee: '$452.30', net: '$44,777.82', admin: 'Gland & Co' },
-            { company: 'JPMORGAN', cusip: '46625H100', accountName: 'Account Name 9012', accountNumber: 'Account Number 9012', filedDate: '10-11-2024', fund: '$150,000,000.00', periodStart: '02-01-2019', periodEnd: '05-01-2019', recDate: '10-21-2024', recovered: '$12,456.78', fee: '$124.57', net: '$12,332.21', admin: 'Epiq Systems' }
+            { company: 'JPMORGAN', cusip: '46625H100', accountName: 'Account Name 9012', accountNumber: 'Account Number 9012', filedDate: '10-11-2024', fund: '$150,000,000.00', periodStart: '02-01-2019', periodEnd: '05-01-2019', recDate: '10-21-2024', recovered: '$12,456.78', fee: '$124.57', net: '$12,332.21', admin: 'Epiq Systems' },
+            { company: 'MICROSOFT CORP', cusip: '594918104', accountName: 'Account Name 3456', accountNumber: 'Account Number 3456', filedDate: '10-12-2024', fund: '$350,000,000.00', periodStart: '03-01-2019', periodEnd: '06-01-2019', recDate: '10-22-2024', recovered: '$78,945.23', fee: '$789.45', net: '$78,155.78', admin: 'Garden City Group' },
+            { company: 'AMAZON.COM INC', cusip: '023135106', accountName: 'Account Name 7890', accountNumber: 'Account Number 7890', filedDate: '10-13-2024', fund: '$280,000,000.00', periodStart: '04-01-2019', periodEnd: '07-01-2019', recDate: '10-23-2024', recovered: '$56,789.45', fee: '$567.89', net: '$56,221.56', admin: 'Epiq Systems' },
+            { company: 'ALPHABET INC', cusip: '02079K305', accountName: 'Account Name 2468', accountNumber: 'Account Number 2468', filedDate: '10-14-2024', fund: '$420,000,000.00', periodStart: '05-01-2019', periodEnd: '08-01-2019', recDate: '10-24-2024', recovered: '$89,123.67', fee: '$891.24', net: '$88,232.43', admin: 'A.B. Data, Ltd' },
+            { company: 'TESLA INC', cusip: '88160R101', accountName: 'Account Name 1357', accountNumber: 'Account Number 1357', filedDate: '10-15-2024', fund: '$195,000,000.00', periodStart: '06-01-2019', periodEnd: '09-01-2019', recDate: '10-25-2024', recovered: '$34,567.89', fee: '$345.68', net: '$34,222.21', admin: 'Gland & Co' },
+            { company: 'META PLATFORMS', cusip: '30303M102', accountName: 'Account Name 8024', accountNumber: 'Account Number 8024', filedDate: '10-16-2024', fund: '$310,000,000.00', periodStart: '07-01-2019', periodEnd: '10-01-2019', recDate: '10-26-2024', recovered: '$67,890.12', fee: '$678.90', net: '$67,211.22', admin: 'Garden City Group' },
+            { company: 'NVIDIA CORP', cusip: '67066G104', accountName: 'Account Name 4680', accountNumber: 'Account Number 4680', filedDate: '10-17-2024', fund: '$175,000,000.00', periodStart: '08-01-2019', periodEnd: '11-01-2019', recDate: '10-27-2024', recovered: '$23,456.78', fee: '$234.57', net: '$23,222.21', admin: 'Epiq Systems' },
+            { company: 'BANK OF AMERICA', cusip: '060505104', accountName: 'Account Name 5791', accountNumber: 'Account Number 5791', filedDate: '10-18-2024', fund: '$225,000,000.00', periodStart: '09-01-2019', periodEnd: '12-01-2019', recDate: '10-28-2024', recovered: '$45,678.90', fee: '$456.79', net: '$45,222.11', admin: 'A.B. Data, Ltd' },
+            { company: 'WELLS FARGO & CO', cusip: '949746101', accountName: 'Account Name 6802', accountNumber: 'Account Number 6802', filedDate: '10-19-2024', fund: '$140,000,000.00', periodStart: '10-01-2019', periodEnd: '01-01-2020', recDate: '10-29-2024', recovered: '$19,876.54', fee: '$198.77', net: '$19,677.77', admin: 'Gland & Co' },
+            { company: 'GOLDMAN SACHS', cusip: '38141G104', accountName: 'Account Name 7913', accountNumber: 'Account Number 7913', filedDate: '10-20-2024', fund: '$265,000,000.00', periodStart: '11-01-2019', periodEnd: '02-01-2020', recDate: '10-30-2024', recovered: '$52,345.67', fee: '$523.46', net: '$51,822.21', admin: 'Garden City Group' },
+            { company: 'MORGAN STANLEY', cusip: '617446448', accountName: 'Account Name 8024', accountNumber: 'Account Number 8024', filedDate: '10-21-2024', fund: '$190,000,000.00', periodStart: '12-01-2019', periodEnd: '03-01-2020', recDate: '10-31-2024', recovered: '$38,901.23', fee: '$389.01', net: '$38,512.22', admin: 'Epiq Systems' },
+            { company: 'CITIGROUP INC', cusip: '172967424', accountName: 'Account Name 9135', accountNumber: 'Account Number 9135', filedDate: '10-22-2024', fund: '$155,000,000.00', periodStart: '01-01-2020', periodEnd: '04-01-2020', recDate: '11-01-2024', recovered: '$27,654.32', fee: '$276.54', net: '$27,377.78', admin: 'A.B. Data, Ltd' },
+            { company: 'BERKSHIRE HATHAWAY', cusip: '084670702', accountName: 'Account Name 0246', accountNumber: 'Account Number 0246', filedDate: '10-23-2024', fund: '$380,000,000.00', periodStart: '02-01-2020', periodEnd: '05-01-2020', recDate: '11-02-2024', recovered: '$71,234.56', fee: '$712.35', net: '$70,522.21', admin: 'Gland & Co' },
+            { company: 'JOHNSON & JOHNSON', cusip: '478160104', accountName: 'Account Name 1357', accountNumber: 'Account Number 1357', filedDate: '10-24-2024', fund: '$220,000,000.00', periodStart: '03-01-2020', periodEnd: '06-01-2020', recDate: '11-03-2024', recovered: '$43,567.89', fee: '$435.68', net: '$43,132.21', admin: 'Garden City Group' },
+            { company: 'PROCTER & GAMBLE', cusip: '742718109', accountName: 'Account Name 2468', accountNumber: 'Account Number 2468', filedDate: '10-25-2024', fund: '$165,000,000.00', periodStart: '04-01-2020', periodEnd: '07-01-2020', recDate: '11-04-2024', recovered: '$31,789.01', fee: '$317.89', net: '$31,471.12', admin: 'Epiq Systems' },
+            { company: 'COCA-COLA CO', cusip: '191216100', accountName: 'Account Name 3579', accountNumber: 'Account Number 3579', filedDate: '10-26-2024', fund: '$145,000,000.00', periodStart: '05-01-2020', periodEnd: '08-01-2020', recDate: '11-05-2024', recovered: '$28,901.23', fee: '$289.01', net: '$28,612.22', admin: 'A.B. Data, Ltd' },
+            { company: 'WALMART INC', cusip: '931142103', accountName: 'Account Name 4680', accountNumber: 'Account Number 4680', filedDate: '10-27-2024', fund: '$200,000,000.00', periodStart: '06-01-2020', periodEnd: '09-01-2020', recDate: '11-06-2024', recovered: '$39,876.54', fee: '$398.77', net: '$39,477.77', admin: 'Gland & Co' },
+            { company: 'HOME DEPOT', cusip: '437076102', accountName: 'Account Name 5791', accountNumber: 'Account Number 5791', filedDate: '10-28-2024', fund: '$130,000,000.00', periodStart: '07-01-2020', periodEnd: '10-01-2020', recDate: '11-07-2024', recovered: '$25,432.10', fee: '$254.32', net: '$25,177.78', admin: 'Garden City Group' }
         ];
 
         const antitrustData = [
@@ -736,11 +853,180 @@
             });
         });
 
+        // Chart creation functions
+        function createRecoveryByMonthChart() {
+            const canvas = document.getElementById('recoveryByMonthChart');
+            if (!canvas || typeof Chart === 'undefined') return;
+            
+            const ctx = canvas.getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+                    datasets: [{
+                        label: 'Recovered ($)',
+                        data: [0, 0, 145000, 0, 0, 783416, 0, 180750, 0, 2499756],
+                        backgroundColor: 'rgba(16, 124, 16, 0.8)',
+                        borderColor: '#107c10',
+                        borderWidth: 2,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return '$' + context.parsed.y.toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + (value / 1000).toFixed(0) + 'K';
+                                },
+                                font: { size: 9 }
+                            },
+                            grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                        },
+                        x: {
+                            ticks: { font: { size: 9 } },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createTopCompaniesChart() {
+            const canvas = document.getElementById('topCompaniesChart');
+            if (!canvas || typeof Chart === 'undefined') return;
+            
+            // Calculate top companies by recovery
+            const companyTotals = {};
+            settledData.forEach(row => {
+                const recovered = parseFloat(row.recovered.replace(/[$,]/g, ''));
+                if (!companyTotals[row.company]) {
+                    companyTotals[row.company] = 0;
+                }
+                companyTotals[row.company] += recovered;
+            });
+            
+            const sorted = Object.entries(companyTotals)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 10);
+            
+            const ctx = canvas.getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: sorted.map(item => item[0].substring(0, 12)),
+                    datasets: [{
+                        label: 'Recovered ($)',
+                        data: sorted.map(item => item[1]),
+                        backgroundColor: 'rgba(0, 120, 212, 0.8)',
+                        borderColor: '#0078d4',
+                        borderWidth: 2,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return '$' + context.parsed.x.toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + (value / 1000).toFixed(0) + 'K';
+                                },
+                                font: { size: 9 }
+                            },
+                            grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                        },
+                        y: {
+                            ticks: { font: { size: 9 } },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Enhanced export with FRT branding
+        function exportTable(tableId, filename) {
+            const table = document.getElementById(tableId);
+            if (!table) return;
+            
+            let csv = [];
+            
+            // Add FRT branding header
+            csv.push('FRT FINANCIAL RECOVERY TECHNOLOGIES LLC');
+            csv.push('Status Report - ' + document.getElementById('reportClientName').textContent);
+            csv.push('Period: ' + document.getElementById('reportPeriodStart').textContent + ' to ' + document.getElementById('reportPeriodEnd').textContent);
+            csv.push('Generated: ' + new Date().toLocaleDateString());
+            csv.push('');
+            csv.push('Report Type: ' + document.querySelector('.report-tab.active').textContent);
+            csv.push('');
+            
+            // Add table data
+            const rows = table.querySelectorAll('tr');
+            for (let i = 0; i < rows.length; i++) {
+                const row = [];
+                const cols = rows[i].querySelectorAll('td, th');
+                for (let j = 0; j < cols.length; j++) {
+                    let data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/"/g, '""');
+                    row.push('"' + data + '"');
+                }
+                csv.push(row.join(','));
+            }
+            
+            csv.push('');
+            csv.push('This report is confidential and proprietary. Unauthorized distribution is prohibited.');
+            csv.push('FRT Financial Recovery Technologies LLC | www.frtservices.com');
+            
+            const csvContent = csv.join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', filename + '_' + new Date().toISOString().split('T')[0] + '.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
         // Initialize
         window.addEventListener('DOMContentLoaded', () => {
             populateSettledTable();
             populateAntitrustTable();
             populateNonusTable();
+            
+            // Create charts after a short delay to ensure Chart.js is loaded
+            setTimeout(() => {
+                createRecoveryByMonthChart();
+                createTopCompaniesChart();
+            }, 500);
         });
     </script>
 </body>
