@@ -237,8 +237,9 @@ body {
     padding: 12px;
     max-width: 1920px;
     margin: 0 auto;
-    height: calc(100vh - 88px);
-    overflow: hidden;
+    min-height: calc(100vh - 88px);
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .content-area {
