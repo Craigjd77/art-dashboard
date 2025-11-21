@@ -43,35 +43,59 @@
             color: var(--pbi-text-secondary);
         }
         
+        .report-tabs-container {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        
         .report-tabs {
             display: flex;
-            gap: 4px;
-            margin-bottom: 16px;
-            border-bottom: 2px solid var(--pbi-border);
+            flex-direction: column;
+            gap: 0;
+            min-width: 220px;
+            background: var(--pbi-card-bg);
+            border: 1px solid var(--pbi-border);
+            border-radius: 4px;
+            padding: 8px;
+            box-shadow: var(--pbi-shadow);
         }
         
         .report-tab {
-            padding: 10px 20px;
+            padding: 12px 16px;
             background: transparent;
-            border: none;
-            border-bottom: 3px solid transparent;
+            border: 1px solid transparent;
+            border-radius: 3px;
             font-size: 12px;
             font-weight: 500;
             color: var(--pbi-text-secondary);
             cursor: pointer;
             transition: all 0.2s ease;
-            margin-bottom: -2px;
+            text-align: left;
+            margin-bottom: 4px;
+        }
+        
+        .report-tab:last-child {
+            margin-bottom: 0;
         }
         
         .report-tab:hover {
             color: var(--pbi-primary);
             background: var(--pbi-hover);
+            border-color: var(--pbi-border);
         }
         
         .report-tab.active {
             color: var(--pbi-primary);
-            border-bottom-color: var(--pbi-primary);
-            background: var(--pbi-hover);
+            background: linear-gradient(135deg, rgba(0, 120, 212, 0.12) 0%, rgba(0, 120, 212, 0.06) 100%);
+            border-color: var(--pbi-primary);
+            border-left-width: 3px;
+            font-weight: 600;
+            box-shadow: 0 1px 3px rgba(0, 120, 212, 0.15);
+        }
+        
+        .report-content-wrapper {
+            flex: 1;
         }
         
         .summary-section {
@@ -411,15 +435,19 @@
             </div>
         </div>
 
-        <!-- Report Tabs -->
-        <div class="report-tabs">
-            <button class="report-tab active" data-tab="settled">Settled Action Recovery</button>
-            <button class="report-tab" data-tab="antitrust">Antitrust Recovery</button>
-            <button class="report-tab" data-tab="nonus">Non-US Group Recovery</button>
-        </div>
-
-        <!-- Settled Action Recovery Tab -->
-        <div class="report-tab-content" id="settledTab">
+        <!-- Report Tabs Container -->
+        <div class="report-tabs-container">
+            <!-- Report Tabs (Left Sidebar) -->
+            <div class="report-tabs">
+                <button class="report-tab active" data-tab="settled">Settled Action Recovery</button>
+                <button class="report-tab" data-tab="antitrust">Antitrust Recovery</button>
+                <button class="report-tab" data-tab="nonus">Non-US Group Recovery</button>
+            </div>
+            
+            <!-- Report Content (Right Side) -->
+            <div class="report-content-wrapper">
+                <!-- Settled Action Recovery Tab -->
+                <div class="report-tab-content" id="settledTab">
             <!-- Summary Section -->
             <div class="summary-section">
                 <div class="summary-title">Summary</div>
@@ -555,8 +583,8 @@
             </div>
         </div>
 
-        <!-- Antitrust Recovery Tab -->
-        <div class="report-tab-content" id="antitrustTab" style="display: none;">
+                <!-- Antitrust Recovery Tab -->
+                <div class="report-tab-content" id="antitrustTab" style="display: none;">
             <!-- Summary Section -->
             <div class="summary-section">
                 <div class="summary-title">Summary</div>
@@ -660,8 +688,8 @@
             </div>
         </div>
 
-        <!-- Non-US Group Recovery Tab -->
-        <div class="report-tab-content" id="nonusTab" style="display: none;">
+                <!-- Non-US Group Recovery Tab -->
+                <div class="report-tab-content" id="nonusTab" style="display: none;">
             <!-- Summary Section -->
             <div class="summary-section">
                 <div class="summary-title">Summary</div>
@@ -777,6 +805,8 @@
                     </table>
                 </div>
             </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -890,6 +920,31 @@
             });
         }
 
+        function populateSettledNewlyPaidTable() {
+            const tbody = document.getElementById('settledNewlyPaidTableBody');
+            tbody.innerHTML = '';
+            
+            settledNewlyPaidData.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.company}</td>
+                    <td>${row.cusip}</td>
+                    <td>${row.accountName}</td>
+                    <td>${row.accountNumber}</td>
+                    <td class="date-cell">${row.filedDate}</td>
+                    <td class="currency-cell">${row.fund}</td>
+                    <td class="date-cell">${row.periodStart}</td>
+                    <td class="date-cell">${row.periodEnd}</td>
+                    <td class="date-cell">${row.recDate}</td>
+                    <td class="currency-cell">${row.recovered}</td>
+                    <td class="currency-cell">${row.fee}</td>
+                    <td class="currency-cell">${row.net}</td>
+                    <td>${row.admin}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
         function populateAntitrustNewlyPaidTable() {
             const tbody = document.getElementById('antitrustNewlyPaidTableBody');
             tbody.innerHTML = '';
@@ -980,38 +1035,6 @@
                 `;
                 tbody.appendChild(tr);
             });
-        }
-
-        // Export function
-        function exportTable(tableId, filename) {
-            const table = document.getElementById(tableId);
-            if (!table) return;
-            
-            let csv = [];
-            const rows = table.querySelectorAll('tr');
-            
-            for (let i = 0; i < rows.length; i++) {
-                const row = [];
-                const cols = rows[i].querySelectorAll('td, th');
-                
-                for (let j = 0; j < cols.length; j++) {
-                    let data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/"/g, '""');
-                    row.push('"' + data + '"');
-                }
-                csv.push(row.join(','));
-            }
-            
-            const csvContent = csv.join('\n');
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-            
-            link.setAttribute('href', url);
-            link.setAttribute('download', filename + '_' + new Date().toISOString().split('T')[0] + '.csv');
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
         }
 
         // Client selection
