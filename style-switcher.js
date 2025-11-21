@@ -344,8 +344,8 @@ class StyleSwitcher {
         const randomCardPadding = selected.cardPadding;
         const randomCardGap = selected.cardGap;
         
-        // Random shadow intensity (0-20)
-        const randomShadowIntensity = Math.floor(Math.random() * 21);
+        // Shadow intensity from selected combination
+        const randomShadowIntensity = selected.shadow;
         
         // Apply random colors
         this.applyColor('primary', randomPrimary);
