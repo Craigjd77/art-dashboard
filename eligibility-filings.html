@@ -84,10 +84,8 @@
         <button class="nav-tab active">CLIENT ELIGIBILITY & FILINGS</button>
         <button class="nav-tab">CLIENT STATUS REPORTS</button>
         <button class="nav-tab">Client Opt-in Monitoring</button>
-        <button class="nav-tab">AGGREGATE ACCOUNT LOOKUP</button>
-        <button class="nav-tab">Client Recoveries</button>
         <button class="nav-tab">Client Remittance</button>
-        <button class="nav-tab">Data Update</button>
+        <button class="nav-tab">Account Manager Dashboard</button>
         <button class="nav-tab" style="background: var(--pbi-hover); border: 1px dashed var(--pbi-border); border-radius: 2px; margin-left: 8px;">+</button>
     </div>
 
@@ -533,6 +531,10 @@
             tab.addEventListener('click', function() {
                 if (this.textContent.includes('Opt-in Monitoring')) {
                     window.location.href = 'opt-in-monitoring.html';
+                } else if (this.textContent.includes('CLIENT STATUS REPORTS')) {
+                    window.location.href = 'client-status-reports.html';
+                } else if (this.textContent.includes('Account Manager Dashboard')) {
+                    window.location.href = 'account-manager-dashboard.html';
                 } else {
                     document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
                     this.classList.add('active');

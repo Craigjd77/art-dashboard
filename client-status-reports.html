@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Status Reports | FRT Work Tools</title>
+    
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Shared Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style-switcher.css">
+    
+    <style>
+        .report-header {
+            background: var(--pbi-card-bg);
+            border: 1px solid var(--pbi-border);
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: var(--pbi-shadow);
+        }
+        
+        .report-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--pbi-primary);
+            margin-bottom: 4px;
+        }
+        
+        .report-subtitle {
+            font-size: 12px;
+            color: var(--pbi-text-secondary);
+            margin-bottom: 8px;
+        }
+        
+        .report-period {
+            font-size: 11px;
+            color: var(--pbi-text-secondary);
+        }
+        
+        .report-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 16px;
+            border-bottom: 2px solid var(--pbi-border);
+        }
+        
+        .report-tab {
+            padding: 10px 20px;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--pbi-text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: -2px;
+        }
+        
+        .report-tab:hover {
+            color: var(--pbi-primary);
+            background: var(--pbi-hover);
+        }
+        
+        .report-tab.active {
+            color: var(--pbi-primary);
+            border-bottom-color: var(--pbi-primary);
+            background: var(--pbi-hover);
+        }
+        
+        .summary-section {
+            background: var(--pbi-card-bg);
+            border: 1px solid var(--pbi-border);
+            border-radius: 4px;
+            padding: 12px;
+            margin-bottom: 12px;
+            box-shadow: var(--pbi-shadow);
+        }
+        
+        .summary-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--pbi-text);
+            margin-bottom: 12px;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+        }
+        
+        .summary-card {
+            background: var(--pbi-background);
+            border: 1px solid var(--pbi-border-light);
+            border-radius: 3px;
+            padding: 10px;
+        }
+        
+        .summary-label {
+            font-size: 10px;
+            color: var(--pbi-text-secondary);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .summary-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--pbi-text);
+        }
+        
+        .summary-value.currency {
+            color: var(--chart-green);
+        }
+        
+        .data-table-container {
+            background: var(--pbi-card-bg);
+            border: 1px solid var(--pbi-border);
+            border-radius: 4px;
+            padding: 12px;
+            box-shadow: var(--pbi-shadow);
+            overflow-x: auto;
+        }
+        
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .table-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--pbi-text);
+        }
+        
+        .table-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .export-button {
+            background: var(--pbi-primary);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 3px;
+            font-size: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s ease;
+        }
+        
+        .export-button:hover {
+            background: var(--pbi-primary-dark);
+        }
+        
+        .status-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+        }
+        
+        .status-table thead {
+            background: var(--pbi-hover);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .status-table th {
+            padding: 8px 6px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--pbi-text);
+            border-bottom: 2px solid var(--pbi-border);
+            white-space: nowrap;
+        }
+        
+        .status-table td {
+            padding: 6px;
+            border-bottom: 1px solid var(--pbi-border-light);
+            color: var(--pbi-text);
+        }
+        
+        .status-table tbody tr {
+            transition: background 0.15s ease;
+        }
+        
+        .status-table tbody tr:hover {
+            background: var(--pbi-hover);
+        }
+        
+        .status-table tbody tr:nth-child(even) {
+            background: rgba(0, 0, 0, 0.02);
+        }
+        
+        .currency-cell {
+            text-align: right;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .date-cell {
+            white-space: nowrap;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--pbi-text-secondary);
+            font-size: 12px;
+        }
+        
+        .client-selector-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 12px;
+            background: var(--pbi-card-bg);
+            border: 1px solid var(--pbi-border);
+            border-radius: 4px;
+            box-shadow: var(--pbi-shadow);
+        }
+        
+        .period-selector {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .period-selector select {
+            padding: 6px 10px;
+            border: 1px solid var(--pbi-border);
+            border-radius: 3px;
+            font-size: 11px;
+            background: var(--pbi-background);
+            color: var(--pbi-text);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <div class="logo">FRT Work Tools</div>
+            <div class="header-title">Client Status Reports</div>
+        </div>
+        <div class="header-right">
+            <div class="user-info">Craig D'Alessio</div>
+            <button>Share</button>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+        <button class="nav-tab">CLIENT ELIGIBILITY & FILINGS</button>
+        <button class="nav-tab active">CLIENT STATUS REPORTS</button>
+        <button class="nav-tab">Client Opt-in Monitoring</button>
+        <button class="nav-tab">Client Remittance</button>
+        <button class="nav-tab">Account Manager Dashboard</button>
+        <button class="nav-tab" style="background: var(--pbi-hover); border: 1px dashed var(--pbi-border); border-radius: 2px; margin-left: 8px;">+</button>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Client & Period Selector -->
+        <div class="client-selector-top">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <label style="font-size: 11px; font-weight: 500;">Client:</label>
+                <select id="clientSelect" style="padding: 6px 10px; border: 1px solid var(--pbi-border); border-radius: 3px; font-size: 11px; min-width: 250px;">
+                    <option value="demo">DEMOFRTCLIENT</option>
+                    <option value="wellington">Wellington Management</option>
+                    <option value="blackrock">BlackRock</option>
+                    <option value="schwab">Charles Schwab Investment Management</option>
+                </select>
+            </div>
+            <div class="period-selector">
+                <label style="font-size: 11px; font-weight: 500;">Report Period:</label>
+                <select id="periodSelect" style="padding: 6px 10px; border: 1px solid var(--pbi-border); border-radius: 3px; font-size: 11px;">
+                    <option value="monthly">Monthly</option>
+                    <option value="quarterly">Quarterly</option>
+                </select>
+                <select id="monthSelect" style="padding: 6px 10px; border: 1px solid var(--pbi-border); border-radius: 3px; font-size: 11px;">
+                    <option value="2024-10">October 2024</option>
+                    <option value="2024-09">September 2024</option>
+                    <option value="2024-08">August 2024</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Report Header -->
+        <div class="report-header">
+            <div class="report-title">FRT FINANCIAL RECOVERY TECH</div>
+            <div class="report-subtitle">Status Report for <span id="reportClientName">DEMOFRTCLIENT</span></div>
+            <div class="report-period">Period from <span id="reportPeriodStart">10/1/2024</span> to <span id="reportPeriodEnd">10/31/2024</span></div>
+        </div>
+
+        <!-- Report Tabs -->
+        <div class="report-tabs">
+            <button class="report-tab active" data-tab="settled">Settled Action Recovery</button>
+            <button class="report-tab" data-tab="antitrust">Antitrust Recovery</button>
+            <button class="report-tab" data-tab="nonus">Non-US Group Recovery</button>
+        </div>
+
+        <!-- Settled Action Recovery Tab -->
+        <div class="report-tab-content" id="settledTab">
+            <!-- Summary Section -->
+            <div class="summary-section">
+                <div class="summary-title">Summary</div>
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <div class="summary-label">Newly Filed</div>
+                        <div class="summary-value currency" id="settledNewlyFiledFund">$7,721,288,700.00</div>
+                        <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">
+                            <span id="settledNewlyFiledClaims">1,247</span> Claims | 
+                            <span id="settledNewlyFiledRecovered" class="currency">$1,607,311</span> Recovered
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-label">Previously Filed</div>
+                        <div class="summary-value currency" id="settledPreviouslyFiledFund">$2,145,234,500.00</div>
+                        <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">
+                            <span id="settledPreviouslyFiledClaims">856</span> Claims | 
+                            <span id="settledPreviouslyFiledRecovered" class="currency">$892,445</span> Recovered
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-label">Total</div>
+                        <div class="summary-value currency" id="settledTotalFund">$9,866,523,200.00</div>
+                        <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">
+                            <span id="settledTotalClaims">2,103</span> Claims | 
+                            <span id="settledTotalRecovered" class="currency">$2,499,756</span> Recovered
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Table -->
+            <div class="data-table-container">
+                <div class="table-header">
+                    <div class="table-title">Settled Action Recovery Details</div>
+                    <div class="table-controls">
+                        <button class="export-button" onclick="exportTable('settledTable', 'Settled_Action_Recovery')">
+                            <i class="fas fa-download"></i> Export to Excel
+                        </button>
+                    </div>
+                </div>
+                <div style="overflow-x: auto; max-height: 600px; overflow-y: auto;">
+                    <table class="status-table" id="settledTable">
+                        <thead>
+                            <tr>
+                                <th>Company Name</th>
+                                <th>CUSIP/ISIN</th>
+                                <th>Account Name</th>
+                                <th>Account Number</th>
+                                <th>Claim Filed Date</th>
+                                <th>Settlement Fund</th>
+                                <th>Class Period Start</th>
+                                <th>Class Period End</th>
+                                <th>Rec Date</th>
+                                <th>$ Recovered</th>
+                                <th>FRT Fee</th>
+                                <th>Net to Client</th>
+                                <th>Claims Administrator</th>
+                            </tr>
+                        </thead>
+                        <tbody id="settledTableBody">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Antitrust Recovery Tab -->
+        <div class="report-tab-content" id="antitrustTab" style="display: none;">
+            <!-- Summary Section -->
+            <div class="summary-section">
+                <div class="summary-title">Summary</div>
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <div class="summary-label">Newly Filed</div>
+                        <div class="summary-value currency" id="antitrustNewlyFiledFund">$1,000.00</div>
+                        <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">
+                            <span id="antitrustNewlyFiledClaims">1</span> Case | 
+                            <span id="antitrustNewlyFiledRecovered" class="currency">$1,500</span> Recovered
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-label">New Paid</div>
+                        <div class="summary-value currency" id="antitrustNewPaidFund">$0.00</div>
+                        <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">
+                            <span id="antitrustNewPaidCases">0</span> Cases
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-label">Total</div>
+                        <div class="summary-value currency" id="antitrustTotalFund">$1,000.00</div>
+                        <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">
+                            <span id="antitrustTotalCases">1</span> Case | 
+                            <span id="antitrustTotalRecovered" class="currency">$1,500</span> Recovered
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Table -->
+            <div class="data-table-container">
+                <div class="table-header">
+                    <div class="table-title">Antitrust Recovery Details</div>
+                    <div class="table-controls">
+                        <button class="export-button" onclick="exportTable('antitrustTable', 'Antitrust_Recovery')">
+                            <i class="fas fa-download"></i> Export to Excel
+                        </button>
+                    </div>
+                </div>
+                <div style="overflow-x: auto; max-height: 600px; overflow-y: auto;">
+                    <table class="status-table" id="antitrustTable">
+                        <thead>
+                            <tr>
+                                <th>Case Name</th>
+                                <th>Account Name</th>
+                                <th>Account Number</th>
+                                <th>Claim Deadline</th>
+                                <th>Filed Date</th>
+                                <th>Settlement Fund</th>
+                                <th>Class Period Start</th>
+                                <th>Class Period End</th>
+                                <th>Est Pay Date</th>
+                                <th>Claims Administrator</th>
+                            </tr>
+                        </thead>
+                        <tbody id="antitrustTableBody">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Non-US Group Recovery Tab -->
+        <div class="report-tab-content" id="nonusTab" style="display: none;">
+            <!-- Summary Section -->
+            <div class="summary-section">
+                <div class="summary-title">Summary</div>
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <div class="summary-label">Newly Registered</div>
+                        <div class="summary-value currency" id="nonusNewlyRegisteredFund">$211,500,000.00</div>
+                        <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">
+                            <span id="nonusNewlyRegisteredCases">1</span> Case | 
+                            <span id="nonusNewlyRegisteredClaims">17</span> Claims | 
+                            <span id="nonusNewlyRegisteredDamages" class="currency">$6,844,934.60</span> FRT Damages
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-label">Previously Registered</div>
+                        <div class="summary-value currency" id="nonusPreviouslyRegisteredFund">$0.00</div>
+                        <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">
+                            <span id="nonusPreviouslyRegisteredCases">16</span> Cases | 
+                            <span id="nonusPreviouslyRegisteredDamages" class="currency">$211,412,900.29</span> FRT Damages
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-label">Total</div>
+                        <div class="summary-value currency" id="nonusTotalFund">$211,500,000.00</div>
+                        <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">
+                            <span id="nonusTotalCases">17</span> Cases | 
+                            <span id="nonusTotalDamages" class="currency">$218,257,834.89</span> FRT Damages
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Newly Paid Section -->
+            <div class="data-table-container" style="margin-bottom: 12px;">
+                <div class="table-header">
+                    <div class="table-title">Newly Paid</div>
+                </div>
+                <div class="empty-state">None in Period</div>
+            </div>
+
+            <!-- Previously Registered Section -->
+            <div class="data-table-container">
+                <div class="table-header">
+                    <div class="table-title">Previously Registered</div>
+                    <div class="table-controls">
+                        <button class="export-button" onclick="exportTable('nonusTable', 'Non_US_Group_Recovery')">
+                            <i class="fas fa-download"></i> Export to Excel
+                        </button>
+                    </div>
+                </div>
+                <div style="overflow-x: auto; max-height: 600px; overflow-y: auto;">
+                    <table class="status-table" id="nonusTable">
+                        <thead>
+                            <tr>
+                                <th>Case Name</th>
+                                <th>CUSIP(s)</th>
+                                <th>Account Name</th>
+                                <th>Account Number</th>
+                                <th>Participation Deadline</th>
+                                <th>Participation Date</th>
+                                <th>Settlement Fund</th>
+                                <th>Class Period Start</th>
+                                <th>Class Period End</th>
+                                <th>FRT Damages</th>
+                                <th>Damaged Shares</th>
+                            </tr>
+                        </thead>
+                        <tbody id="nonusTableBody">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Style Switcher -->
+    <div id="styleSwitcher"></div>
+    <script src="style-switcher.js"></script>
+
+    <script>
+        // Sample data
+        const settledData = [
+            { company: 'APACHE CORP', cusip: '037411100', accountName: 'Account Name 1234', accountNumber: 'Account Number 1234', filedDate: '10-09-2024', fund: '$65,000,000.00', periodStart: '01-01-2018', periodEnd: '01-01-2020', recDate: '10-19-2024', recovered: '$1,065.95', fee: '$10.33', net: '$18,875.29', admin: 'A.B. Data, Ltd' },
+            { company: 'APPLE INC', cusip: '037833100', accountName: 'Account Name 5678', accountNumber: 'Account Number 5678', filedDate: '10-10-2024', fund: '$490,000,000.00', periodStart: '11-01-2018', periodEnd: '01-02-2019', recDate: '10-20-2024', recovered: '$45,230.12', fee: '$452.30', net: '$44,777.82', admin: 'Gland & Co' },
+            { company: 'JPMORGAN', cusip: '46625H100', accountName: 'Account Name 9012', accountNumber: 'Account Number 9012', filedDate: '10-11-2024', fund: '$150,000,000.00', periodStart: '02-01-2019', periodEnd: '05-01-2019', recDate: '10-21-2024', recovered: '$12,456.78', fee: '$124.57', net: '$12,332.21', admin: 'Epiq Systems' }
+        ];
+
+        const antitrustData = [
+            { caseName: 'Stock (Lending) IFER', accountName: 'Account Name 1234', accountNumber: 'Account Number 1234', deadline: '07-08-2024', filedDate: '07-05-2024', fund: '$180,000.00', periodStart: '01-07-2009', periodEnd: '08-22-2023', estPay: '10-31-2025', admin: 'Epic Systems' }
+        ];
+
+        const nonusData = [
+            { caseName: 'Medibank Private Ltd', cusip: '58532R100', accountName: 'Account Name 1234', accountNumber: 'Account Number 1234', deadline: '12-15-2024', participationDate: '11-01-2024', fund: '$211,500,000.00', periodStart: '01-01-2020', periodEnd: '12-31-2022', damages: '$6,280,566.06', shares: '125,611' },
+            { caseName: 'BHP Billiton', cusip: '088608108', accountName: 'Account Name 5678', accountNumber: 'Account Number 5678', deadline: '11-30-2024', participationDate: '10-15-2024', fund: '$180,000,000.00', periodStart: '02-01-2019', periodEnd: '05-01-2020', damages: '$101,166,114.56', shares: '2,023,322' },
+            { caseName: 'Boral Limited', cusip: '099535100', accountName: 'Account Name 9012', accountNumber: 'Account Number 9012', deadline: '01-15-2025', participationDate: '09-20-2024', fund: '$95,000,000.00', periodStart: '03-01-2020', periodEnd: '06-01-2021', damages: '$7,423,533.25', shares: '148,471' }
+        ];
+
+        // Tab switching
+        document.querySelectorAll('.report-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabName = this.dataset.tab;
+                
+                // Update tab active state
+                document.querySelectorAll('.report-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show/hide tab content
+                document.querySelectorAll('.report-tab-content').forEach(content => {
+                    content.style.display = 'none';
+                });
+                document.getElementById(tabName + 'Tab').style.display = 'block';
+            });
+        });
+
+        // Populate tables
+        function populateSettledTable() {
+            const tbody = document.getElementById('settledTableBody');
+            tbody.innerHTML = '';
+            
+            settledData.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.company}</td>
+                    <td>${row.cusip}</td>
+                    <td>${row.accountName}</td>
+                    <td>${row.accountNumber}</td>
+                    <td class="date-cell">${row.filedDate}</td>
+                    <td class="currency-cell">${row.fund}</td>
+                    <td class="date-cell">${row.periodStart}</td>
+                    <td class="date-cell">${row.periodEnd}</td>
+                    <td class="date-cell">${row.recDate}</td>
+                    <td class="currency-cell">${row.recovered}</td>
+                    <td class="currency-cell">${row.fee}</td>
+                    <td class="currency-cell">${row.net}</td>
+                    <td>${row.admin}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function populateAntitrustTable() {
+            const tbody = document.getElementById('antitrustTableBody');
+            tbody.innerHTML = '';
+            
+            antitrustData.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.caseName}</td>
+                    <td>${row.accountName}</td>
+                    <td>${row.accountNumber}</td>
+                    <td class="date-cell">${row.deadline}</td>
+                    <td class="date-cell">${row.filedDate}</td>
+                    <td class="currency-cell">${row.fund}</td>
+                    <td class="date-cell">${row.periodStart}</td>
+                    <td class="date-cell">${row.periodEnd}</td>
+                    <td class="date-cell">${row.estPay}</td>
+                    <td>${row.admin}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function populateNonusTable() {
+            const tbody = document.getElementById('nonusTableBody');
+            tbody.innerHTML = '';
+            
+            nonusData.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.caseName}</td>
+                    <td>${row.cusip}</td>
+                    <td>${row.accountName}</td>
+                    <td>${row.accountNumber}</td>
+                    <td class="date-cell">${row.deadline}</td>
+                    <td class="date-cell">${row.participationDate}</td>
+                    <td class="currency-cell">${row.fund}</td>
+                    <td class="date-cell">${row.periodStart}</td>
+                    <td class="date-cell">${row.periodEnd}</td>
+                    <td class="currency-cell">${row.damages}</td>
+                    <td>${row.shares}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Export function
+        function exportTable(tableId, filename) {
+            const table = document.getElementById(tableId);
+            if (!table) return;
+            
+            let csv = [];
+            const rows = table.querySelectorAll('tr');
+            
+            for (let i = 0; i < rows.length; i++) {
+                const row = [];
+                const cols = rows[i].querySelectorAll('td, th');
+                
+                for (let j = 0; j < cols.length; j++) {
+                    let data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/"/g, '""');
+                    row.push('"' + data + '"');
+                }
+                csv.push(row.join(','));
+            }
+            
+            const csvContent = csv.join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', filename + '_' + new Date().toISOString().split('T')[0] + '.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Client selection
+        document.getElementById('clientSelect').addEventListener('change', function() {
+            document.getElementById('reportClientName').textContent = this.options[this.selectedIndex].text;
+        });
+
+        // Tab navigation
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                if (this.textContent.includes('ELIGIBILITY & FILINGS')) {
+                    window.location.href = 'eligibility-filings.html';
+                } else if (this.textContent.includes('Opt-in Monitoring')) {
+                    window.location.href = 'opt-in-monitoring.html';
+                } else if (this.textContent.includes('Account Manager Dashboard')) {
+                    window.location.href = 'account-manager-dashboard.html';
+                } else {
+                    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            populateSettledTable();
+            populateAntitrustTable();
+            populateNonusTable();
+        });
+    </script>
+</body>
+</html>
+
