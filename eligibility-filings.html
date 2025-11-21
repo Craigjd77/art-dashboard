@@ -172,27 +172,105 @@
 
         <!-- Main Content Area -->
         <div class="content-area">
-            <!-- KPI Dashboard - Key Metrics -->
-            <div class="kpi-dashboard">
-                <div class="kpi-card kpi-card-featured">
-                    <div class="kpi-label">Total Organizer Damages</div>
-                    <div class="kpi-value" style="font-size: 24px;">$393.6M</div>
-                    <div style="font-size: 9px; opacity: 0.9; margin-top: 4px;">All eligible cases</div>
+            <!-- Quick View Summary Cards -->
+            <div class="grid-4" style="margin-bottom: 12px;">
+                <div class="viz-card" style="border-left: 4px solid var(--pbi-primary); padding: 12px;">
+                    <div style="font-size: 10px; color: var(--pbi-text-secondary); margin-bottom: 4px;">TOTAL ELIGIBLE</div>
+                    <div style="font-size: 20px; font-weight: 600; color: var(--pbi-primary);">$393.6M</div>
+                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">Organizer Damages</div>
                 </div>
-                <div class="kpi-card">
-                    <div class="kpi-label">Cases Filed</div>
-                    <div class="kpi-value" style="font-size: 24px;">127</div>
-                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">Total filings</div>
+                <div class="viz-card" style="border-left: 4px solid var(--chart-green); padding: 12px;">
+                    <div style="font-size: 10px; color: var(--pbi-text-secondary); margin-bottom: 4px;">FILED CASES</div>
+                    <div style="font-size: 20px; font-weight: 600; color: var(--chart-green);">127</div>
+                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">Total Claims Filed</div>
                 </div>
-                <div class="kpi-card kpi-card-success">
-                    <div class="kpi-label">Recoveries Received</div>
-                    <div class="kpi-value" style="font-size: 24px; color: var(--chart-green);">$16.7M</div>
-                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">Net recovery</div>
+                <div class="viz-card" style="border-left: 4px solid var(--chart-orange); padding: 12px;">
+                    <div style="font-size: 10px; color: var(--pbi-text-secondary); margin-bottom: 4px;">RECOVERIES</div>
+                    <div style="font-size: 20px; font-weight: 600; color: var(--chart-orange);">$16.7M</div>
+                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">Net to Client</div>
                 </div>
-                <div class="kpi-card">
-                    <div class="kpi-label">Pending Disbursements</div>
-                    <div class="kpi-value" style="font-size: 24px;">$2.1M</div>
-                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">Scheduled</div>
+                <div class="viz-card" style="border-left: 4px solid var(--chart-purple); padding: 12px;">
+                    <div style="font-size: 10px; color: var(--pbi-text-secondary); margin-bottom: 4px;">PENDING</div>
+                    <div style="font-size: 20px; font-weight: 600; color: var(--chart-purple);">$2.1M</div>
+                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">Upcoming Disbursements</div>
+                </div>
+            </div>
+
+            <!-- Action Items Quick View -->
+            <div class="grid-2" style="margin-bottom: 12px;">
+                <div class="viz-card" style="border-left: 4px solid #ff8c00;">
+                    <div class="viz-title" style="display: flex; justify-content: space-between; align-items: center;">
+                        <span><i class="fas fa-exclamation-triangle" style="color: #ff8c00; margin-right: 6px;"></i>Action Required</span>
+                        <span class="badge" style="background: #ff8c00;">12</span>
+                    </div>
+                    <div style="font-size: 10px; color: var(--pbi-text-secondary); margin: 8px 0;">
+                        Cases with upcoming deadlines or missing documentation
+                    </div>
+                    <div style="max-height: 150px; overflow-y: auto;">
+                        <table class="data-table" style="font-size: 9px;">
+                            <thead>
+                                <tr>
+                                    <th>Case</th>
+                                    <th>Deadline</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Apple Inc Securities</td>
+                                    <td>11-30-2024</td>
+                                    <td><span class="badge" style="background: #ff8c00;">Urgent</span></td>
+                                </tr>
+                                <tr>
+                                    <td>JPMorgan Chase</td>
+                                    <td>12-15-2024</td>
+                                    <td><span class="badge" style="background: #ff8c00;">Docs Needed</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Microsoft Corp</td>
+                                    <td>12-20-2024</td>
+                                    <td><span class="badge" style="background: #ff8c00;">Review</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="viz-card" style="border-left: 4px solid var(--chart-green);">
+                    <div class="viz-title" style="display: flex; justify-content: space-between; align-items: center;">
+                        <span><i class="fas fa-check-circle" style="color: var(--chart-green); margin-right: 6px;"></i>Recent Activity</span>
+                        <span class="badge" style="background: var(--chart-green);">8</span>
+                    </div>
+                    <div style="font-size: 10px; color: var(--pbi-text-secondary); margin: 8px 0;">
+                        Recently filed claims and recoveries received
+                    </div>
+                    <div style="max-height: 150px; overflow-y: auto;">
+                        <table class="data-table" style="font-size: 9px;">
+                            <thead>
+                                <tr>
+                                    <th>Case</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Amazon.com Inc</td>
+                                    <td>10-28-2024</td>
+                                    <td style="text-align: right; color: var(--chart-green);">$45,678</td>
+                                </tr>
+                                <tr>
+                                    <td>Alphabet Inc</td>
+                                    <td>10-25-2024</td>
+                                    <td style="text-align: right; color: var(--chart-green);">$78,901</td>
+                                </tr>
+                                <tr>
+                                    <td>Berkshire Hathaway</td>
+                                    <td>10-22-2024</td>
+                                    <td style="text-align: right; color: var(--chart-green);">$12,345</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
