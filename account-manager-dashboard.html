@@ -657,37 +657,6 @@
                     </div>
                 </div>
 
-                <!-- Charts Row -->
-                <div class="grid-2" style="margin-bottom: 12px;">
-                    <!-- Recovery Trend Chart -->
-                    <div class="viz-card">
-                        <div class="viz-title">Recovery Trend Over Time</div>
-                        <div class="bar-chart-container" style="height: 300px;">
-                            <canvas id="recoveryTrendChart"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Case Status Distribution -->
-                    <div class="viz-card">
-                        <div class="viz-title">Case Status Distribution</div>
-                        <div class="donut-container" style="height: 300px;">
-                            <canvas id="caseStatusChart"></canvas>
-                            <div class="donut-center">
-                                <div class="donut-total" style="font-size: 20px;">47</div>
-                                <div class="donut-label" style="font-size: 10px;">Total Cases</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Recovery by Account -->
-                <div class="viz-card" style="margin-bottom: 12px;">
-                    <div class="viz-title">Recovery by Child Account</div>
-                    <div class="bar-chart-container" style="height: 250px;">
-                        <canvas id="recoveryByAccountChart"></canvas>
-                    </div>
-                </div>
-
                 <!-- Non-US Opt-in Cases Eligibility Snapshot -->
                 <div class="viz-card">
                     <div class="viz-title">Non-US Opt-in Cases Eligibility Snapshot</div>
@@ -1098,30 +1067,21 @@
                 indicator.textContent = `Page ${pageNumber} of 3`;
             }
             
-            // Update charts when showing Page 3 - they should already be created
-            if (pageNumber === 3) {
+            // Resize charts when switching pages to ensure they render correctly
+            if (pageNumber === 1) {
                 setTimeout(() => {
-                    // Resize charts to ensure they render correctly when page becomes visible
                     const trendCanvas = document.getElementById('recoveryTrendChart');
                     const statusCanvas = document.getElementById('caseStatusChart');
                     const accountCanvas = document.getElementById('recoveryByAccountChart');
                     
                     if (trendCanvas && trendCanvas.chart) {
                         trendCanvas.chart.resize();
-                    } else if (trendCanvas) {
-                        createRecoveryTrendChart();
                     }
-                    
                     if (statusCanvas && statusCanvas.chart) {
                         statusCanvas.chart.resize();
-                    } else if (statusCanvas) {
-                        createCaseStatusChart();
                     }
-                    
                     if (accountCanvas && accountCanvas.chart) {
                         accountCanvas.chart.resize();
-                    } else if (accountCanvas) {
-                        createRecoveryByAccountChart();
                     }
                 }, 200);
             }
