@@ -649,7 +649,7 @@
             </div>
 
             <!-- Page 3: Analysis -->
-            <div class="dashboard-page" id="page3" style="display: none;">
+            <div class="dashboard-page" id="page3">
                 <div class="viz-card" style="margin-bottom: 12px;">
                     <div class="viz-title">Analysis & Trends</div>
                     <div style="font-size: 10px; color: var(--pbi-text-secondary); margin-bottom: 12px;">
@@ -1454,21 +1454,29 @@
             
             // Create all charts on page load - Chart.js can handle hidden elements
             // We'll update them when Page 3 is shown
-            setTimeout(() => {
+            function initCharts() {
                 if (typeof Chart !== 'undefined') {
-                    console.log('Creating charts on page load...');
-                    createRecoveryTrendChart();
-                    createCaseStatusChart();
-                    createRecoveryByAccountChart();
-                } else {
-                    console.error('Chart.js not loaded yet, retrying...');
-                    setTimeout(() => {
+                    console.log('Chart.js loaded, creating charts...');
+                    try {
                         createRecoveryTrendChart();
                         createCaseStatusChart();
                         createRecoveryByAccountChart();
-                    }, 1000);
+                        console.log('All charts created successfully');
+                    } catch (e) {
+                        console.error('Error creating charts:', e);
+                    }
+                } else {
+                    console.log('Chart.js not loaded yet, waiting...');
+                    setTimeout(initCharts, 200);
                 }
-            }, 1000);
+            }
+            
+            // Wait for Chart.js to load
+            if (document.readyState === 'loading') {
+                window.addEventListener('load', initCharts);
+            } else {
+                setTimeout(initCharts, 500);
+            }
         });
     </script>
 </body>
