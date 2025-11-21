@@ -1459,8 +1459,15 @@
             populateNotificationSignups();
             populateEligibilitySnapshot();
             
-            // Don't initialize charts on load - they'll be created when Page 3 is shown
-            // This prevents Chart.js from trying to render on hidden elements
+            // Check if Page 3 is active on load (e.g., from URL parameter or refresh)
+            const page3 = document.getElementById('page3');
+            if (page3 && page3.classList.contains('active')) {
+                setTimeout(() => {
+                    createRecoveryTrendChart();
+                    createCaseStatusChart();
+                    createRecoveryByAccountChart();
+                }, 500);
+            }
         });
     </script>
 </body>
