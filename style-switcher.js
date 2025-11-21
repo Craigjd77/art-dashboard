@@ -286,44 +286,63 @@ class StyleSwitcher {
     }
 
     randomizeStyles() {
-        // Generate random hex color
-        const randomColor = () => {
-            return '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
-        };
-        
-        // Generate random colors
-        const randomPrimary = randomColor();
-        const randomBackground = randomColor();
-        const randomCardBg = randomColor();
-        const randomBorder = randomColor();
-        
-        // For text colors, ensure good contrast (darker for primary, lighter for secondary)
-        const randomTextPrimary = '#' + Math.floor(Math.random() * 0x333333).toString(16).padStart(6, '0');
-        const randomTextSecondary = '#' + Math.floor(Math.random() * 0x666666 + 0x666666).toString(16).padStart(6, '0');
-        
-        // Random font family
-        const fontFamilies = [
-            "'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Helvetica Neue', sans-serif",
-            "Arial, sans-serif",
-            "'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "'Roboto', sans-serif",
-            "'Open Sans', sans-serif",
-            "'Inter', sans-serif",
-            "'Georgia', serif",
-            "'Times New Roman', serif",
-            "'Courier New', monospace",
-            "'Comic Sans MS', cursive"
+        // Curated list of popular, professional color/style combinations
+        const popularCombinations = [
+            // Power BI / Microsoft Blue
+            { primary: '#0078d4', background: '#faf9f8', cardBg: '#ffffff', border: '#edebe9', textPrimary: '#323130', textSecondary: '#605e5c', fontFamily: "'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Helvetica Neue', sans-serif", fontSize: 14, cardPadding: 12, cardGap: 12, shadow: 10 },
+            // Professional Navy
+            { primary: '#1e3a8a', background: '#f8fafc', cardBg: '#ffffff', border: '#e2e8f0', textPrimary: '#1e293b', textSecondary: '#64748b', fontFamily: "'Inter', sans-serif", fontSize: 14, cardPadding: 16, cardGap: 16, shadow: 12 },
+            // Modern Teal
+            { primary: '#0d9488', background: '#f0fdfa', cardBg: '#ffffff', border: '#ccfbf1', textPrimary: '#134e4a', textSecondary: '#5eead4', fontFamily: "'Roboto', sans-serif", fontSize: 14, cardPadding: 14, cardGap: 14, shadow: 8 },
+            // Corporate Green
+            { primary: '#059669', background: '#f0fdf4', cardBg: '#ffffff', border: '#d1fae5', textPrimary: '#065f46', textSecondary: '#6ee7b7', fontFamily: "'Open Sans', sans-serif", fontSize: 14, cardPadding: 12, cardGap: 12, shadow: 10 },
+            // Elegant Purple
+            { primary: '#7c3aed', background: '#faf5ff', cardBg: '#ffffff', border: '#e9d5ff', textPrimary: '#581c87', textSecondary: '#a78bfa', fontFamily: "'Inter', sans-serif", fontSize: 14, cardPadding: 16, cardGap: 16, shadow: 12 },
+            // Classic Indigo
+            { primary: '#4f46e5', background: '#eef2ff', cardBg: '#ffffff', border: '#c7d2fe', textPrimary: '#312e81', textSecondary: '#818cf8', fontFamily: "'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Helvetica Neue', sans-serif", fontSize: 14, cardPadding: 12, cardGap: 12, shadow: 10 },
+            // Warm Orange
+            { primary: '#ea580c', background: '#fff7ed', cardBg: '#ffffff', border: '#fed7aa', textPrimary: '#9a3412', textSecondary: '#fb923c', fontFamily: "'Roboto', sans-serif", fontSize: 14, cardPadding: 14, cardGap: 14, shadow: 8 },
+            // Professional Gray
+            { primary: '#475569', background: '#f1f5f9', cardBg: '#ffffff', border: '#cbd5e1', textPrimary: '#0f172a', textSecondary: '#64748b', fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", fontSize: 14, cardPadding: 12, cardGap: 12, shadow: 10 },
+            // Financial Blue
+            { primary: '#0369a1', background: '#f0f9ff', cardBg: '#ffffff', border: '#bae6fd', textPrimary: '#0c4a6e', textSecondary: '#38bdf8', fontFamily: "'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Helvetica Neue', sans-serif", fontSize: 14, cardPadding: 16, cardGap: 16, shadow: 12 },
+            // Modern Red
+            { primary: '#dc2626', background: '#fef2f2', cardBg: '#ffffff', border: '#fecaca', textPrimary: '#991b1b', textSecondary: '#f87171', fontFamily: "'Inter', sans-serif", fontSize: 14, cardPadding: 14, cardGap: 14, shadow: 8 },
+            // Deep Blue
+            { primary: '#1e40af', background: '#eff6ff', cardBg: '#ffffff', border: '#bfdbfe', textPrimary: '#1e3a8a', textSecondary: '#60a5fa', fontFamily: "'Open Sans', sans-serif", fontSize: 14, cardPadding: 12, cardGap: 12, shadow: 10 },
+            // Emerald
+            { primary: '#10b981', background: '#ecfdf5', cardBg: '#ffffff', border: '#a7f3d0', textPrimary: '#065f46', textSecondary: '#34d399', fontFamily: "'Roboto', sans-serif", fontSize: 14, cardPadding: 16, cardGap: 16, shadow: 12 },
+            // Royal Purple
+            { primary: '#9333ea', background: '#faf5ff', cardBg: '#ffffff', border: '#e9d5ff', textPrimary: '#6b21a8', textSecondary: '#c084fc', fontFamily: "'Inter', sans-serif", fontSize: 14, cardPadding: 14, cardGap: 14, shadow: 8 },
+            // Steel Blue
+            { primary: '#0284c7', background: '#f0f9ff', cardBg: '#ffffff', border: '#bae6fd', textPrimary: '#0c4a6e', textSecondary: '#38bdf8', fontFamily: "'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Helvetica Neue', sans-serif", fontSize: 14, cardPadding: 12, cardGap: 12, shadow: 10 },
+            // Forest Green
+            { primary: '#16a34a', background: '#f0fdf4', cardBg: '#ffffff', border: '#bbf7d0', textPrimary: '#166534', textSecondary: '#4ade80', fontFamily: "'Open Sans', sans-serif", fontSize: 14, cardPadding: 16, cardGap: 16, shadow: 12 },
+            // Slate
+            { primary: '#475569', background: '#f8fafc', cardBg: '#ffffff', border: '#cbd5e1', textPrimary: '#0f172a', textSecondary: '#64748b', fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", fontSize: 14, cardPadding: 14, cardGap: 14, shadow: 8 },
+            // Azure
+            { primary: '#0ea5e9', background: '#f0f9ff', cardBg: '#ffffff', border: '#bae6fd', textPrimary: '#0c4a6e', textSecondary: '#38bdf8', fontFamily: "'Inter', sans-serif", fontSize: 14, cardPadding: 12, cardGap: 12, shadow: 10 },
+            // Amber
+            { primary: '#f59e0b', background: '#fffbeb', cardBg: '#ffffff', border: '#fde68a', textPrimary: '#92400e', textSecondary: '#fbbf24', fontFamily: "'Roboto', sans-serif", fontSize: 14, cardPadding: 16, cardGap: 16, shadow: 12 },
+            // Rose
+            { primary: '#e11d48', background: '#fff1f2', cardBg: '#ffffff', border: '#fecdd3', textPrimary: '#9f1239', textSecondary: '#fb7185', fontFamily: "'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Helvetica Neue', sans-serif", fontSize: 14, cardPadding: 14, cardGap: 14, shadow: 8 },
+            // Cyan
+            { primary: '#06b6d4', background: '#ecfeff', cardBg: '#ffffff', border: '#a5f3fc', textPrimary: '#164e63', textSecondary: '#22d3ee', fontFamily: "'Open Sans', sans-serif", fontSize: 14, cardPadding: 12, cardGap: 12, shadow: 10 }
         ];
-        const randomFontFamily = fontFamilies[Math.floor(Math.random() * fontFamilies.length)];
         
-        // Random font size (10-18px)
-        const randomFontSize = Math.floor(Math.random() * 9) + 10;
+        // Select a random combination from the curated list
+        const selected = popularCombinations[Math.floor(Math.random() * popularCombinations.length)];
         
-        // Random card padding (4-24px)
-        const randomCardPadding = Math.floor(Math.random() * 21) + 4;
-        
-        // Random card gap (4-24px)
-        const randomCardGap = Math.floor(Math.random() * 21) + 4;
+        const randomPrimary = selected.primary;
+        const randomBackground = selected.background;
+        const randomCardBg = selected.cardBg;
+        const randomBorder = selected.border;
+        const randomTextPrimary = selected.textPrimary;
+        const randomTextSecondary = selected.textSecondary;
+        const randomFontFamily = selected.fontFamily;
+        const randomFontSize = selected.fontSize;
+        const randomCardPadding = selected.cardPadding;
+        const randomCardGap = selected.cardGap;
         
         // Random shadow intensity (0-20)
         const randomShadowIntensity = Math.floor(Math.random() * 21);
