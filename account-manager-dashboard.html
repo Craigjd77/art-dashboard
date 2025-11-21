@@ -329,11 +329,11 @@
         }
         
         .dashboard-page {
-            display: none;
+            display: none !important;
         }
-        
+
         .dashboard-page.active {
-            display: block;
+            display: block !important;
         }
         
         .page-indicator {
@@ -1230,6 +1230,9 @@
                     }
                 }
             });
+            
+            // Store chart reference
+            canvas.chart = chart;
         }
 
         function createCaseStatusChart() {
@@ -1288,6 +1291,9 @@
                     }
                 }
             });
+            
+            // Store chart reference
+            canvas.chart = chart;
         }
 
         function createRecoveryByAccountChart() {
@@ -1370,6 +1376,9 @@
                     }
                 }
             });
+            
+            // Store chart reference
+            canvas.chart = chart;
         }
 
         // Initialize
