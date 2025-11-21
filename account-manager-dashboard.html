@@ -635,7 +635,7 @@
             </div>
 
             <!-- Page 3: Analysis -->
-            <div class="dashboard-page" id="page3">
+            <div class="dashboard-page" id="page3" style="display: none;">
                 <div class="viz-card" style="margin-bottom: 12px;">
                     <div class="viz-title">Analysis & Trends</div>
                     <div style="font-size: 10px; color: var(--pbi-text-secondary); margin-bottom: 12px;">
@@ -1086,19 +1086,31 @@
             
             // Initialize charts if showing Page 3 - wait for page to be visible
             if (pageNumber === 3) {
-                // Wait a bit longer to ensure page is visible
+                // Wait a bit longer to ensure page is visible and Chart.js is loaded
                 setTimeout(() => {
+                    console.log('Initializing Page 3 charts...');
                     try {
+                        // Check if Chart.js is available
+                        if (typeof Chart === 'undefined') {
+                            console.error('Chart.js not loaded, retrying...');
+                            setTimeout(() => showPage(3, buttonElement), 500);
+                            return;
+                        }
+                        
                         // Always recreate charts when showing Page 3 to ensure they render
                         const trendCanvas = document.getElementById('recoveryTrendChart');
                         const statusCanvas = document.getElementById('caseStatusChart');
                         const accountCanvas = document.getElementById('recoveryByAccountChart');
+                        
+                        console.log('Canvas elements:', { trendCanvas, statusCanvas, accountCanvas });
                         
                         if (trendCanvas) {
                             if (trendCanvas.chart) {
                                 trendCanvas.chart.destroy();
                             }
                             createRecoveryTrendChart();
+                        } else {
+                            console.error('recoveryTrendChart canvas not found');
                         }
                         
                         if (statusCanvas) {
@@ -1106,6 +1118,8 @@
                                 statusCanvas.chart.destroy();
                             }
                             createCaseStatusChart();
+                        } else {
+                            console.error('caseStatusChart canvas not found');
                         }
                         
                         if (accountCanvas) {
@@ -1113,6 +1127,8 @@
                                 accountCanvas.chart.destroy();
                             }
                             createRecoveryByAccountChart();
+                        } else {
+                            console.error('recoveryByAccountChart canvas not found');
                         }
                     } catch (e) {
                         console.error('Error creating charts:', e);
@@ -1123,7 +1139,7 @@
                             createRecoveryByAccountChart();
                         }, 1000);
                     }
-                }, 300);
+                }, 500);
             }
         }
 
@@ -1179,7 +1195,17 @@
         // Chart creation functions
         function createRecoveryTrendChart() {
             const canvas = document.getElementById('recoveryTrendChart');
-            if (!canvas) return;
+            if (!canvas) {
+                console.error('recoveryTrendChart canvas not found');
+                return;
+            }
+            
+            // Check if Chart.js is loaded
+            if (typeof Chart === 'undefined') {
+                console.error('Chart.js is not loaded');
+                setTimeout(() => createRecoveryTrendChart(), 500);
+                return;
+            }
             
             // Destroy existing chart if it exists
             if (canvas.chart) {
@@ -1254,7 +1280,17 @@
 
         function createCaseStatusChart() {
             const canvas = document.getElementById('caseStatusChart');
-            if (!canvas) return;
+            if (!canvas) {
+                console.error('caseStatusChart canvas not found');
+                return;
+            }
+            
+            // Check if Chart.js is loaded
+            if (typeof Chart === 'undefined') {
+                console.error('Chart.js is not loaded');
+                setTimeout(() => createCaseStatusChart(), 500);
+                return;
+            }
             
             // Destroy existing chart if it exists
             if (canvas.chart) {
@@ -1315,7 +1351,17 @@
 
         function createRecoveryByAccountChart() {
             const canvas = document.getElementById('recoveryByAccountChart');
-            if (!canvas) return;
+            if (!canvas) {
+                console.error('recoveryByAccountChart canvas not found');
+                return;
+            }
+            
+            // Check if Chart.js is loaded
+            if (typeof Chart === 'undefined') {
+                console.error('Chart.js is not loaded');
+                setTimeout(() => createRecoveryByAccountChart(), 500);
+                return;
+            }
             
             // Destroy existing chart if it exists
             if (canvas.chart) {
