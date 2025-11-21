@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Manager Dashboard | FRT Work Tools</title>
+    
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Shared Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style-switcher.css">
+    
+    <style>
+        .client-hierarchy {
+            background: var(--pbi-card-bg);
+            border: 1px solid var(--pbi-border);
+            border-radius: 4px;
+            padding: 12px;
+            margin-bottom: 12px;
+            box-shadow: var(--pbi-shadow);
+        }
+        
+        .parent-client {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--pbi-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .child-clients {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-left: 24px;
+        }
+        
+        .child-client-badge {
+            background: var(--pbi-background);
+            border: 1px solid var(--pbi-border);
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .child-client-badge:hover {
+            background: var(--pbi-hover);
+            border-color: var(--pbi-primary);
+        }
+        
+        .child-client-badge.active {
+            background: var(--pbi-primary);
+            color: white;
+            border-color: var(--pbi-primary);
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .info-card {
+            background: var(--pbi-card-bg);
+            border: 1px solid var(--pbi-border);
+            border-radius: 4px;
+            padding: 12px;
+            box-shadow: var(--pbi-shadow);
+        }
+        
+        .info-card-label {
+            font-size: 10px;
+            color: var(--pbi-text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        
+        .info-card-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--pbi-text-primary);
+        }
+        
+        .info-card-value.yes {
+            color: var(--chart-green);
+        }
+        
+        .info-card-value.no {
+            color: var(--chart-red);
+        }
+        
+        .open-items-section {
+            background: var(--pbi-card-bg);
+            border: 1px solid var(--pbi-border);
+            border-left: 4px solid #ff8c00;
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: var(--pbi-shadow);
+        }
+        
+        .open-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--pbi-border-light);
+        }
+        
+        .open-item:last-child {
+            border-bottom: none;
+        }
+        
+        .open-item-left {
+            flex: 1;
+        }
+        
+        .open-item-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--pbi-text-primary);
+            margin-bottom: 2px;
+        }
+        
+        .open-item-desc {
+            font-size: 10px;
+            color: var(--pbi-text-secondary);
+        }
+        
+        .open-item-badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 9px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        
+        .badge-jira {
+            background: #0052CC;
+            color: white;
+        }
+        
+        .badge-ots {
+            background: #ff8c00;
+            color: white;
+        }
+        
+        .badge-audit {
+            background: #d13438;
+            color: white;
+        }
+        
+        .interaction-item {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--pbi-border-light);
+        }
+        
+        .interaction-item:last-child {
+            border-bottom: none;
+        }
+        
+        .interaction-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+        
+        .interaction-type {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--pbi-text-primary);
+        }
+        
+        .interaction-date {
+            font-size: 9px;
+            color: var(--pbi-text-secondary);
+        }
+        
+        .interaction-details {
+            font-size: 10px;
+            color: var(--pbi-text-secondary);
+        }
+        
+        .user-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        
+        .user-badge {
+            background: var(--pbi-background);
+            border: 1px solid var(--pbi-border);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .user-badge.admin {
+            background: #e3f2fd;
+            border-color: var(--pbi-primary);
+            color: var(--pbi-primary);
+        }
+        
+        .recovery-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--pbi-border-light);
+        }
+        
+        .recovery-item:last-child {
+            border-bottom: none;
+        }
+        
+        .recovery-case {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--pbi-text-primary);
+        }
+        
+        .recovery-amount {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--chart-green);
+        }
+        
+        .recovery-date {
+            font-size: 10px;
+            color: var(--pbi-text-secondary);
+        }
+        
+        .eligibility-snapshot {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px;
+        }
+        
+        .eligibility-card {
+            background: var(--pbi-background);
+            border: 1px solid var(--pbi-border);
+            border-radius: 4px;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .eligibility-count {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--pbi-primary);
+            margin-bottom: 4px;
+        }
+        
+        .eligibility-label {
+            font-size: 10px;
+            color: var(--pbi-text-secondary);
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <div class="logo">FRT Work Tools</div>
+            <div class="header-title">Account Manager Dashboard</div>
+        </div>
+        <div class="header-right">
+            <div class="user-info">Craig D'Alessio</div>
+            <button>Share</button>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+        <button class="nav-tab">CLIENT ELIGIBILITY & FILINGS</button>
+        <button class="nav-tab">CLIENT STATUS REPORTS</button>
+        <button class="nav-tab">Client Opt-in Monitoring</button>
+        <button class="nav-tab">AGGREGATE ACCOUNT LOOKUP</button>
+        <button class="nav-tab">Client Recoveries</button>
+        <button class="nav-tab">Client Remittance</button>
+        <button class="nav-tab">Data Update</button>
+        <button class="nav-tab active">Account Manager Dashboard</button>
+        <button class="nav-tab" style="background: var(--pbi-hover); border: 1px dashed var(--pbi-border); border-radius: 2px; margin-left: 8px;">+</button>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="client-selector">
+                <label>Select a Client</label>
+                <select id="clientSelect">
+                    <option value="wellington">Wellington Management</option>
+                    <option value="blackrock">BlackRock</option>
+                    <option value="schwab">Charles Schwab Investment Management</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="content-area">
+            <!-- Client Hierarchy -->
+            <div class="client-hierarchy">
+                <div class="parent-client">
+                    <i class="fas fa-building"></i>
+                    <span id="parentClientName">Wellington Management</span>
+                </div>
+                <div class="child-clients" id="childClients">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Key Metrics KPI Cards -->
+            <div class="kpi-dashboard">
+                <div class="kpi-card">
+                    <div class="kpi-label">Claims Filed</div>
+                    <div class="kpi-value" style="font-size: 24px;" id="claimsFiled">47</div>
+                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">Across all child accounts</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Eligible Cases</div>
+                    <div class="kpi-value" style="font-size: 24px; color: var(--chart-green);" id="eligibleCases">32</div>
+                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">Currently eligible</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Total Recoveries</div>
+                    <div class="kpi-value" style="font-size: 24px; color: var(--chart-green);" id="totalRecoveries">$8.4M</div>
+                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">All time</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Expected Recovery</div>
+                    <div class="kpi-value" style="font-size: 24px;" id="expectedRecovery">$12.2M</div>
+                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">Pending cases</div>
+                </div>
+            </div>
+
+            <!-- Client Information Grid -->
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-card-label">Contract Date</div>
+                    <div class="info-card-value" id="contractDate">3/15/2020</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-label">ATF Signature Date</div>
+                    <div class="info-card-value" id="atfSignatureDate">3/22/2020</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-label">Data Source</div>
+                    <div class="info-card-value" id="dataSource">Custodian Direct</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-label">Data Refresh Frequency</div>
+                    <div class="info-card-value" id="dataRefresh">Monthly</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-label">CUSIP Client</div>
+                    <div class="info-card-value yes" id="cusipClient">Yes</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-label">Recognized Loss Filed</div>
+                    <div class="info-card-value" id="recognizedLoss">$45.8M</div>
+                </div>
+            </div>
+
+            <!-- Two Column Layout -->
+            <div class="grid-2">
+                <!-- Left Column -->
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <!-- Open Items -->
+                    <div class="open-items-section">
+                        <div class="viz-title" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <span><i class="fas fa-exclamation-circle" style="color: #ff8c00; margin-right: 8px;"></i>Open Items</span>
+                            <button class="export-button" onclick="exportTable('openItemsTable', 'Open_Items')">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                        </div>
+                        <div id="openItemsList">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Recent Recoveries -->
+                    <div class="viz-card">
+                        <div class="viz-title" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <span>Recent Recoveries</span>
+                            <button class="export-button" onclick="exportTable('recoveriesTable', 'Recent_Recoveries')">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                        </div>
+                        <div id="recentRecoveriesList">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- All Recoveries Summary -->
+                    <div class="viz-card">
+                        <div class="viz-title">All Recoveries Summary</div>
+                        <div style="overflow-x: auto;">
+                            <table class="data-table" id="allRecoveriesTable">
+                                <thead>
+                                    <tr>
+                                        <th>Case Name</th>
+                                        <th style="text-align: right;">Recovery Amount</th>
+                                        <th>Date Received</th>
+                                        <th>Child Account</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="allRecoveriesBody">
+                                    <!-- Populated by JavaScript -->
+                                </tbody>
+                                <tfoot>
+                                    <tr style="background: var(--pbi-background); font-weight: 600;">
+                                        <td>Total</td>
+                                        <td style="text-align: right;" id="totalRecoveriesAmount">$8,420,000</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <!-- Recent Interactions -->
+                    <div class="viz-card">
+                        <div class="viz-title">Recent Interactions</div>
+                        <div id="recentInteractionsList">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Notifications -->
+                    <div class="viz-card">
+                        <div class="viz-title">
+                            Recent Notifications
+                            <span class="badge" style="background: var(--pbi-primary); margin-left: 8px;">3 NEW</span>
+                        </div>
+                        <div id="notificationsList">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Client Portal Users -->
+                    <div class="viz-card">
+                        <div class="viz-title">Client Portal Users</div>
+                        <div class="user-list" id="portalUsersList">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Notification Sign-ups -->
+                    <div class="viz-card">
+                        <div class="viz-title">Notification Sign-ups by User</div>
+                        <div style="overflow-x: auto;">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Email Notifications</th>
+                                        <th>Portal Notifications</th>
+                                        <th>Last Active</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="notificationSignupsBody">
+                                    <!-- Populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Non-US Opt-in Cases Eligibility Snapshot -->
+            <div class="viz-card">
+                <div class="viz-title">Non-US Opt-in Cases Eligibility Snapshot</div>
+                <div class="eligibility-snapshot" id="eligibilitySnapshot">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="page-info">
+            <span>Account Manager Dashboard</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <span>Zoom: 100%</span>
+        </div>
+    </div>
+
+    <!-- Style Switcher -->
+    <script src="style-switcher.js?v=2"></script>
+
+    <script>
+        // Sample client data structure
+        const clientData = {
+            wellington: {
+                parent: 'Wellington Management',
+                children: [
+                    { id: 'wellington-hf', name: 'Wellington Hedge Funds', active: true },
+                    { id: 'wellington-mf', name: 'Wellington Mutual Funds', active: false },
+                    { id: 'wellington-gf', name: 'Wellington Global Funds', active: false },
+                    { id: 'wellington-tc', name: 'Wellington Trust Company', active: false }
+                ],
+                contractDate: '3/15/2020',
+                atfSignatureDate: '3/22/2020',
+                dataSource: 'Custodian Direct',
+                dataRefresh: 'Monthly',
+                cusipClient: true,
+                recognizedLoss: '$45.8M',
+                claimsFiled: 47,
+                eligibleCases: 32,
+                totalRecoveries: 8400000,
+                expectedRecovery: 12200000
+            }
+        };
+
+        // Sample open items
+        const openItems = [
+            { type: 'JIRA', title: 'Documentation Review - Q4 2024', desc: 'Pending client signature on updated agreement', priority: 'High' },
+            { type: 'OTS', title: 'Data Refresh Request', desc: 'Client requested updated trade data for case analysis', priority: 'Medium' },
+            { type: 'AUDIT', title: 'Open Documentation Audit', desc: '3 documents pending review for compliance', priority: 'High' },
+            { type: 'JIRA', title: 'Recovery Disbursement Processing', desc: 'Awaiting final approval for $180K disbursement', priority: 'Medium' },
+            { type: 'OTS', title: 'New Case Eligibility Review', desc: 'British American Tobacco case requires eligibility determination', priority: 'High' }
+        ];
+
+        // Sample recoveries
+        const recentRecoveries = [
+            { case: 'Barclays Plc (Staley Action)', amount: 180750, date: '8/20/2025', child: 'Wellington Hedge Funds' },
+            { case: 'DWS Group', amount: 783416, date: '6/15/2025', child: 'Wellington Mutual Funds' },
+            { case: 'Petrobras', amount: 1450000, date: '3/10/2025', child: 'Wellington Global Funds' }
+        ];
+
+        const allRecoveries = [
+            { case: 'Barclays Plc (Staley Action)', amount: 180750, date: '8/20/2025', child: 'Wellington Hedge Funds' },
+            { case: 'DWS Group', amount: 783416, date: '6/15/2025', child: 'Wellington Mutual Funds' },
+            { case: 'Petrobras', amount: 1450000, date: '3/10/2025', child: 'Wellington Global Funds' },
+            { case: 'Vestas Wind Systems', amount: 194115, date: '2/5/2025', child: 'Wellington Trust Company' },
+            { case: 'Bayer AG', amount: 5800000, date: '12/15/2024', child: 'Wellington Hedge Funds' }
+        ];
+
+        // Sample interactions
+        const recentInteractions = [
+            { type: 'Email', details: 'Discussed Q4 recovery expectations and upcoming case deadlines', date: '2 hours ago', user: 'Sarah Johnson' },
+            { type: 'Phone Call', details: 'Client inquiry about British American Tobacco case status', date: '1 day ago', user: 'Mike Chen' },
+            { type: 'Meeting', details: 'Quarterly review - discussed portfolio performance and new opportunities', date: '3 days ago', user: 'Craig D\'Alessio' },
+            { type: 'Portal Activity', details: 'Client accessed case details and downloaded recovery report', date: '5 days ago', user: 'System' }
+        ];
+
+        // Sample notifications
+        const notifications = [
+            { title: 'New Recovery Received', details: 'Barclays Plc recovery of $180,750 processed', date: '2 hours ago', read: false },
+            { title: 'Case Status Update', details: 'British American Tobacco case now eligible for opt-in', date: '1 day ago', read: false },
+            { title: 'Documentation Required', details: '3 documents pending for Petrobras case review', date: '2 days ago', read: false }
+        ];
+
+        // Sample portal users
+        const portalUsers = [
+            { name: 'John Smith', role: 'Admin', email: 'john.smith@wellington.com', lastActive: '2 hours ago' },
+            { name: 'Jane Doe', role: 'User', email: 'jane.doe@wellington.com', lastActive: '1 day ago' },
+            { name: 'Bob Wilson', role: 'User', email: 'bob.wilson@wellington.com', lastActive: '3 days ago' }
+        ];
+
+        // Sample notification signups
+        const notificationSignups = [
+            { user: 'John Smith', email: true, portal: true, lastActive: '2 hours ago' },
+            { user: 'Jane Doe', email: true, portal: false, lastActive: '1 day ago' },
+            { user: 'Bob Wilson', email: false, portal: true, lastActive: '3 days ago' }
+        ];
+
+        // Eligibility snapshot
+        const eligibilitySnapshot = [
+            { label: 'Eligible', count: 12, color: 'var(--chart-green)' },
+            { label: 'Not Eligible', count: 5, color: 'var(--chart-red)' },
+            { label: 'Under Review', count: 8, color: 'var(--chart-orange)' },
+            { label: 'Pending', count: 7, color: 'var(--pbi-text-secondary)' }
+        ];
+
+        function formatCurrency(amount) {
+            if (amount >= 1000000) {
+                return '$' + (amount / 1000000).toFixed(1) + 'M';
+            } else if (amount >= 1000) {
+                return '$' + (amount / 1000).toFixed(0) + 'K';
+            }
+            return '$' + amount.toLocaleString();
+        }
+
+        function populateClientHierarchy() {
+            const client = clientData.wellington;
+            document.getElementById('parentClientName').textContent = client.parent;
+            
+            const childContainer = document.getElementById('childClients');
+            childContainer.innerHTML = '';
+            
+            client.children.forEach(child => {
+                const badge = document.createElement('div');
+                badge.className = `child-client-badge ${child.active ? 'active' : ''}`;
+                badge.textContent = child.name;
+                badge.onclick = () => selectChildClient(child.id);
+                childContainer.appendChild(badge);
+            });
+        }
+
+        function selectChildClient(childId) {
+            // Update active state
+            document.querySelectorAll('.child-client-badge').forEach(badge => {
+                badge.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Filter data by child client
+            // In real implementation, this would fetch child-specific data
+            console.log('Selected child client:', childId);
+        }
+
+        function populateOpenItems() {
+            const container = document.getElementById('openItemsList');
+            container.innerHTML = '';
+            
+            openItems.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'open-item';
+                div.innerHTML = `
+                    <div class="open-item-left">
+                        <div class="open-item-title">${item.title}</div>
+                        <div class="open-item-desc">${item.desc}</div>
+                    </div>
+                    <div>
+                        <span class="open-item-badge badge-${item.type.toLowerCase()}">${item.type}</span>
+                        <span class="open-item-badge" style="background: ${item.priority === 'High' ? '#d13438' : '#ff8c00'}; color: white;">${item.priority}</span>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function populateRecentRecoveries() {
+            const container = document.getElementById('recentRecoveriesList');
+            container.innerHTML = '';
+            
+            recentRecoveries.forEach(recovery => {
+                const div = document.createElement('div');
+                div.className = 'recovery-item';
+                div.innerHTML = `
+                    <div>
+                        <div class="recovery-case">${recovery.case}</div>
+                        <div class="recovery-date">${recovery.date} • ${recovery.child}</div>
+                    </div>
+                    <div class="recovery-amount">${formatCurrency(recovery.amount)}</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function populateAllRecoveries() {
+            const tbody = document.getElementById('allRecoveriesBody');
+            tbody.innerHTML = '';
+            
+            let total = 0;
+            allRecoveries.forEach(recovery => {
+                total += recovery.amount;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${recovery.case}</td>
+                    <td class="currency" style="text-align: right; font-weight: 600;">${formatCurrency(recovery.amount)}</td>
+                    <td class="date-cell">${recovery.date}</td>
+                    <td>${recovery.child}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+            
+            document.getElementById('totalRecoveriesAmount').textContent = formatCurrency(total);
+        }
+
+        function populateRecentInteractions() {
+            const container = document.getElementById('recentInteractionsList');
+            container.innerHTML = '';
+            
+            recentInteractions.forEach(interaction => {
+                const div = document.createElement('div');
+                div.className = 'interaction-item';
+                div.innerHTML = `
+                    <div class="interaction-header">
+                        <div class="interaction-type">
+                            <i class="fas fa-${interaction.type === 'Email' ? 'envelope' : interaction.type === 'Phone Call' ? 'phone' : interaction.type === 'Meeting' ? 'calendar' : 'user'}"></i>
+                            ${interaction.type}
+                        </div>
+                        <div class="interaction-date">${interaction.date}</div>
+                    </div>
+                    <div class="interaction-details">${interaction.details}</div>
+                    <div class="interaction-details" style="margin-top: 2px; font-size: 9px; color: var(--pbi-text-secondary);">By: ${interaction.user}</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function populateNotifications() {
+            const container = document.getElementById('notificationsList');
+            container.innerHTML = '';
+            
+            notifications.forEach(notif => {
+                const div = document.createElement('div');
+                div.className = 'interaction-item';
+                div.style.background = notif.read ? 'transparent' : 'var(--pbi-background)';
+                div.style.padding = '8px';
+                div.style.borderRadius = '4px';
+                div.innerHTML = `
+                    <div class="interaction-header">
+                        <div class="interaction-type">${notif.title}</div>
+                        <div class="interaction-date">${notif.date}</div>
+                    </div>
+                    <div class="interaction-details">${notif.details}</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function populatePortalUsers() {
+            const container = document.getElementById('portalUsersList');
+            container.innerHTML = '';
+            
+            portalUsers.forEach(user => {
+                const badge = document.createElement('div');
+                badge.className = `user-badge ${user.role === 'Admin' ? 'admin' : ''}`;
+                badge.innerHTML = `
+                    <i class="fas fa-${user.role === 'Admin' ? 'user-shield' : 'user'}"></i>
+                    <span>${user.name}</span>
+                    <span style="font-size: 9px; opacity: 0.7;">(${user.lastActive})</span>
+                `;
+                container.appendChild(badge);
+            });
+        }
+
+        function populateNotificationSignups() {
+            const tbody = document.getElementById('notificationSignupsBody');
+            tbody.innerHTML = '';
+            
+            notificationSignups.forEach(signup => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${signup.user}</td>
+                    <td style="text-align: center;">
+                        <span class="case-status-badge ${signup.email ? 'status-confirmed' : 'status-not-eligible'}">
+                            ${signup.email ? 'Yes' : 'No'}
+                        </span>
+                    </td>
+                    <td style="text-align: center;">
+                        <span class="case-status-badge ${signup.portal ? 'status-confirmed' : 'status-not-eligible'}">
+                            ${signup.portal ? 'Yes' : 'No'}
+                        </span>
+                    </td>
+                    <td class="date-cell">${signup.lastActive}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function populateEligibilitySnapshot() {
+            const container = document.getElementById('eligibilitySnapshot');
+            container.innerHTML = '';
+            
+            eligibilitySnapshot.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'eligibility-card';
+                card.innerHTML = `
+                    <div class="eligibility-count" style="color: ${item.color};">${item.count}</div>
+                    <div class="eligibility-label">${item.label}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function exportTable(tableId, filename) {
+            const table = document.getElementById(tableId);
+            if (!table) {
+                // For non-table exports, create a simple CSV
+                alert('Export functionality for this section coming soon!');
+                return;
+            }
+            
+            let csv = [];
+            const rows = table.querySelectorAll('tr');
+            
+            for (let i = 0; i < rows.length; i++) {
+                const row = [];
+                const cols = rows[i].querySelectorAll('td, th');
+                
+                for (let j = 0; j < cols.length; j++) {
+                    let data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/"/g, '""');
+                    row.push('"' + data + '"');
+                }
+                csv.push(row.join(','));
+            }
+            
+            const csvContent = csv.join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', filename + '_' + new Date().toISOString().split('T')[0] + '.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Tab navigation
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                if (this.textContent.includes('Opt-in Monitoring')) {
+                    window.location.href = 'opt-in-monitoring.html';
+                } else if (this.textContent.includes('ELIGIBILITY & FILINGS')) {
+                    window.location.href = 'eligibility-filings.html';
+                } else {
+                    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            populateClientHierarchy();
+            populateOpenItems();
+            populateRecentRecoveries();
+            populateAllRecoveries();
+            populateRecentInteractions();
+            populateNotifications();
+            populatePortalUsers();
+            populateNotificationSignups();
+            populateEligibilitySnapshot();
+        });
+    </script>
+</body>
+</html>
+
