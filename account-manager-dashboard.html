@@ -482,67 +482,33 @@
                 </div>
             </div>
 
-            <!-- Charts Row -->
-            <div class="grid-2" style="margin-bottom: 12px;">
-                <!-- Recovery Trend Chart -->
-                <div class="viz-card">
-                    <div class="viz-title">Recovery Trend</div>
-                    <div class="bar-chart-container" style="height: 200px;">
-                        <canvas id="recoveryTrendChart"></canvas>
+            <!-- Client Information -->
+            <div class="viz-card" style="margin-bottom: 12px;">
+                <div class="viz-title">Client Information</div>
+                <div class="info-grid" style="grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0;">
+                    <div class="info-card" style="padding: 10px;">
+                        <div class="info-card-label">Contract Date</div>
+                        <div class="info-card-value" style="font-size: 12px;" id="contractDate">3/15/2020</div>
                     </div>
-                </div>
-
-                <!-- Case Status Distribution -->
-                <div class="viz-card">
-                    <div class="viz-title">Case Status Distribution</div>
-                    <div class="donut-container" style="height: 200px;">
-                        <canvas id="caseStatusChart"></canvas>
-                        <div class="donut-center">
-                            <div class="donut-total" style="font-size: 16px;">47</div>
-                            <div class="donut-label" style="font-size: 9px;">Total Cases</div>
-                        </div>
+                    <div class="info-card" style="padding: 10px;">
+                        <div class="info-card-label">ATF Signature</div>
+                        <div class="info-card-value" style="font-size: 12px;" id="atfSignatureDate">3/22/2020</div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Client Information & Recovery by Account -->
-            <div class="grid-2" style="margin-bottom: 12px;">
-                <!-- Client Information -->
-                <div class="viz-card">
-                    <div class="viz-title">Client Information</div>
-                    <div class="info-grid" style="grid-template-columns: 1fr 1fr; gap: 8px; margin: 0;">
-                        <div class="info-card" style="padding: 10px;">
-                            <div class="info-card-label">Contract Date</div>
-                            <div class="info-card-value" style="font-size: 12px;" id="contractDate">3/15/2020</div>
-                        </div>
-                        <div class="info-card" style="padding: 10px;">
-                            <div class="info-card-label">ATF Signature</div>
-                            <div class="info-card-value" style="font-size: 12px;" id="atfSignatureDate">3/22/2020</div>
-                        </div>
-                        <div class="info-card" style="padding: 10px;">
-                            <div class="info-card-label">Data Source</div>
-                            <div class="info-card-value" style="font-size: 12px;" id="dataSource">Custodian Direct</div>
-                        </div>
-                        <div class="info-card" style="padding: 10px;">
-                            <div class="info-card-label">Refresh Frequency</div>
-                            <div class="info-card-value" style="font-size: 12px;" id="dataRefresh">Monthly</div>
-                        </div>
-                        <div class="info-card" style="padding: 10px;">
-                            <div class="info-card-label">CUSIP Client</div>
-                            <div class="info-card-value yes" style="font-size: 12px;" id="cusipClient">Yes</div>
-                        </div>
-                        <div class="info-card" style="padding: 10px;">
-                            <div class="info-card-label">Recognized Loss</div>
-                            <div class="info-card-value" style="font-size: 12px;" id="recognizedLoss">$45.8M</div>
-                        </div>
+                    <div class="info-card" style="padding: 10px;">
+                        <div class="info-card-label">Data Source</div>
+                        <div class="info-card-value" style="font-size: 12px;" id="dataSource">Custodian Direct</div>
                     </div>
-                </div>
-
-                <!-- Recovery by Child Account -->
-                <div class="viz-card">
-                    <div class="viz-title">Recovery by Child Account</div>
-                    <div class="bar-chart-container" style="height: 200px;">
-                        <canvas id="recoveryByAccountChart"></canvas>
+                    <div class="info-card" style="padding: 10px;">
+                        <div class="info-card-label">Refresh Frequency</div>
+                        <div class="info-card-value" style="font-size: 12px;" id="dataRefresh">Monthly</div>
+                    </div>
+                    <div class="info-card" style="padding: 10px;">
+                        <div class="info-card-label">CUSIP Client</div>
+                        <div class="info-card-value yes" style="font-size: 12px;" id="cusipClient">Yes</div>
+                    </div>
+                    <div class="info-card" style="padding: 10px;">
+                        <div class="info-card-label">Recognized Loss</div>
+                        <div class="info-card-value" style="font-size: 12px;" id="recognizedLoss">$45.8M</div>
                     </div>
                 </div>
             </div>
