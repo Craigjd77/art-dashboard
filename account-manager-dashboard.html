@@ -329,11 +329,25 @@
         }
         
         .dashboard-page {
-            display: none !important;
+            display: none;
         }
 
         .dashboard-page.active {
+            display: block;
+        }
+        
+        /* Ensure Page 3 content is visible when active */
+        #page3.active {
             display: block !important;
+        }
+        
+        #page3.active .viz-card {
+            display: block;
+        }
+        
+        #page3.active canvas {
+            display: block !important;
+            visibility: visible !important;
         }
         
         .page-indicator {
@@ -1086,60 +1100,57 @@
             
             // Initialize charts if showing Page 3 - wait for page to be visible
             if (pageNumber === 3) {
-                // Wait a bit longer to ensure page is visible and Chart.js is loaded
+                // Force page to be visible first
+                const page3 = document.getElementById('page3');
+                if (page3) {
+                    page3.style.display = 'block';
+                    page3.classList.add('active');
+                }
+                
+                // Wait for page to be visible and Chart.js to be ready
                 setTimeout(() => {
                     console.log('Initializing Page 3 charts...');
-                    try {
-                        // Check if Chart.js is available
-                        if (typeof Chart === 'undefined') {
-                            console.error('Chart.js not loaded, retrying...');
-                            setTimeout(() => showPage(3, buttonElement), 500);
-                            return;
-                        }
-                        
-                        // Always recreate charts when showing Page 3 to ensure they render
-                        const trendCanvas = document.getElementById('recoveryTrendChart');
-                        const statusCanvas = document.getElementById('caseStatusChart');
-                        const accountCanvas = document.getElementById('recoveryByAccountChart');
-                        
-                        console.log('Canvas elements:', { trendCanvas, statusCanvas, accountCanvas });
-                        
-                        if (trendCanvas) {
-                            if (trendCanvas.chart) {
-                                trendCanvas.chart.destroy();
-                            }
-                            createRecoveryTrendChart();
-                        } else {
-                            console.error('recoveryTrendChart canvas not found');
-                        }
-                        
-                        if (statusCanvas) {
-                            if (statusCanvas.chart) {
-                                statusCanvas.chart.destroy();
-                            }
-                            createCaseStatusChart();
-                        } else {
-                            console.error('caseStatusChart canvas not found');
-                        }
-                        
-                        if (accountCanvas) {
-                            if (accountCanvas.chart) {
-                                accountCanvas.chart.destroy();
-                            }
-                            createRecoveryByAccountChart();
-                        } else {
-                            console.error('recoveryByAccountChart canvas not found');
-                        }
-                    } catch (e) {
-                        console.error('Error creating charts:', e);
-                        // Retry once after a longer delay
-                        setTimeout(() => {
-                            createRecoveryTrendChart();
-                            createCaseStatusChart();
-                            createRecoveryByAccountChart();
-                        }, 1000);
+                    console.log('Chart.js available:', typeof Chart !== 'undefined');
+                    
+                    // Check if Chart.js is available
+                    if (typeof Chart === 'undefined') {
+                        console.error('Chart.js not loaded, waiting...');
+                        setTimeout(() => showPage(3, buttonElement), 1000);
+                        return;
                     }
-                }, 500);
+                    
+                    // Always recreate charts when showing Page 3
+                    const trendCanvas = document.getElementById('recoveryTrendChart');
+                    const statusCanvas = document.getElementById('caseStatusChart');
+                    const accountCanvas = document.getElementById('recoveryByAccountChart');
+                    
+                    console.log('Canvas elements found:', {
+                        trend: !!trendCanvas,
+                        status: !!statusCanvas,
+                        account: !!accountCanvas
+                    });
+                    
+                    if (trendCanvas) {
+                        if (trendCanvas.chart) {
+                            trendCanvas.chart.destroy();
+                        }
+                        createRecoveryTrendChart();
+                    }
+                    
+                    if (statusCanvas) {
+                        if (statusCanvas.chart) {
+                            statusCanvas.chart.destroy();
+                        }
+                        createCaseStatusChart();
+                    }
+                    
+                    if (accountCanvas) {
+                        if (accountCanvas.chart) {
+                            accountCanvas.chart.destroy();
+                        }
+                        createRecoveryByAccountChart();
+                    }
+                }, 100);
             }
         }
 
@@ -1233,6 +1244,9 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    animation: {
+                        duration: 0
+                    },
                     plugins: {
                         legend: {
                             display: false
@@ -1320,6 +1334,9 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    animation: {
+                        duration: 0
+                    },
                     cutout: '60%',
                     plugins: {
                         legend: {
@@ -1399,6 +1416,9 @@
                     indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
+                    animation: {
+                        duration: 0
+                    },
                     plugins: {
                         legend: {
                             display: false
