@@ -90,35 +90,51 @@
             margin-bottom: 12px;
         }
         
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 12px;
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
         }
         
-        .summary-card {
-            background: var(--pbi-background);
-            border: 1px solid var(--pbi-border-light);
-            border-radius: 3px;
-            padding: 10px;
+        .summary-table thead {
+            background: var(--pbi-hover);
         }
         
-        .summary-label {
-            font-size: 10px;
-            color: var(--pbi-text-secondary);
-            margin-bottom: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .summary-value {
-            font-size: 16px;
+        .summary-table th {
+            padding: 8px 10px;
+            text-align: left;
             font-weight: 600;
+            color: var(--pbi-text);
+            border-bottom: 2px solid var(--pbi-border);
+        }
+        
+        .summary-table th:first-child {
+            font-weight: 700;
+        }
+        
+        .summary-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid var(--pbi-border-light);
             color: var(--pbi-text);
         }
         
-        .summary-value.currency {
-            color: var(--chart-green);
+        .summary-table tbody tr:last-child {
+            font-weight: 600;
+            background: var(--pbi-hover);
+        }
+        
+        .summary-table tbody tr:last-child td {
+            border-top: 2px solid var(--pbi-border);
+            border-bottom: 2px solid var(--pbi-border);
+        }
+        
+        .summary-table .currency-cell {
+            text-align: right;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .summary-table .number-cell {
+            text-align: right;
         }
         
         .data-table-container {
@@ -320,32 +336,40 @@
             <!-- Summary Section -->
             <div class="summary-section">
                 <div class="summary-title">Summary</div>
-                <div class="summary-grid">
-                    <div class="summary-card">
-                        <div class="summary-label">Newly Filed</div>
-                        <div class="summary-value currency" id="settledNewlyFiledFund">$7,721,288,700.00</div>
-                        <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">
-                            <span id="settledNewlyFiledClaims">1,247</span> Claims | 
-                            <span id="settledNewlyFiledRecovered" class="currency">$1,607,311</span> Recovered
-                        </div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-label">Previously Filed</div>
-                        <div class="summary-value currency" id="settledPreviouslyFiledFund">$2,145,234,500.00</div>
-                        <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">
-                            <span id="settledPreviouslyFiledClaims">856</span> Claims | 
-                            <span id="settledPreviouslyFiledRecovered" class="currency">$892,445</span> Recovered
-                        </div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-label">Total</div>
-                        <div class="summary-value currency" id="settledTotalFund">$9,866,523,200.00</div>
-                        <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">
-                            <span id="settledTotalClaims">2,103</span> Claims | 
-                            <span id="settledTotalRecovered" class="currency">$2,499,756</span> Recovered
-                        </div>
-                    </div>
-                </div>
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Settlement Fund</th>
+                            <th># Claims</th>
+                            <th>Total Recognized Loss<br>Pro Rata Shares</th>
+                            <th>$ Recovered</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Newly Filed</strong></td>
+                            <td class="currency-cell" id="settledNewlyFiledFund">$7,721,288,700.00</td>
+                            <td class="number-cell" id="settledNewlyFiledClaims">1,247</td>
+                            <td class="currency-cell">$45,234,567.89</td>
+                            <td class="currency-cell" id="settledNewlyFiledRecovered">$1,607,311.00</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Previously Filed</strong></td>
+                            <td class="currency-cell" id="settledPreviouslyFiledFund">$2,145,234,500.00</td>
+                            <td class="number-cell" id="settledPreviouslyFiledClaims">856</td>
+                            <td class="currency-cell">$12,345,678.90</td>
+                            <td class="currency-cell" id="settledPreviouslyFiledRecovered">$892,445.00</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total</strong></td>
+                            <td class="currency-cell" id="settledTotalFund">$9,866,523,200.00</td>
+                            <td class="number-cell" id="settledTotalClaims">2,103</td>
+                            <td class="currency-cell">$57,580,246.79</td>
+                            <td class="currency-cell" id="settledTotalRecovered">$2,499,756.00</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
             <!-- Data Table -->
@@ -390,31 +414,36 @@
             <!-- Summary Section -->
             <div class="summary-section">
                 <div class="summary-title">Summary</div>
-                <div class="summary-grid">
-                    <div class="summary-card">
-                        <div class="summary-label">Newly Filed</div>
-                        <div class="summary-value currency" id="antitrustNewlyFiledFund">$1,000.00</div>
-                        <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">
-                            <span id="antitrustNewlyFiledClaims">1</span> Case | 
-                            <span id="antitrustNewlyFiledRecovered" class="currency">$1,500</span> Recovered
-                        </div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-label">New Paid</div>
-                        <div class="summary-value currency" id="antitrustNewPaidFund">$0.00</div>
-                        <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">
-                            <span id="antitrustNewPaidCases">0</span> Cases
-                        </div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-label">Total</div>
-                        <div class="summary-value currency" id="antitrustTotalFund">$1,000.00</div>
-                        <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">
-                            <span id="antitrustTotalCases">1</span> Case | 
-                            <span id="antitrustTotalRecovered" class="currency">$1,500</span> Recovered
-                        </div>
-                    </div>
-                </div>
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Settlement Fund</th>
+                            <th># Claims</th>
+                            <th>$ Recovered</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Newly Filed</strong></td>
+                            <td class="currency-cell" id="antitrustNewlyFiledFund">$1,000.00</td>
+                            <td class="number-cell" id="antitrustNewlyFiledClaims">1</td>
+                            <td class="currency-cell" id="antitrustNewlyFiledRecovered">$1,500.00</td>
+                        </tr>
+                        <tr>
+                            <td><strong>New Paid</strong></td>
+                            <td class="currency-cell" id="antitrustNewPaidFund">$0.00</td>
+                            <td class="number-cell" id="antitrustNewPaidCases">0</td>
+                            <td class="currency-cell">$0.00</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total</strong></td>
+                            <td class="currency-cell" id="antitrustTotalFund">$1,000.00</td>
+                            <td class="number-cell" id="antitrustTotalCases">1</td>
+                            <td class="currency-cell" id="antitrustTotalRecovered">$1,500.00</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
             <!-- Data Table -->
@@ -456,33 +485,48 @@
             <!-- Summary Section -->
             <div class="summary-section">
                 <div class="summary-title">Summary</div>
-                <div class="summary-grid">
-                    <div class="summary-card">
-                        <div class="summary-label">Newly Registered</div>
-                        <div class="summary-value currency" id="nonusNewlyRegisteredFund">$211,500,000.00</div>
-                        <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">
-                            <span id="nonusNewlyRegisteredCases">1</span> Case | 
-                            <span id="nonusNewlyRegisteredClaims">17</span> Claims | 
-                            <span id="nonusNewlyRegisteredDamages" class="currency">$6,844,934.60</span> FRT Damages
-                        </div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-label">Previously Registered</div>
-                        <div class="summary-value currency" id="nonusPreviouslyRegisteredFund">$0.00</div>
-                        <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">
-                            <span id="nonusPreviouslyRegisteredCases">16</span> Cases | 
-                            <span id="nonusPreviouslyRegisteredDamages" class="currency">$211,412,900.29</span> FRT Damages
-                        </div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-label">Total</div>
-                        <div class="summary-value currency" id="nonusTotalFund">$211,500,000.00</div>
-                        <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">
-                            <span id="nonusTotalCases">17</span> Cases | 
-                            <span id="nonusTotalDamages" class="currency">$218,257,834.89</span> FRT Damages
-                        </div>
-                    </div>
-                </div>
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th># Cases</th>
+                            <th>Settlement Fund</th>
+                            <th># Claims</th>
+                            <th>FRT Damages</th>
+                            <th>Damaged Shares</th>
+                            <th>$ Recovered</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Newly Registered</strong></td>
+                            <td class="number-cell" id="nonusNewlyRegisteredCases">1</td>
+                            <td class="currency-cell" id="nonusNewlyRegisteredFund">$211,500,000.00</td>
+                            <td class="number-cell" id="nonusNewlyRegisteredClaims">17</td>
+                            <td class="currency-cell" id="nonusNewlyRegisteredDamages">$6,844,934.60</td>
+                            <td class="number-cell">125,611</td>
+                            <td class="currency-cell">$0.00</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Previously Registered</strong></td>
+                            <td class="number-cell" id="nonusPreviouslyRegisteredCases">16</td>
+                            <td class="currency-cell" id="nonusPreviouslyRegisteredFund">$0.00</td>
+                            <td class="number-cell">0</td>
+                            <td class="currency-cell" id="nonusPreviouslyRegisteredDamages">$211,412,900.29</td>
+                            <td class="number-cell">2,023,322</td>
+                            <td class="currency-cell">$0.00</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total</strong></td>
+                            <td class="number-cell" id="nonusTotalCases">17</td>
+                            <td class="currency-cell" id="nonusTotalFund">$211,500,000.00</td>
+                            <td class="number-cell" id="nonusTotalClaims">17</td>
+                            <td class="currency-cell" id="nonusTotalDamages">$218,257,834.89</td>
+                            <td class="number-cell">2,148,933</td>
+                            <td class="currency-cell">$0.00</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
             <!-- Newly Paid Section -->
