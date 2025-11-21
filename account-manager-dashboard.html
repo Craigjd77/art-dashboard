@@ -1098,59 +1098,32 @@
                 indicator.textContent = `Page ${pageNumber} of 3`;
             }
             
-            // Initialize charts if showing Page 3 - wait for page to be visible
+            // Update charts when showing Page 3 - they should already be created
             if (pageNumber === 3) {
-                // Force page to be visible first
-                const page3 = document.getElementById('page3');
-                if (page3) {
-                    page3.style.display = 'block';
-                    page3.classList.add('active');
-                }
-                
-                // Wait for page to be visible and Chart.js to be ready
                 setTimeout(() => {
-                    console.log('Initializing Page 3 charts...');
-                    console.log('Chart.js available:', typeof Chart !== 'undefined');
-                    
-                    // Check if Chart.js is available
-                    if (typeof Chart === 'undefined') {
-                        console.error('Chart.js not loaded, waiting...');
-                        setTimeout(() => showPage(3, buttonElement), 1000);
-                        return;
-                    }
-                    
-                    // Always recreate charts when showing Page 3
+                    // Resize charts to ensure they render correctly when page becomes visible
                     const trendCanvas = document.getElementById('recoveryTrendChart');
                     const statusCanvas = document.getElementById('caseStatusChart');
                     const accountCanvas = document.getElementById('recoveryByAccountChart');
                     
-                    console.log('Canvas elements found:', {
-                        trend: !!trendCanvas,
-                        status: !!statusCanvas,
-                        account: !!accountCanvas
-                    });
-                    
-                    if (trendCanvas) {
-                        if (trendCanvas.chart) {
-                            trendCanvas.chart.destroy();
-                        }
+                    if (trendCanvas && trendCanvas.chart) {
+                        trendCanvas.chart.resize();
+                    } else if (trendCanvas) {
                         createRecoveryTrendChart();
                     }
                     
-                    if (statusCanvas) {
-                        if (statusCanvas.chart) {
-                            statusCanvas.chart.destroy();
-                        }
+                    if (statusCanvas && statusCanvas.chart) {
+                        statusCanvas.chart.resize();
+                    } else if (statusCanvas) {
                         createCaseStatusChart();
                     }
                     
-                    if (accountCanvas) {
-                        if (accountCanvas.chart) {
-                            accountCanvas.chart.destroy();
-                        }
+                    if (accountCanvas && accountCanvas.chart) {
+                        accountCanvas.chart.resize();
+                    } else if (accountCanvas) {
                         createRecoveryByAccountChart();
                     }
-                }, 100);
+                }, 200);
             }
         }
 
@@ -1479,15 +1452,23 @@
             populateNotificationSignups();
             populateEligibilitySnapshot();
             
-            // Check if Page 3 is active on load (e.g., from URL parameter or refresh)
-            const page3 = document.getElementById('page3');
-            if (page3 && page3.classList.contains('active')) {
-                setTimeout(() => {
+            // Create all charts on page load - Chart.js can handle hidden elements
+            // We'll update them when Page 3 is shown
+            setTimeout(() => {
+                if (typeof Chart !== 'undefined') {
+                    console.log('Creating charts on page load...');
                     createRecoveryTrendChart();
                     createCaseStatusChart();
                     createRecoveryByAccountChart();
-                }, 500);
-            }
+                } else {
+                    console.error('Chart.js not loaded yet, retrying...');
+                    setTimeout(() => {
+                        createRecoveryTrendChart();
+                        createCaseStatusChart();
+                        createRecoveryByAccountChart();
+                    }, 1000);
+                }
+            }, 1000);
         });
     </script>
 </body>
