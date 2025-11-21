@@ -20,49 +20,49 @@
             background: var(--pbi-card-bg);
             border: 1px solid var(--pbi-border);
             border-radius: 4px;
-            padding: 16px;
-            margin-bottom: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
             box-shadow: var(--pbi-shadow);
         }
         
         .report-title {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 600;
             color: var(--pbi-primary);
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
         
         .report-subtitle {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--pbi-text-secondary);
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
         
         .report-period {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--pbi-text-secondary);
         }
         
         .report-tabs-container {
             display: flex;
-            gap: 16px;
-            margin-bottom: 16px;
+            gap: 12px;
+            margin-bottom: 12px;
         }
         
         .report-tabs {
             display: flex;
             flex-direction: column;
             gap: 0;
-            min-width: 220px;
+            min-width: 200px;
             background: var(--pbi-card-bg);
             border: 1px solid var(--pbi-border);
             border-radius: 4px;
-            padding: 8px;
+            padding: 6px;
             box-shadow: var(--pbi-shadow);
         }
         
         .report-tab {
-            padding: 12px 16px;
+            padding: 10px 12px;
             background: transparent;
             border: 1px solid transparent;
             border-radius: 3px;
@@ -72,7 +72,7 @@
             cursor: pointer;
             transition: all 0.2s ease;
             text-align: left;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         
         .report-tab:last-child {
@@ -102,16 +102,16 @@
             background: var(--pbi-card-bg);
             border: 1px solid var(--pbi-border);
             border-radius: 4px;
-            padding: 12px;
-            margin-bottom: 12px;
+            padding: 10px;
+            margin-bottom: 10px;
             box-shadow: var(--pbi-shadow);
         }
         
         .summary-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             color: var(--pbi-text);
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
         
         .summary-table {
@@ -165,7 +165,7 @@
             background: var(--pbi-card-bg);
             border: 1px solid var(--pbi-border);
             border-radius: 4px;
-            padding: 12px;
+            padding: 10px;
             box-shadow: var(--pbi-shadow);
             overflow-x: auto;
         }
@@ -174,11 +174,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
         
         .table-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             color: var(--pbi-text);
         }
@@ -267,8 +267,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
-            padding: 12px;
+            margin-bottom: 10px;
+            padding: 10px;
             background: var(--pbi-card-bg);
             border: 1px solid var(--pbi-border);
             border-radius: 4px;
@@ -277,7 +277,7 @@
         
         .period-selector {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             align-items: center;
         }
         
@@ -290,30 +290,93 @@
             color: var(--pbi-text);
         }
         
+        .comparison-toggle {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding: 8px;
+            background: var(--pbi-hover);
+            border-radius: 3px;
+            border: 1px solid var(--pbi-border);
+        }
+        
+        .comparison-toggle label {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--pbi-text);
+            margin-right: 4px;
+        }
+        
+        .comparison-toggle select {
+            padding: 4px 8px;
+            border: 1px solid var(--pbi-border);
+            border-radius: 3px;
+            font-size: 10px;
+            background: var(--pbi-background);
+            color: var(--pbi-text);
+        }
+        
+        .comparison-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        
+        .comparison-indicator.positive {
+            background: rgba(16, 124, 16, 0.1);
+            color: #107c10;
+        }
+        
+        .comparison-indicator.negative {
+            background: rgba(209, 52, 56, 0.1);
+            color: #d13438;
+        }
+        
+        .comparison-indicator.neutral {
+            background: rgba(0, 120, 212, 0.1);
+            color: #0078d4;
+        }
+        
+        .comparison-value {
+            font-size: 11px;
+            color: var(--pbi-text-secondary);
+            margin-top: 2px;
+        }
+        
+        .comparison-mode-active {
+            background: rgba(0, 120, 212, 0.08);
+            border-color: var(--pbi-primary);
+        }
+        
         .charts-section {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 12px;
+            gap: 10px;
+            margin-bottom: 10px;
         }
         
         .chart-card {
             background: var(--pbi-card-bg);
             border: 1px solid var(--pbi-border);
             border-radius: 4px;
-            padding: 12px;
+            padding: 10px;
             box-shadow: var(--pbi-shadow);
         }
         
         .chart-title {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             color: var(--pbi-text);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         
         .chart-container {
-            height: 200px;
+            height: 180px;
             position: relative;
         }
         
@@ -340,13 +403,13 @@
         .frt-logo-header {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 8px;
+            gap: 10px;
+            margin-bottom: 0;
         }
         
         .frt-logo {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             background: var(--pbi-primary);
             border-radius: 4px;
             display: flex;
@@ -354,7 +417,185 @@
             justify-content: center;
             color: white;
             font-weight: 700;
-            font-size: 16px;
+            font-size: 14px;
+        }
+        
+        .executive-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        
+        .kpi-card {
+            background: var(--pbi-card-bg);
+            border: 1px solid var(--pbi-border);
+            border-radius: 4px;
+            padding: 12px;
+            box-shadow: var(--pbi-shadow);
+            position: relative;
+        }
+        
+        .kpi-label {
+            font-size: 10px;
+            color: var(--pbi-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        
+        .kpi-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--pbi-text);
+            margin-bottom: 3px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.2;
+        }
+        
+        .kpi-change {
+            font-size: 10px;
+            color: var(--pbi-text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            margin-bottom: 2px;
+        }
+        
+        .kpi-change.positive {
+            color: #107c10;
+        }
+        
+        .kpi-change.negative {
+            color: #d13438;
+        }
+        
+        .kpi-trend {
+            font-size: 9px;
+        }
+        
+        .kpi-subtitle {
+            font-size: 9px;
+            color: var(--pbi-text-secondary);
+            margin-top: 2px;
+        }
+        
+        .comparison-value {
+            font-size: 9px;
+            margin-top: 2px;
+        }
+        
+        .alert-section {
+            background: var(--pbi-card-bg);
+            border: 1px solid var(--pbi-border);
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 12px;
+            box-shadow: var(--pbi-shadow);
+        }
+        
+        .alert-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .alert-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--pbi-text);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .alert-badge {
+            background: #d13438;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 9px;
+            font-weight: 600;
+        }
+        
+        .alert-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 8px;
+            border-bottom: 1px solid var(--pbi-border-light);
+            font-size: 10px;
+        }
+        
+        .alert-item:last-child {
+            border-bottom: none;
+        }
+        
+        .alert-priority {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        .alert-priority.critical {
+            background: #d13438;
+            box-shadow: 0 0 4px rgba(209, 52, 56, 0.5);
+        }
+        
+        .alert-priority.warning {
+            background: #ffb900;
+            box-shadow: 0 0 4px rgba(255, 185, 0, 0.5);
+        }
+        
+        .alert-priority.info {
+            background: #0078d4;
+        }
+        
+        .alert-case {
+            font-weight: 600;
+            color: var(--pbi-text);
+            flex: 1;
+            font-size: 10px;
+        }
+        
+        .alert-deadline {
+            color: var(--pbi-text-secondary);
+            font-family: 'Courier New', monospace;
+            min-width: 90px;
+            font-size: 10px;
+        }
+        
+        .alert-days {
+            font-size: 9px;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        
+        .alert-days.critical {
+            background: rgba(209, 52, 56, 0.1);
+            color: #d13438;
+        }
+        
+        .alert-days.warning {
+            background: rgba(255, 185, 0, 0.1);
+            color: #ca5010;
+        }
+        
+        .alert-days.info {
+            background: rgba(0, 120, 212, 0.1);
+            color: #0078d4;
+        }
+        
+        .no-alerts {
+            text-align: center;
+            padding: 15px;
+            color: var(--pbi-text-secondary);
+            font-size: 10px;
+            font-style: italic;
         }
     </style>
 </head>
@@ -420,6 +661,14 @@
                     <option value="2024-09">September 2024</option>
                     <option value="2024-08">August 2024</option>
                 </select>
+                <div class="comparison-toggle" id="comparisonToggle">
+                    <label>Compare:</label>
+                    <select id="comparisonMode" style="padding: 6px 10px; border: 1px solid var(--pbi-border); border-radius: 3px; font-size: 11px;">
+                        <option value="none">None</option>
+                        <option value="previous">vs Previous Period</option>
+                        <option value="year">vs Same Period Last Year</option>
+                    </select>
+                </div>
             </div>
         </div>
 
@@ -431,6 +680,91 @@
                     <div class="report-title">FRT FINANCIAL RECOVERY TECH</div>
                     <div class="report-subtitle">Status Report for <span id="reportClientName">DEMOFRTCLIENT</span></div>
                     <div class="report-period">Period from <span id="reportPeriodStart">10/1/2024</span> to <span id="reportPeriodEnd">10/31/2024</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Executive Summary KPIs -->
+        <div class="executive-summary">
+            <div class="kpi-card">
+                <div class="kpi-label">Total Recovered</div>
+                <div class="kpi-value" id="kpiTotalRecovered">$2,499,756</div>
+                <div class="kpi-change" id="kpiTotalRecoveredChange">
+                    <span class="kpi-trend">↑</span>
+                    <span id="kpiTotalRecoveredLabel">Current Period</span>
+                </div>
+                <div class="comparison-value" id="kpiTotalRecoveredComparison" style="display: none;"></div>
+                <div class="kpi-subtitle" id="kpiTotalRecoveredSubtitle">Current Period</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">YTD Recovered</div>
+                <div class="kpi-value" id="kpiYTDRecovered">$12,456,789</div>
+                <div class="kpi-change positive" id="kpiYTDChange">
+                    <span class="kpi-trend">↑</span>
+                    <span id="kpiYTDLabel">Year to Date</span>
+                </div>
+                <div class="comparison-value" id="kpiYTDComparison" style="display: none;"></div>
+                <div class="kpi-subtitle" id="kpiYTDSubtitle">Year to Date</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Active Claims</div>
+                <div class="kpi-value" id="kpiActiveClaims">2,103</div>
+                <div class="kpi-change" id="kpiActiveClaimsChange">
+                    <span class="kpi-trend">→</span>
+                    <span id="kpiActiveClaimsLabel">Across all categories</span>
+                </div>
+                <div class="comparison-value" id="kpiActiveClaimsComparison" style="display: none;"></div>
+                <div class="kpi-subtitle" id="kpiActiveClaimsSubtitle">Total Filed</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Recovery Rate</div>
+                <div class="kpi-value" id="kpiRecoveryRate">4.3%</div>
+                <div class="kpi-change positive" id="kpiRecoveryRateChange">
+                    <span class="kpi-trend">↑</span>
+                    <span id="kpiRecoveryRateLabel">of Settlement Funds</span>
+                </div>
+                <div class="comparison-value" id="kpiRecoveryRateComparison" style="display: none;"></div>
+                <div class="kpi-subtitle" id="kpiRecoveryRateSubtitle">Current Period</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Pending Recovery</div>
+                <div class="kpi-value" id="kpiPendingRecovery">$7,123,456</div>
+                <div class="kpi-change" id="kpiPendingChange">
+                    <span class="kpi-trend">→</span>
+                    <span id="kpiPendingLabel">Estimated</span>
+                </div>
+                <div class="comparison-value" id="kpiPendingComparison" style="display: none;"></div>
+                <div class="kpi-subtitle" id="kpiPendingSubtitle">From Filed Claims</div>
+            </div>
+        </div>
+
+        <!-- Deadline Risk Alerts -->
+        <div class="alert-section">
+            <div class="alert-header">
+                <div class="alert-title">
+                    <i class="fas fa-exclamation-triangle" style="color: #d13438;"></i>
+                    Upcoming Deadlines
+                    <span class="alert-badge" id="alertCount">3</span>
+                </div>
+            </div>
+            <div id="alertItems">
+                <div class="alert-item">
+                    <div class="alert-priority critical"></div>
+                    <div class="alert-case">Foreign Exchange Antitrust - Stock (Lending) IFER</div>
+                    <div class="alert-deadline">07-08-2024</div>
+                    <div class="alert-days critical">7 days</div>
+                </div>
+                <div class="alert-item">
+                    <div class="alert-priority warning"></div>
+                    <div class="alert-case">BHP Billiton - Non-US Group Recovery</div>
+                    <div class="alert-deadline">11-30-2024</div>
+                    <div class="alert-days warning">40 days</div>
+                </div>
+                <div class="alert-item">
+                    <div class="alert-priority info"></div>
+                    <div class="alert-case">Medibank Private Ltd - Non-US Group Recovery</div>
+                    <div class="alert-deadline">12-15-2024</div>
+                    <div class="alert-days info">55 days</div>
                 </div>
             </div>
         </div>
@@ -1041,6 +1375,11 @@
         document.getElementById('clientSelect').addEventListener('change', function() {
             document.getElementById('reportClientName').textContent = this.options[this.selectedIndex].text;
         });
+        
+        // Comparison mode selection
+        document.getElementById('comparisonMode').addEventListener('change', function() {
+            updateComparisonDisplay();
+        });
 
         // Tab navigation
         document.querySelectorAll('.nav-tab').forEach(tab => {
@@ -1221,6 +1560,185 @@
             document.body.removeChild(link);
         }
 
+        // Comparison data (would come from API in production)
+        const comparisonData = {
+            previous: {
+                totalRecovered: 1895432,
+                ytdRecovered: 10543210,
+                activeClaims: 1897,
+                recoveryRate: 3.8,
+                pendingRecovery: 6890123
+            },
+            yearAgo: {
+                totalRecovered: 1654321,
+                ytdRecovered: 9567890,
+                activeClaims: 1734,
+                recoveryRate: 3.5,
+                pendingRecovery: 6123456
+            }
+        };
+        
+        // Calculate percentage change
+        function calculatePercentageChange(current, previous) {
+            if (!previous || previous === 0) return null;
+            const change = ((current - previous) / previous) * 100;
+            return {
+                value: Math.abs(change).toFixed(1),
+                direction: change >= 0 ? 'positive' : 'negative',
+                trend: change >= 0 ? '↑' : '↓'
+            };
+        }
+        
+        // Format comparison indicator
+        function formatComparisonIndicator(change, prefix = '') {
+            if (!change) return '';
+            const sign = change.direction === 'positive' ? '+' : '-';
+            return `${prefix}${sign}${change.value}%`;
+        }
+        
+        // Update comparison display
+        function updateComparisonDisplay() {
+            const comparisonMode = document.getElementById('comparisonMode').value;
+            const toggle = document.getElementById('comparisonToggle');
+            
+            if (comparisonMode === 'none') {
+                toggle.classList.remove('comparison-mode-active');
+                // Hide all comparison values
+                document.querySelectorAll('.comparison-value').forEach(el => {
+                    el.style.display = 'none';
+                });
+                // Reset labels to defaults
+                document.getElementById('kpiTotalRecoveredLabel').textContent = 'Current Period';
+                document.getElementById('kpiYTDLabel').textContent = 'Year to Date';
+                document.getElementById('kpiActiveClaimsLabel').textContent = 'Across all categories';
+                document.getElementById('kpiRecoveryRateLabel').textContent = 'of Settlement Funds';
+                document.getElementById('kpiPendingLabel').textContent = 'Estimated';
+                return;
+            }
+            
+            toggle.classList.add('comparison-mode-active');
+            const compareData = comparisonMode === 'previous' ? comparisonData.previous : comparisonData.yearAgo;
+            const compareLabel = comparisonMode === 'previous' ? 'Previous Period' : 'Same Period Last Year';
+            
+            // Calculate current values
+            let currentTotalRecovered = 0;
+            let currentClaims = 0;
+            let currentSettlementFund = 0;
+            
+            settledNewlyPaidData.forEach(row => {
+                currentTotalRecovered += parseFloat(row.recovered.replace(/[$,]/g, ''));
+            });
+            settledData.forEach(row => {
+                currentTotalRecovered += parseFloat(row.recovered.replace(/[$,]/g, ''));
+                currentClaims++;
+                currentSettlementFund += parseFloat(row.fund.replace(/[$,]/g, ''));
+            });
+            
+            const currentRecoveryRate = currentSettlementFund > 0 
+                ? ((currentTotalRecovered / currentSettlementFund) * 100)
+                : 0;
+            const currentPending = 7123456; // Placeholder
+            const currentYTD = 12456789; // Placeholder
+            
+            // Calculate comparisons
+            const totalRecoveredChange = calculatePercentageChange(currentTotalRecovered, compareData.totalRecovered);
+            const ytdChange = calculatePercentageChange(currentYTD, compareData.ytdRecovered);
+            const claimsChange = calculatePercentageChange(currentClaims, compareData.activeClaims);
+            const rateChange = calculatePercentageChange(currentRecoveryRate, compareData.recoveryRate);
+            const pendingChange = calculatePercentageChange(currentPending, compareData.pendingRecovery);
+            
+            // Update Total Recovered
+            updateKPIComparison('kpiTotalRecovered', totalRecoveredChange, compareData.totalRecovered, compareLabel, '$');
+            
+            // Update YTD
+            updateKPIComparison('kpiYTD', ytdChange, compareData.ytdRecovered, compareLabel, '$');
+            
+            // Update Active Claims
+            updateKPIComparison('kpiActiveClaims', claimsChange, compareData.activeClaims, compareLabel, '');
+            
+            // Update Recovery Rate
+            updateKPIComparison('kpiRecoveryRate', rateChange, compareData.recoveryRate, compareLabel, '', '%');
+            
+            // Update Pending
+            updateKPIComparison('kpiPending', pendingChange, compareData.pendingRecovery, compareLabel, '$');
+        }
+        
+        // Update individual KPI comparison
+        function updateKPIComparison(kpiPrefix, change, previousValue, label, currency = '', suffix = '') {
+            const labelEl = document.getElementById(kpiPrefix + 'Label');
+            const changeEl = document.getElementById(kpiPrefix + 'Change');
+            const comparisonEl = document.getElementById(kpiPrefix + 'Comparison');
+            const trendEl = changeEl.querySelector('.kpi-trend');
+            
+            if (!change) {
+                comparisonEl.style.display = 'none';
+                return;
+            }
+            
+            // Update label
+            labelEl.textContent = label;
+            
+            // Update trend indicator
+            trendEl.textContent = change.trend;
+            changeEl.className = 'kpi-change ' + change.direction;
+            
+            // Update comparison value
+            const prevValue = currency + previousValue.toLocaleString('en-US', {maximumFractionDigits: 0}) + suffix;
+            const comparisonText = `Previous: ${prevValue} ${formatComparisonIndicator(change)}`;
+            comparisonEl.textContent = comparisonText;
+            comparisonEl.className = 'comparison-value ' + change.direction;
+            comparisonEl.style.display = 'block';
+            
+            // Highlight significant changes (>10%)
+            if (parseFloat(change.value) > 10) {
+                changeEl.style.fontWeight = '600';
+            }
+        }
+        
+        // Calculate and update KPIs
+        function updateKPIs() {
+            // Calculate total recovered from all newly paid data
+            let totalRecovered = 0;
+            let totalClaims = 0;
+            let totalSettlementFund = 0;
+            
+            // From settled newly paid
+            settledNewlyPaidData.forEach(row => {
+                totalRecovered += parseFloat(row.recovered.replace(/[$,]/g, ''));
+                totalClaims++;
+            });
+            
+            // From settled data (including previously filed)
+            settledData.forEach(row => {
+                totalRecovered += parseFloat(row.recovered.replace(/[$,]/g, ''));
+                totalClaims++;
+                totalSettlementFund += parseFloat(row.fund.replace(/[$,]/g, ''));
+            });
+            
+            // Calculate recovery rate (recovered / settlement fund * 100)
+            const recoveryRate = totalSettlementFund > 0 
+                ? ((totalRecovered / totalSettlementFund) * 100).toFixed(1)
+                : '0.0';
+            
+            // Update KPI displays
+            document.getElementById('kpiTotalRecovered').textContent = '$' + totalRecovered.toLocaleString('en-US', {maximumFractionDigits: 0});
+            document.getElementById('kpiActiveClaims').textContent = totalClaims.toLocaleString();
+            document.getElementById('kpiRecoveryRate').textContent = recoveryRate + '%';
+            
+            // Calculate pending recovery (estimate - this would come from actual data)
+            const pendingRecovery = 7123456; // Placeholder - would calculate from filed but unpaid claims
+            document.getElementById('kpiPendingRecovery').textContent = '$' + pendingRecovery.toLocaleString('en-US', {maximumFractionDigits: 0});
+            
+            // Update comparisons if mode is active
+            updateComparisonDisplay();
+        }
+        
+        // Update alert count dynamically
+        function updateAlertCount() {
+            const alertCount = document.querySelectorAll('.alert-item').length;
+            document.getElementById('alertCount').textContent = alertCount;
+        }
+
         // Initialize
         window.addEventListener('DOMContentLoaded', () => {
             populateSettledNewlyPaidTable();
@@ -1229,6 +1747,8 @@
             populateAntitrustTable();
             populateNonusNewlyPaidTable();
             populateNonusTable();
+            updateKPIs();
+            updateAlertCount();
             
             // Create charts after a short delay to ensure Chart.js is loaded
             setTimeout(() => {
