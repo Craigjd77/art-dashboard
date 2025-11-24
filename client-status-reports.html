@@ -8,6 +8,10 @@
     <!-- Chart.js for visualizations -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     
+    <!-- jsPDF for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.3/jspdf.plugin.autotable.min.js"></script>
+    
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -117,7 +121,7 @@
         .summary-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 11px;
+            font-size: 10px;
         }
         
         .summary-table thead {
@@ -125,11 +129,12 @@
         }
         
         .summary-table th {
-            padding: 8px 10px;
+            padding: 6px 8px;
             text-align: left;
             font-weight: 600;
             color: var(--pbi-text);
             border-bottom: 2px solid var(--pbi-border);
+            font-size: 10px;
         }
         
         .summary-table th:first-child {
@@ -137,9 +142,10 @@
         }
         
         .summary-table td {
-            padding: 8px 10px;
+            padding: 6px 8px;
             border-bottom: 1px solid var(--pbi-border-light);
             color: var(--pbi-text);
+            font-size: 10px;
         }
         
         .summary-table tbody tr:last-child {
@@ -207,6 +213,51 @@
             background: var(--pbi-primary-dark);
         }
         
+        .export-button.pdf {
+            background: #d13438;
+            font-weight: 600;
+        }
+        
+        .export-button.pdf:hover {
+            background: #c02a2e;
+        }
+        
+        .top-export-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+            justify-content: flex-end;
+        }
+        
+        .top-export-button {
+            background: var(--pbi-primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .top-export-button:hover {
+            background: var(--pbi-primary-dark);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+        
+        .top-export-button.pdf {
+            background: #d13438;
+        }
+        
+        .top-export-button.pdf:hover {
+            background: #c02a2e;
+        }
+        
         .status-table {
             width: 100%;
             border-collapse: collapse;
@@ -221,18 +272,20 @@
         }
         
         .status-table th {
-            padding: 8px 6px;
+            padding: 6px 4px;
             text-align: left;
             font-weight: 600;
             color: var(--pbi-text);
             border-bottom: 2px solid var(--pbi-border);
             white-space: nowrap;
+            font-size: 9px;
         }
         
         .status-table td {
-            padding: 6px;
+            padding: 4px;
             border-bottom: 1px solid var(--pbi-border-light);
             color: var(--pbi-text);
+            font-size: 9px;
         }
         
         .status-table tbody tr {
@@ -360,6 +413,10 @@
             margin-bottom: 10px;
         }
         
+        .charts-section.full-width {
+            grid-template-columns: 1fr;
+        }
+        
         .chart-card {
             background: var(--pbi-card-bg);
             border: 1px solid var(--pbi-border);
@@ -368,16 +425,57 @@
             box-shadow: var(--pbi-shadow);
         }
         
+        .chart-card.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        
         .chart-title {
             font-size: 11px;
             font-weight: 600;
             color: var(--pbi-text);
-            margin-bottom: 6px;
+        }
+        
+        .chart-controls {
+            display: flex;
+            gap: 4px;
+            font-size: 9px;
+        }
+        
+        .chart-toggle {
+            padding: 2px 6px;
+            border: 1px solid var(--pbi-border);
+            background: var(--pbi-background);
+            border-radius: 3px;
+            cursor: pointer;
+            color: var(--pbi-text-secondary);
+            transition: all 0.2s ease;
+        }
+        
+        .chart-toggle:hover {
+            background: var(--pbi-hover);
+            border-color: var(--pbi-primary);
+        }
+        
+        .chart-toggle.active {
+            background: var(--pbi-primary);
+            color: white;
+            border-color: var(--pbi-primary);
         }
         
         .chart-container {
-            height: 180px;
+            height: 200px;
             position: relative;
+        }
+        
+        .chart-container.large {
+            height: 250px;
         }
         
         .frt-footer {
@@ -597,6 +695,164 @@
             font-size: 10px;
             font-style: italic;
         }
+        
+        .quick-search-container {
+            margin-bottom: 12px;
+            position: relative;
+            background: var(--pbi-card-bg);
+            border: 1px solid var(--pbi-border);
+            border-radius: 4px;
+            padding: 10px;
+            box-shadow: var(--pbi-shadow);
+        }
+        
+        .quick-search-box {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .quick-search-input {
+            width: 100%;
+            padding: 8px 36px 8px 12px;
+            border: 1px solid var(--pbi-border);
+            border-radius: 4px;
+            font-size: 12px;
+            background: var(--pbi-card-bg);
+            color: var(--pbi-text);
+            transition: border-color 0.2s ease;
+        }
+        
+        .quick-search-input:focus {
+            outline: none;
+            border-color: var(--pbi-primary);
+            box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.1);
+        }
+        
+        .quick-search-input::placeholder {
+            color: var(--pbi-text-secondary);
+        }
+        
+        .quick-search-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--pbi-text-secondary);
+            pointer-events: none;
+        }
+        
+        .search-results-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--pbi-card-bg);
+            border: 1px solid var(--pbi-border);
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            margin-top: 2px;
+        }
+        
+        .search-results-dropdown.show {
+            display: block;
+        }
+        
+        .search-result-item {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--pbi-border-light);
+            cursor: pointer;
+            transition: background 0.15s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .search-result-item:hover {
+            background: var(--pbi-hover);
+        }
+        
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .search-result-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .search-result-company {
+            font-weight: 600;
+            color: var(--pbi-text);
+            font-size: 12px;
+        }
+        
+        .search-result-type {
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            background: var(--pbi-hover);
+            color: var(--pbi-text-secondary);
+        }
+        
+        .search-result-details {
+            font-size: 10px;
+            color: var(--pbi-text-secondary);
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .search-result-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .search-highlight {
+            background: rgba(0, 120, 212, 0.2);
+            font-weight: 600;
+            padding: 0 2px;
+        }
+        
+        .search-no-results {
+            padding: 20px;
+            text-align: center;
+            color: var(--pbi-text-secondary);
+            font-size: 11px;
+            font-style: italic;
+        }
+        
+        .search-clear-btn {
+            position: absolute;
+            right: 32px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: var(--pbi-text-secondary);
+            cursor: pointer;
+            padding: 4px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        
+        .search-clear-btn:hover {
+            color: var(--pbi-text);
+        }
+        
+        .search-clear-btn.visible {
+            display: flex;
+        }
     </style>
 </head>
 <body>
@@ -667,7 +923,7 @@
                         <option value="none">None</option>
                         <option value="previous">vs Previous Period</option>
                         <option value="year">vs Same Period Last Year</option>
-                    </select>
+                </select>
                 </div>
             </div>
         </div>
@@ -681,6 +937,26 @@
                     <div class="report-subtitle">Status Report for <span id="reportClientName">DEMOFRTCLIENT</span></div>
                     <div class="report-period">Period from <span id="reportPeriodStart">10/1/2024</span> to <span id="reportPeriodEnd">10/31/2024</span></div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Quick Case Search -->
+        <div class="quick-search-container">
+            <div class="quick-search-box">
+                <input 
+                    type="text" 
+                    id="quickSearchInput" 
+                    class="quick-search-input" 
+                    placeholder="Quick search: Company name, Case number, CUSIP/ISIN..."
+                    autocomplete="off"
+                />
+                <button class="search-clear-btn" id="searchClearBtn" onclick="clearSearch()">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="quick-search-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="search-results-dropdown" id="searchResultsDropdown"></div>
             </div>
         </div>
 
@@ -772,16 +1048,16 @@
         <!-- Report Tabs Container -->
         <div class="report-tabs-container">
             <!-- Report Tabs (Left Sidebar) -->
-            <div class="report-tabs">
-                <button class="report-tab active" data-tab="settled">Settled Action Recovery</button>
-                <button class="report-tab" data-tab="antitrust">Antitrust Recovery</button>
-                <button class="report-tab" data-tab="nonus">Non-US Group Recovery</button>
-            </div>
-            
+        <div class="report-tabs">
+            <button class="report-tab active" data-tab="settled">Settled Action Recovery</button>
+            <button class="report-tab" data-tab="antitrust">Antitrust Recovery</button>
+            <button class="report-tab" data-tab="nonus">Non-US Group Recovery</button>
+        </div>
+
             <!-- Report Content (Right Side) -->
             <div class="report-content-wrapper">
-                <!-- Settled Action Recovery Tab -->
-                <div class="report-tab-content" id="settledTab">
+        <!-- Settled Action Recovery Tab -->
+        <div class="report-tab-content" id="settledTab">
             <!-- Summary Section -->
             <div class="summary-section">
                 <div class="summary-title">Summary</div>
@@ -867,15 +1143,58 @@
             <!-- Charts Section -->
             <div class="charts-section">
                 <div class="chart-card">
+                    <div class="chart-header">
                     <div class="chart-title">Recovery by Month</div>
+                        <div class="chart-controls">
+                            <span class="chart-toggle active" onclick="toggleChartView('monthly', 'bar')">Bar</span>
+                            <span class="chart-toggle" onclick="toggleChartView('monthly', 'line')">Line</span>
+                        </div>
+                    </div>
                     <div class="chart-container">
                         <canvas id="recoveryByMonthChart"></canvas>
                     </div>
                 </div>
                 <div class="chart-card">
+                    <div class="chart-header">
                     <div class="chart-title">Top 10 Companies by Recovery</div>
+                    </div>
                     <div class="chart-container">
                         <canvas id="topCompaniesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Historical Trends Section -->
+            <div class="charts-section full-width">
+                <div class="chart-card full-width">
+                    <div class="chart-header">
+                        <div class="chart-title">Cumulative Recovery Trend (YTD)</div>
+                        <div class="chart-controls">
+                            <span class="chart-toggle active" onclick="toggleCumulativeView('all')">All Types</span>
+                            <span class="chart-toggle" onclick="toggleCumulativeView('settled')">Settled Only</span>
+                        </div>
+                    </div>
+                    <div class="chart-container large">
+                        <canvas id="cumulativeTrendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="charts-section">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title">Recovery by Type</div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="recoveryByTypeChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title">Year-over-Year Comparison</div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="yoyComparisonChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -886,11 +1205,14 @@
                     <div class="table-title">Settled Action Recovery Details</div>
                     <div class="table-controls">
                         <button class="export-button" onclick="exportTable('settledTable', 'Settled_Action_Recovery')">
-                            <i class="fas fa-download"></i> Export to Excel
+                            <i class="fas fa-file-excel"></i> Export to Excel
+                        </button>
+                        <button class="export-button pdf" onclick="exportToPDF()">
+                            <i class="fas fa-file-pdf"></i> Export to PDF
                         </button>
                     </div>
                 </div>
-                <div style="overflow-x: auto; max-height: 600px; overflow-y: auto;">
+                <div style="overflow-x: auto; max-height: 400px; overflow-y: auto;">
                     <table class="status-table" id="settledTable">
                         <thead>
                             <tr>
@@ -917,8 +1239,8 @@
             </div>
         </div>
 
-                <!-- Antitrust Recovery Tab -->
-                <div class="report-tab-content" id="antitrustTab" style="display: none;">
+        <!-- Antitrust Recovery Tab -->
+        <div class="report-tab-content" id="antitrustTab" style="display: none;">
             <!-- Summary Section -->
             <div class="summary-section">
                 <div class="summary-title">Summary</div>
@@ -998,7 +1320,7 @@
                         </button>
                     </div>
                 </div>
-                <div style="overflow-x: auto; max-height: 600px; overflow-y: auto;">
+                <div style="overflow-x: auto; max-height: 400px; overflow-y: auto;">
                     <table class="status-table" id="antitrustTable">
                         <thead>
                             <tr>
@@ -1022,8 +1344,8 @@
             </div>
         </div>
 
-                <!-- Non-US Group Recovery Tab -->
-                <div class="report-tab-content" id="nonusTab" style="display: none;">
+        <!-- Non-US Group Recovery Tab -->
+        <div class="report-tab-content" id="nonusTab" style="display: none;">
             <!-- Summary Section -->
             <div class="summary-section">
                 <div class="summary-title">Summary</div>
@@ -1116,7 +1438,7 @@
                         </button>
                     </div>
                 </div>
-                <div style="overflow-x: auto; max-height: 600px; overflow-y: auto;">
+                <div style="overflow-x: auto; max-height: 400px; overflow-y: auto;">
                     <table class="status-table" id="nonusTable">
                         <thead>
                             <tr>
@@ -1380,6 +1702,230 @@
         document.getElementById('comparisonMode').addEventListener('change', function() {
             updateComparisonDisplay();
         });
+        
+        // Quick Search Functionality
+        const searchInput = document.getElementById('quickSearchInput');
+        const searchResults = document.getElementById('searchResultsDropdown');
+        const searchClearBtn = document.getElementById('searchClearBtn');
+        let searchTimeout;
+        let allSearchData = [];
+        
+        // Build searchable data index
+        function buildSearchIndex() {
+            allSearchData = [];
+            
+            // Add settled data
+            settledData.forEach((row, idx) => {
+                allSearchData.push({
+                    type: 'Settled Action Recovery',
+                    category: 'settled',
+                    company: row.company || '',
+                    cusip: row.cusip || '',
+                    accountName: row.accountName || '',
+                    accountNumber: row.accountNumber || '',
+                    fund: row.fund || '',
+                    recovered: row.recovered || '',
+                    originalIndex: idx
+                });
+            });
+            
+            settledNewlyPaidData.forEach((row, idx) => {
+                allSearchData.push({
+                    type: 'Settled Action Recovery - Newly Paid',
+                    category: 'settled',
+                    company: row.company || '',
+                    cusip: row.cusip || '',
+                    accountName: row.accountName || '',
+                    accountNumber: row.accountNumber || '',
+                    fund: row.fund || '',
+                    recovered: row.recovered || '',
+                    originalIndex: idx
+                });
+            });
+            
+            // Add antitrust data
+            antitrustData.forEach((row, idx) => {
+                allSearchData.push({
+                    type: 'Antitrust Recovery',
+                    category: 'antitrust',
+                    company: row.caseName || '',
+                    cusip: '',
+                    accountName: row.accountName || '',
+                    accountNumber: row.accountNumber || '',
+                    fund: row.fund || '',
+                    recovered: '',
+                    originalIndex: idx
+                });
+            });
+            
+            antitrustNewlyPaidData.forEach((row, idx) => {
+                allSearchData.push({
+                    type: 'Antitrust Recovery - Newly Paid',
+                    category: 'antitrust',
+                    company: row.caseName || '',
+                    cusip: '',
+                    accountName: row.accountName || '',
+                    accountNumber: row.accountNumber || '',
+                    fund: row.fund || '',
+                    recovered: row.recovered || '',
+                    originalIndex: idx
+                });
+            });
+            
+            // Add non-US data
+            nonusData.forEach((row, idx) => {
+                allSearchData.push({
+                    type: 'Non-US Group Recovery',
+                    category: 'nonus',
+                    company: row.caseName || '',
+                    cusip: row.cusip || '',
+                    accountName: row.accountName || '',
+                    accountNumber: row.accountNumber || '',
+                    fund: row.fund || '',
+                    recovered: '',
+                    damages: row.damages || '',
+                    originalIndex: idx
+                });
+            });
+            
+            nonusNewlyPaidData.forEach((row, idx) => {
+                allSearchData.push({
+                    type: 'Non-US Group Recovery - Newly Paid',
+                    category: 'nonus',
+                    company: row.caseName || '',
+                    cusip: row.cusip || '',
+                    accountName: row.accountName || '',
+                    accountNumber: row.accountNumber || '',
+                    fund: row.fund || '',
+                    recovered: row.recovered || '',
+                    damages: row.damages || '',
+                    originalIndex: idx
+                });
+            });
+        }
+        
+        // Highlight search term in text
+        function highlightMatch(text, query) {
+            if (!query) return text;
+            const regex = new RegExp(`(${query})`, 'gi');
+            return text.replace(regex, '<span class="search-highlight">$1</span>');
+        }
+        
+        // Perform search
+        function performSearch(query) {
+            if (!query || query.length < 2) {
+                searchResults.classList.remove('show');
+                return;
+            }
+            
+            const searchTerm = query.toLowerCase();
+            const results = allSearchData.filter(item => {
+                const companyMatch = (item.company || '').toLowerCase().includes(searchTerm);
+                const cusipMatch = (item.cusip || '').toLowerCase().includes(searchTerm);
+                const accountMatch = (item.accountName || '').toLowerCase().includes(searchTerm) ||
+                                   (item.accountNumber || '').toLowerCase().includes(searchTerm);
+                
+                return companyMatch || cusipMatch || accountMatch;
+            }).slice(0, 10); // Limit to 10 results for performance
+            
+            displaySearchResults(results, query);
+        }
+        
+        // Display search results
+        function displaySearchResults(results, query) {
+            if (results.length === 0) {
+                searchResults.innerHTML = '<div class="search-no-results">No matching cases found</div>';
+                searchResults.classList.add('show');
+                return;
+            }
+            
+            searchResults.innerHTML = results.map(item => {
+                const highlightedCompany = highlightMatch(item.company, query);
+                const highlightedCusip = item.cusip ? highlightMatch(item.cusip, query) : '';
+                const escapedCategory = item.category.replace(/'/g, "\\'");
+                
+                return `<div class="search-result-item" onclick="handleSearchClick('${escapedCategory}', '${item.originalIndex}')">
+                    <div class="search-result-header">
+                        <span class="search-result-company">${highlightedCompany}</span>
+                        <span class="search-result-type">${item.type}</span>
+                    </div>
+                    <div class="search-result-details">
+                        ${item.cusip ? `<div class="search-result-detail-item"><i class="fas fa-hashtag"></i> <span>${highlightedCusip}</span></div>` : ''}
+                        ${item.fund ? `<div class="search-result-detail-item"><i class="fas fa-dollar-sign"></i> <span>Settlement Fund: ${item.fund}</span></div>` : ''}
+                        ${item.recovered ? `<div class="search-result-detail-item"><i class="fas fa-check-circle"></i> <span>Recovered: ${item.recovered}</span></div>` : ''}
+                    </div>
+                </div>`;
+            }).join('');
+            
+            searchResults.classList.add('show');
+        }
+        
+        // Handle search input
+        searchInput.addEventListener('input', function(e) {
+            const query = e.target.value.trim();
+            
+            // Show/hide clear button
+            if (query.length > 0) {
+                searchClearBtn.classList.add('visible');
+            } else {
+                searchClearBtn.classList.remove('visible');
+                searchResults.classList.remove('show');
+            }
+            
+            // Debounce search
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                performSearch(query);
+            }, 150);
+        });
+        
+        // Handle search click - switch to relevant tab and highlight result
+        function handleSearchClick(category, index) {
+            // Switch to appropriate tab
+            const tabMap = {
+                'settled': 'settled',
+                'antitrust': 'antitrust',
+                'nonus': 'nonus'
+            };
+            
+            const targetTab = tabMap[category];
+            if (targetTab) {
+                document.querySelector(`[data-tab="${targetTab}"]`).click();
+            }
+            
+            // Clear search
+            clearSearch();
+            
+            // Scroll to table (you could enhance this to highlight specific row)
+            setTimeout(() => {
+                const targetTable = document.querySelector(`#${targetTab}Tab .data-table-container`);
+                if (targetTable) {
+                    targetTable.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 100);
+        }
+        
+        // Clear search
+        function clearSearch() {
+            searchInput.value = '';
+            searchResults.classList.remove('show');
+            searchClearBtn.classList.remove('visible');
+        }
+        
+        // Close search results when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                searchResults.classList.remove('show');
+            }
+        });
+        
+        // Keyboard navigation
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                clearSearch();
+                searchInput.blur();
+            }
+        });
 
         // Tab navigation
         document.querySelectorAll('.nav-tab').forEach(tab => {
@@ -1397,23 +1943,35 @@
             });
         });
 
+        // Chart instances storage
+        let chartInstances = {};
+
         // Chart creation functions
-        function createRecoveryByMonthChart() {
+        function createRecoveryByMonthChart(type = 'bar') {
             const canvas = document.getElementById('recoveryByMonthChart');
             if (!canvas || typeof Chart === 'undefined') return;
             
+            // Destroy existing chart if it exists
+            if (chartInstances.recoveryByMonth) {
+                chartInstances.recoveryByMonth.destroy();
+            }
+            
             const ctx = canvas.getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
+            const monthlyData = [0, 0, 145000, 0, 0, 783416, 0, 180750, 0, 2499756];
+            
+            chartInstances.recoveryByMonth = new Chart(ctx, {
+                type: type,
                 data: {
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
                     datasets: [{
                         label: 'Recovered ($)',
-                        data: [0, 0, 145000, 0, 0, 783416, 0, 180750, 0, 2499756],
-                        backgroundColor: 'rgba(16, 124, 16, 0.8)',
+                        data: monthlyData,
+                        backgroundColor: type === 'bar' ? 'rgba(16, 124, 16, 0.8)' : 'rgba(16, 124, 16, 0.3)',
                         borderColor: '#107c10',
                         borderWidth: 2,
-                        borderRadius: 4
+                        borderRadius: type === 'bar' ? 4 : 0,
+                        fill: type === 'line' ? true : false,
+                        tension: type === 'line' ? 0.4 : 0
                     }]
                 },
                 options: {
@@ -1453,6 +2011,11 @@
             const canvas = document.getElementById('topCompaniesChart');
             if (!canvas || typeof Chart === 'undefined') return;
             
+            // Destroy existing chart if it exists
+            if (chartInstances.topCompanies) {
+                chartInstances.topCompanies.destroy();
+            }
+            
             // Calculate top companies by recovery
             const companyTotals = {};
             settledData.forEach(row => {
@@ -1468,7 +2031,7 @@
                 .slice(0, 10);
             
             const ctx = canvas.getContext('2d');
-            new Chart(ctx, {
+            chartInstances.topCompanies = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: sorted.map(item => item[0].substring(0, 12)),
@@ -1514,6 +2077,207 @@
                 }
             });
         }
+        
+        // Create Cumulative Recovery Trend Chart
+        function createCumulativeTrendChart(viewType = 'all') {
+            const canvas = document.getElementById('cumulativeTrendChart');
+            if (!canvas || typeof Chart === 'undefined') return;
+            
+            if (chartInstances.cumulativeTrend) {
+                chartInstances.cumulativeTrend.destroy();
+            }
+            
+            // Historical monthly data (cumulative)
+            const monthlyData = [0, 0, 145000, 145000, 145000, 928416, 928416, 1109166, 1109166, 3608922];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'];
+            
+            const ctx = canvas.getContext('2d');
+            chartInstances.cumulativeTrend = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Cumulative Recovery',
+                        data: monthlyData,
+                        borderColor: '#0078d4',
+                        backgroundColor: 'rgba(0, 120, 212, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        pointBackgroundColor: '#0078d4',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return 'Cumulative: $' + context.parsed.y.toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + (value / 1000000).toFixed(1) + 'M';
+                                },
+                                font: { size: 9 }
+                            },
+                            grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                        },
+                        x: {
+                            ticks: { font: { size: 9 } },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Create Recovery by Type Chart
+        function createRecoveryByTypeChart() {
+            const canvas = document.getElementById('recoveryByTypeChart');
+            if (!canvas || typeof Chart === 'undefined') return;
+            
+            if (chartInstances.recoveryByType) {
+                chartInstances.recoveryByType.destroy();
+            }
+            
+            const ctx = canvas.getContext('2d');
+            chartInstances.recoveryByType = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Settled Action', 'Antitrust', 'Non-US Group'],
+                    datasets: [{
+                        data: [2499756, 127179, 0],
+                        backgroundColor: [
+                            'rgba(0, 120, 212, 0.8)',
+                            'rgba(16, 124, 16, 0.8)',
+                            'rgba(209, 52, 56, 0.8)'
+                        ],
+                        borderColor: [
+                            '#0078d4',
+                            '#107c10',
+                            '#d13438'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { size: 9 },
+                                padding: 8
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = '$' + context.parsed.toLocaleString();
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                    return label + ': ' + value + ' (' + percentage + '%)';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Create Year-over-Year Comparison Chart
+        function createYOYComparisonChart() {
+            const canvas = document.getElementById('yoyComparisonChart');
+            if (!canvas || typeof Chart === 'undefined') return;
+            
+            if (chartInstances.yoyComparison) {
+                chartInstances.yoyComparison.destroy();
+            }
+            
+            const ctx = canvas.getContext('2d');
+            chartInstances.yoyComparison = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+                    datasets: [{
+                        label: '2023',
+                        data: [1250000, 1890000, 2450000, 3200000],
+                        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                        borderColor: 'rgba(0, 0, 0, 0.3)',
+                        borderWidth: 1
+                    }, {
+                        label: '2024',
+                        data: [1450000, 928416, 2499756, null],
+                        backgroundColor: 'rgba(0, 120, 212, 0.8)',
+                        borderColor: '#0078d4',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { size: 9 },
+                                padding: 8
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': $' + (context.parsed.y || 0).toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + (value / 1000000).toFixed(1) + 'M';
+                                },
+                                font: { size: 9 }
+                            },
+                            grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                        },
+                        x: {
+                            ticks: { font: { size: 9 } },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Toggle cumulative view
+        function toggleCumulativeView(viewType) {
+            document.querySelectorAll('.chart-toggle').forEach(btn => {
+                if (btn.parentElement.previousElementSibling && 
+                    btn.parentElement.previousElementSibling.textContent.includes('Cumulative')) {
+                    btn.classList.remove('active');
+                }
+            });
+            event.target.classList.add('active');
+            createCumulativeTrendChart(viewType);
+        }
 
         // Enhanced export with FRT branding
         function exportTable(tableId, filename) {
@@ -1558,6 +2322,199 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+        }
+        
+        // Export to PDF with comprehensive report
+        async function exportToPDF() {
+            // Check for jsPDF library - wait a moment if needed
+            let jsPDFClass;
+            let attempts = 0;
+            
+            while (attempts < 5) {
+                if (typeof window.jspdf !== 'undefined' && window.jspdf.jsPDF) {
+                    jsPDFClass = window.jspdf.jsPDF;
+                    break;
+                } else if (typeof window.jsPDF !== 'undefined') {
+                    jsPDFClass = window.jsPDF;
+                    break;
+                } else if (typeof jspdf !== 'undefined' && jspdf.jsPDF) {
+                    jsPDFClass = jspdf.jsPDF;
+                    break;
+                }
+                
+                attempts++;
+                if (attempts < 5) {
+                    await new Promise(resolve => setTimeout(resolve, 200));
+                }
+            }
+            
+            if (!jsPDFClass) {
+                alert('PDF library is still loading. Please wait a moment and try again, or refresh the page.');
+                return;
+            }
+            
+            try {
+                const doc = new jsPDFClass('p', 'mm', 'letter');
+                let yPosition = 20;
+                const pageWidth = doc.internal.pageSize.width;
+                const pageHeight = doc.internal.pageSize.height;
+                const margin = 20;
+                const contentWidth = pageWidth - (margin * 2);
+                
+                // Helper to add new page if needed
+                function checkPageBreak(neededSpace) {
+                    if (yPosition + neededSpace > pageHeight - margin) {
+                        doc.addPage();
+                        yPosition = margin;
+                        return true;
+                    }
+                    return false;
+                }
+                
+                // Helper to add text with word wrap
+                function addText(text, x, y, options = {}) {
+                    const { fontSize = 10, fontStyle = 'normal', align = 'left', maxWidth = contentWidth } = options;
+                    doc.setFontSize(fontSize);
+                    doc.setFont('helvetica', fontStyle);
+                    const lines = doc.splitTextToSize(text, maxWidth);
+                    doc.text(lines, x, y, { align });
+                    return lines.length * (fontSize * 0.4);
+                }
+                // Page 1: Cover/Header
+                doc.setFillColor(0, 120, 212);
+                doc.rect(0, 0, pageWidth, 30, 'F');
+                
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(20);
+                doc.setFont('helvetica', 'bold');
+                doc.text('FRT FINANCIAL RECOVERY TECHNOLOGIES LLC', pageWidth / 2, 15, { align: 'center' });
+                
+                doc.setTextColor(0, 0, 0);
+                yPosition = 40;
+                
+                // Report title
+                doc.setFontSize(16);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Client Status Report', margin, yPosition);
+                yPosition += 10;
+                
+                // Client and period info
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                const clientName = document.getElementById('reportClientName').textContent;
+                const periodStart = document.getElementById('reportPeriodStart').textContent;
+                const periodEnd = document.getElementById('reportPeriodEnd').textContent;
+                doc.text('Client: ' + clientName, margin, yPosition);
+                yPosition += 6;
+                doc.text('Period: ' + periodStart + ' to ' + periodEnd, margin, yPosition);
+                yPosition += 6;
+                doc.text('Generated: ' + new Date().toLocaleDateString(), margin, yPosition);
+                yPosition += 15;
+                
+                // Executive Summary KPIs
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Executive Summary', margin, yPosition);
+                yPosition += 10;
+                
+                doc.setFontSize(9);
+                doc.setFont('helvetica', 'normal');
+                const kpis = [
+                    ['Total Recovered', document.getElementById('kpiTotalRecovered').textContent],
+                    ['YTD Recovered', document.getElementById('kpiYTDRecovered').textContent],
+                    ['Active Claims', document.getElementById('kpiActiveClaims').textContent],
+                    ['Recovery Rate', document.getElementById('kpiRecoveryRate').textContent],
+                    ['Pending Recovery', document.getElementById('kpiPendingRecovery').textContent]
+                ];
+                
+                checkPageBreak(20);
+                kpis.forEach(([label, value]) => {
+                    doc.setFont('helvetica', 'bold');
+                    doc.text(label + ':', margin, yPosition);
+                    doc.setFont('helvetica', 'normal');
+                    doc.text(value, margin + 60, yPosition);
+                    yPosition += 6;
+                });
+                yPosition += 10;
+                
+                // Summary table (if available)
+                const summaryTable = document.querySelector('.summary-table');
+                if (summaryTable) {
+                    checkPageBreak(50);
+                    doc.setFontSize(10);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('Summary', margin, yPosition);
+                    yPosition += 8;
+                    
+                    // Get table data
+                    const headers = [];
+                    const rows = [];
+                    
+                    summaryTable.querySelectorAll('thead th').forEach(th => {
+                        headers.push(th.textContent.trim());
+                    });
+                    
+                    summaryTable.querySelectorAll('tbody tr').forEach(tr => {
+                        const row = [];
+                        tr.querySelectorAll('td').forEach(td => {
+                            row.push(td.textContent.trim());
+                        });
+                        if (row.length > 0) rows.push(row);
+                    });
+                    
+                    doc.autoTable({
+                        startY: yPosition,
+                        head: [headers],
+                        body: rows,
+                        theme: 'striped',
+                        headStyles: { fillColor: [0, 120, 212], textColor: 255, fontStyle: 'bold' },
+                        styles: { fontSize: 8, cellPadding: 3 },
+                        margin: { left: margin, right: margin }
+                    });
+                    
+                    yPosition = doc.lastAutoTable.finalY + 10;
+                }
+                
+                // Add charts as images (simplified - in production, use html2canvas)
+                checkPageBreak(60);
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Key Metrics & Trends', margin, yPosition);
+                yPosition += 15;
+                
+                doc.setFontSize(9);
+                doc.setFont('helvetica', 'italic');
+                doc.text('Note: Charts can be exported separately or included via screenshot', margin, yPosition);
+                yPosition += 10;
+                
+                // Footer on each page
+                const addFooter = (pageNum) => {
+                    doc.setFontSize(8);
+                    doc.setTextColor(128, 128, 128);
+                    doc.text('FRT Financial Recovery Technologies LLC | www.frtservices.com | Page ' + pageNum, 
+                        pageWidth / 2, pageHeight - 10, { align: 'center' });
+                    doc.text('This report is confidential and proprietary. Unauthorized distribution is prohibited.',
+                        pageWidth / 2, pageHeight - 5, { align: 'center' });
+                };
+                
+                // Add footer to all pages
+                const totalPages = doc.internal.pages.length - 1;
+                for (let i = 1; i <= totalPages; i++) {
+                    doc.setPage(i);
+                    addFooter(i);
+                }
+                
+                // Generate filename
+                const filename = 'FRT_Status_Report_' + clientName.replace(/\s+/g, '_') + '_' + 
+                    new Date().toISOString().split('T')[0] + '.pdf';
+                
+                // Save PDF
+                doc.save(filename);
+                
+            } catch (error) {
+                console.error('PDF export error:', error);
+                alert('Error generating PDF: ' + error.message);
+            }
         }
 
         // Comparison data (would come from API in production)
@@ -1749,11 +2706,15 @@
             populateNonusTable();
             updateKPIs();
             updateAlertCount();
+            buildSearchIndex();
             
             // Create charts after a short delay to ensure Chart.js is loaded
             setTimeout(() => {
                 createRecoveryByMonthChart();
                 createTopCompaniesChart();
+                createCumulativeTrendChart();
+                createRecoveryByTypeChart();
+                createYOYComparisonChart();
             }, 500);
         });
     </script>
