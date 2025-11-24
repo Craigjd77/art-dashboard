@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Remittance | FRT Work Tools</title>
+    
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- jsPDF for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.3/jspdf.plugin.autotable.min.js"></script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Shared Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style-switcher.css">
+    
+    <style>
+        .remittance-kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        
+        .status-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        
+        .status-card {
+            background: var(--pbi-card-bg);
+            border: 1px solid var(--pbi-border);
+            border-radius: 4px;
+            padding: 12px;
+            box-shadow: var(--pbi-shadow);
+            border-left: 4px solid;
+        }
+        
+        .status-card.received {
+            border-left-color: #107c10;
+        }
+        
+        .status-card.pending {
+            border-left-color: #ffb900;
+        }
+        
+        .status-card.overdue {
+            border-left-color: #d13438;
+        }
+        
+        .status-card.in-transit {
+            border-left-color: #0078d4;
+        }
+        
+        .status-card-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--pbi-text-secondary);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        
+        .status-card-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--pbi-text);
+            margin-bottom: 4px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .status-card-count {
+            font-size: 9px;
+            color: var(--pbi-text-secondary);
+        }
+        
+        .remittance-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 12px;
+            border-bottom: 2px solid var(--pbi-border);
+        }
+        
+        .remittance-tab {
+            padding: 10px 16px;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--pbi-text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: -2px;
+        }
+        
+        .remittance-tab:hover {
+            color: var(--pbi-primary);
+            background: var(--pbi-hover);
+        }
+        
+        .remittance-tab.active {
+            color: var(--pbi-primary);
+            border-bottom-color: var(--pbi-primary);
+            background: var(--pbi-hover);
+        }
+        
+        .remittance-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9px;
+        }
+        
+        .remittance-table thead {
+            background: var(--pbi-hover);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .remittance-table th {
+            padding: 6px 4px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--pbi-text);
+            border-bottom: 2px solid var(--pbi-border);
+            white-space: nowrap;
+            font-size: 9px;
+        }
+        
+        .remittance-table td {
+            padding: 4px;
+            border-bottom: 1px solid var(--pbi-border-light);
+            color: var(--pbi-text);
+        }
+        
+        .remittance-table tbody tr:hover {
+            background: var(--pbi-hover);
+        }
+        
+        .payment-status-badge {
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-received {
+            background: rgba(16, 124, 16, 0.1);
+            color: #107c10;
+        }
+        
+        .status-pending {
+            background: rgba(255, 185, 0, 0.1);
+            color: #ca5010;
+        }
+        
+        .status-overdue {
+            background: rgba(209, 52, 56, 0.1);
+            color: #d13438;
+        }
+        
+        .status-in-transit {
+            background: rgba(0, 120, 212, 0.1);
+            color: #0078d4;
+        }
+        
+        .reconciliation-status {
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 8px;
+            font-weight: 600;
+        }
+        
+        .recon-matched {
+            background: rgba(16, 124, 16, 0.1);
+            color: #107c10;
+        }
+        
+        .recon-unmatched {
+            background: rgba(255, 185, 0, 0.1);
+            color: #ca5010;
+        }
+        
+        .recon-flagged {
+            background: rgba(209, 52, 56, 0.1);
+            color: #d13438;
+        }
+        
+        .payment-method-badge {
+            font-size: 8px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            background: var(--pbi-hover);
+            color: var(--pbi-text);
+        }
+        
+        .days-indicator {
+            font-size: 8px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        
+        .days-overdue {
+            background: rgba(209, 52, 56, 0.1);
+            color: #d13438;
+        }
+        
+        .days-approaching {
+            background: rgba(255, 185, 0, 0.1);
+            color: #ca5010;
+        }
+        
+        .days-normal {
+            background: rgba(0, 120, 212, 0.1);
+            color: #0078d4;
+        }
+        
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        
+        .filter-group label {
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--pbi-text-secondary);
+        }
+        
+        .filter-group select,
+        .filter-group input {
+            padding: 4px 8px;
+            border: 1px solid var(--pbi-border);
+            border-radius: 3px;
+            font-size: 10px;
+            background: var(--pbi-background);
+            color: var(--pbi-text);
+        }
+        
+        .charts-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        
+        .chart-card {
+            background: var(--pbi-card-bg);
+            border: 1px solid var(--pbi-border);
+            border-radius: 4px;
+            padding: 10px;
+            box-shadow: var(--pbi-shadow);
+        }
+        
+        .chart-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--pbi-text);
+            margin-bottom: 6px;
+        }
+        
+        .chart-container {
+            height: 180px;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <div class="logo">FRT Work Tools</div>
+            <div class="header-title">Client Remittance</div>
+        </div>
+        <div class="header-right">
+            <div class="user-info">Craig D'Alessio</div>
+            <button>Share</button>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+        <button class="nav-tab">
+            <i class="fas fa-file-check"></i>
+            CLIENT ELIGIBILITY & FILINGS
+        </button>
+        <button class="nav-tab">
+            <i class="fas fa-chart-line"></i>
+            STATUS REPORTS
+        </button>
+        <button class="nav-tab">
+            <i class="fas fa-bell"></i>
+            Client Opt-in Monitoring
+        </button>
+        <button class="nav-tab active">
+            <i class="fas fa-money-bill-wave"></i>
+            Client Remittance
+        </button>
+        <button class="nav-tab">
+            <i class="fas fa-user-tie"></i>
+            Account Manager Dashboard
+        </button>
+        <button class="nav-tab">+</button>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Client Selector -->
+        <div class="client-selector-top">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <label style="font-size: 11px; font-weight: 500;">Client:</label>
+                <select id="clientSelect" style="padding: 6px 10px; border: 1px solid var(--pbi-border); border-radius: 3px; font-size: 11px; min-width: 250px;">
+                    <option value="demo">DEMOFRTCLIENT</option>
+                    <option value="wellington">Wellington Management</option>
+                    <option value="blackrock">BlackRock</option>
+                    <option value="schwab">Charles Schwab Investment Management</option>
+                </select>
+            </div>
+            <div class="period-selector">
+                <label style="font-size: 11px; font-weight: 500;">Period:</label>
+                <select id="periodSelect" style="padding: 6px 10px; border: 1px solid var(--pbi-border); border-radius: 3px; font-size: 11px;">
+                    <option value="monthly">Monthly</option>
+                    <option value="quarterly">Quarterly</option>
+                    <option value="ytd">Year to Date</option>
+                </select>
+                <select id="monthSelect" style="padding: 6px 10px; border: 1px solid var(--pbi-border); border-radius: 3px; font-size: 11px;">
+                    <option value="2024-10">October 2024</option>
+                    <option value="2024-09">September 2024</option>
+                    <option value="2024-08">August 2024</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Executive Summary KPIs -->
+        <div class="remittance-kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-label">Total Remitted (YTD)</div>
+                <div class="kpi-value" id="kpiTotalRemitted">$2,499,756</div>
+                <div class="kpi-change positive">
+                    <span class="kpi-trend">↑</span>
+                    <span>Year to Date</span>
+                </div>
+                <div class="kpi-subtitle">All Payments Received</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">This Period Remitted</div>
+                <div class="kpi-value" id="kpiPeriodRemitted">$456,789</div>
+                <div class="kpi-change positive">
+                    <span class="kpi-trend">↑</span>
+                    <span>Current Period</span>
+                </div>
+                <div class="kpi-subtitle">October 2024</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Pending Remittances</div>
+                <div class="kpi-value" id="kpiPendingRemittances">$1,123,456</div>
+                <div class="kpi-change">
+                    <span class="kpi-trend">→</span>
+                    <span>Expected</span>
+                </div>
+                <div class="kpi-subtitle">Not Yet Received</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Reconciliation Rate</div>
+                <div class="kpi-value" id="kpiReconciliationRate">94.2%</div>
+                <div class="kpi-change positive">
+                    <span class="kpi-trend">↑</span>
+                    <span>Matched to Claims</span>
+                </div>
+                <div class="kpi-subtitle">Payment Matching</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Avg Days to Payment</div>
+                <div class="kpi-value" id="kpiAvgDays">127</div>
+                <div class="kpi-change">
+                    <span class="kpi-trend">→</span>
+                    <span>Days</span>
+                </div>
+                <div class="kpi-subtitle">Filing to Payment</div>
+            </div>
+        </div>
+
+        <!-- Status Cards -->
+        <div class="status-cards">
+            <div class="status-card received">
+                <div class="status-card-title">Received</div>
+                <div class="status-card-value">$2,499,756</div>
+                <div class="status-card-count">342 payments</div>
+            </div>
+            <div class="status-card pending">
+                <div class="status-card-title">Pending</div>
+                <div class="status-card-value">$856,234</div>
+                <div class="status-card-count">156 expected</div>
+            </div>
+            <div class="status-card overdue">
+                <div class="status-card-title">Overdue</div>
+                <div class="status-card-value">$267,222</div>
+                <div class="status-card-count">23 overdue</div>
+            </div>
+            <div class="status-card in-transit">
+                <div class="status-card-title">In Transit</div>
+                <div class="status-card-value">$189,450</div>
+                <div class="status-card-count">12 payments</div>
+            </div>
+        </div>
+
+        <!-- Remittance Tabs -->
+        <div class="remittance-tabs">
+            <button class="remittance-tab active" data-tab="recent">Recent Remittances</button>
+            <button class="remittance-tab" data-tab="pending">Pending Remittances</button>
+            <button class="remittance-tab" data-tab="reconciliation">Reconciliation</button>
+            <button class="remittance-tab" data-tab="history">Payment History</button>
+        </div>
+
+        <!-- Recent Remittances Tab -->
+        <div class="report-tab-content" id="recentTab">
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <label>Status:</label>
+                    <select id="statusFilter">
+                        <option value="all">All</option>
+                        <option value="received">Received</option>
+                        <option value="deposited">Deposited</option>
+                        <option value="cleared">Cleared</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Method:</label>
+                    <select id="methodFilter">
+                        <option value="all">All</option>
+                        <option value="wire">Wire</option>
+                        <option value="ach">ACH</option>
+                        <option value="check">Check</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Administrator:</label>
+                    <select id="adminFilter">
+                        <option value="all">All</option>
+                        <option value="gland">Gland & Co</option>
+                        <option value="garden">Garden City Group</option>
+                        <option value="epiq">Epiq Systems</option>
+                        <option value="abdata">A.B. Data, Ltd</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Date Range:</label>
+                    <input type="date" id="dateFrom" style="font-size: 10px;">
+                    <span style="font-size: 10px;">to</span>
+                    <input type="date" id="dateTo" style="font-size: 10px;">
+                </div>
+                <div style="margin-left: auto;">
+                    <button class="export-button" onclick="exportRemittances('recent')">
+                        <i class="fas fa-file-excel"></i> Export to Excel
+                    </button>
+                    <button class="export-button pdf" onclick="exportRemittancePDF()">
+                        <i class="fas fa-file-pdf"></i> Export to PDF
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent Remittances Table -->
+            <div class="data-table-container">
+                <div class="table-header">
+                    <div class="table-title">Recent Remittances - This Period</div>
+                </div>
+                <div style="overflow-x: auto; max-height: 400px; overflow-y: auto;">
+                    <table class="remittance-table" id="recentRemittancesTable">
+                        <thead>
+                            <tr>
+                                <th>Payment Date</th>
+                                <th>Case Name</th>
+                                <th>Settlement Fund</th>
+                                <th>Gross Amount</th>
+                                <th>FRT Fee</th>
+                                <th>Net to Client</th>
+                                <th>Method</th>
+                                <th>Reference #</th>
+                                <th>Administrator</th>
+                                <th>Status</th>
+                                <th>Reconciliation</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentRemittancesTableBody">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Remittances Tab -->
+        <div class="report-tab-content" id="pendingTab" style="display: none;">
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <label>Status:</label>
+                    <select id="pendingStatusFilter">
+                        <option value="all">All</option>
+                        <option value="scheduled">Scheduled</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="delayed">Delayed</option>
+                        <option value="overdue">Overdue</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Days Until:</label>
+                    <select id="daysFilter">
+                        <option value="all">All</option>
+                        <option value="overdue">Overdue</option>
+                        <option value="7">Next 7 Days</option>
+                        <option value="30">Next 30 Days</option>
+                        <option value="90">Next 90 Days</option>
+                    </select>
+                </div>
+                <div style="margin-left: auto;">
+                    <button class="export-button" onclick="exportRemittances('pending')">
+                        <i class="fas fa-file-excel"></i> Export to Excel
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pending Remittances Table -->
+            <div class="data-table-container">
+                <div class="table-header">
+                    <div class="table-title">Pending Remittances - Expected Payments</div>
+                </div>
+                <div style="overflow-x: auto; max-height: 400px; overflow-y: auto;">
+                    <table class="remittance-table" id="pendingRemittancesTable">
+                        <thead>
+                            <tr>
+                                <th>Expected Date</th>
+                                <th>Case Name</th>
+                                <th>Settlement Fund</th>
+                                <th>Expected Amount</th>
+                                <th>Days Until</th>
+                                <th>Administrator</th>
+                                <th>Status</th>
+                                <th>Last Update</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pendingRemittancesTableBody">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reconciliation Tab -->
+        <div class="report-tab-content" id="reconciliationTab" style="display: none;">
+            <!-- Reconciliation Summary -->
+            <div class="summary-section" style="margin-bottom: 12px;">
+                <div class="summary-title">Reconciliation Status</div>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 8px;">
+                    <div>
+                        <div style="font-size: 10px; color: var(--pbi-text-secondary); margin-bottom: 4px;">Total Payments</div>
+                        <div style="font-size: 18px; font-weight: 600;">342</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 10px; color: var(--pbi-text-secondary); margin-bottom: 4px;">Matched</div>
+                        <div style="font-size: 18px; font-weight: 600; color: #107c10;">322</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 10px; color: var(--pbi-text-secondary); margin-bottom: 4px;">Unmatched</div>
+                        <div style="font-size: 18px; font-weight: 600; color: #ffb900;">15</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 10px; color: var(--pbi-text-secondary); margin-bottom: 4px;">Flagged</div>
+                        <div style="font-size: 18px; font-weight: 600; color: #d13438;">5</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unmatched Payments -->
+            <div class="data-table-container" style="margin-bottom: 12px;">
+                <div class="table-header">
+                    <div class="table-title">Unmatched Payments - Require Attention</div>
+                </div>
+                <div style="overflow-x: auto; max-height: 300px; overflow-y: auto;">
+                    <table class="remittance-table" id="unmatchedTable">
+                        <thead>
+                            <tr>
+                                <th>Payment Date</th>
+                                <th>Reference #</th>
+                                <th>Amount</th>
+                                <th>Administrator</th>
+                                <th>Suggested Match</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="unmatchedTableBody">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Missing Payments -->
+            <div class="data-table-container">
+                <div class="table-header">
+                    <div class="table-title">Missing Payments - Expected But Not Received</div>
+                </div>
+                <div style="overflow-x: auto; max-height: 300px; overflow-y: auto;">
+                    <table class="remittance-table" id="missingTable">
+                        <thead>
+                            <tr>
+                                <th>Expected Date</th>
+                                <th>Case Name</th>
+                                <th>Expected Amount</th>
+                                <th>Days Overdue</th>
+                                <th>Administrator</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="missingTableBody">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment History Tab -->
+        <div class="report-tab-content" id="historyTab" style="display: none;">
+            <!-- Charts -->
+            <div class="charts-row">
+                <div class="chart-card">
+                    <div class="chart-title">Remittances by Month</div>
+                    <div class="chart-container">
+                        <canvas id="remittancesByMonthChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title">Payment Status Distribution</div>
+                    <div class="chart-container">
+                        <canvas id="paymentStatusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="charts-row">
+                <div class="chart-card">
+                    <div class="chart-title">Average Payment Timeline by Case Type</div>
+                    <div class="chart-container">
+                        <canvas id="paymentTimelineChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title">Remittances by Administrator</div>
+                    <div class="chart-container">
+                        <canvas id="remittancesByAdminChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment History Table -->
+            <div class="data-table-container">
+                <div class="table-header">
+                    <div class="table-title">Complete Payment History</div>
+                    <div class="table-controls">
+                        <button class="export-button" onclick="exportRemittances('history')">
+                            <i class="fas fa-file-excel"></i> Export to Excel
+                        </button>
+                    </div>
+                </div>
+                <div style="overflow-x: auto; max-height: 400px; overflow-y: auto;">
+                    <table class="remittance-table" id="historyTable">
+                        <thead>
+                            <tr>
+                                <th>Payment Date</th>
+                                <th>Case Name</th>
+                                <th>Gross Amount</th>
+                                <th>Net to Client</th>
+                                <th>Method</th>
+                                <th>Administrator</th>
+                                <th>Status</th>
+                                <th>Days to Payment</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FRT Footer -->
+    <div class="frt-footer">
+        <div style="margin-bottom: 8px;">
+            <strong>FRT Financial Recovery Technologies LLC</strong> | 
+            <a href="https://www.frtservices.com" target="_blank">www.frtservices.com</a> | 
+            <a href="mailto:info@frtservices.com">info@frtservices.com</a>
+        </div>
+        <div style="opacity: 0.9; font-size: 10px;">
+            This report is confidential and proprietary. Unauthorized distribution is prohibited.
+        </div>
+    </div>
+
+    <!-- Style Switcher -->
+    <div id="styleSwitcher"></div>
+    <script src="style-switcher.js"></script>
+
+    <script>
+        // Sample remittance data
+        const recentRemittancesData = [
+            { paymentDate: '10-25-2024', caseName: 'TESLA INC', settlementFund: '$195,000,000.00', grossAmount: '$34,567.89', fee: '$345.68', net: '$34,222.21', method: 'Wire', reference: 'WIRE-2024-1025-001', admin: 'Gland & Co', status: 'Cleared', reconciliation: 'Matched' },
+            { paymentDate: '10-26-2024', caseName: 'META PLATFORMS', settlementFund: '$310,000,000.00', grossAmount: '$67,890.12', fee: '$678.90', net: '$67,211.22', method: 'ACH', reference: 'ACH-2024-1026-002', admin: 'Garden City Group', status: 'Deposited', reconciliation: 'Matched' },
+            { paymentDate: '10-27-2024', caseName: 'NVIDIA CORP', settlementFund: '$175,000,000.00', grossAmount: '$23,456.78', fee: '$234.57', net: '$23,222.21', method: 'Check', reference: 'CHK-2024-1027-003', admin: 'Epiq Systems', status: 'Received', reconciliation: 'Unmatched' },
+            { paymentDate: '10-28-2024', caseName: 'BANK OF AMERICA', settlementFund: '$225,000,000.00', grossAmount: '$45,678.90', fee: '$456.79', net: '$45,222.11', method: 'Wire', reference: 'WIRE-2024-1028-004', admin: 'A.B. Data, Ltd', status: 'Cleared', reconciliation: 'Matched' },
+            { paymentDate: '10-29-2024', caseName: 'WELLS FARGO & CO', settlementFund: '$140,000,000.00', grossAmount: '$19,876.54', fee: '$198.77', net: '$19,677.77', method: 'ACH', reference: 'ACH-2024-1029-005', admin: 'Gland & Co', status: 'Cleared', reconciliation: 'Matched' },
+            { paymentDate: '10-30-2024', caseName: 'GOLDMAN SACHS', settlementFund: '$265,000,000.00', grossAmount: '$52,345.67', fee: '$523.46', net: '$51,822.21', method: 'Wire', reference: 'WIRE-2024-1030-006', admin: 'Garden City Group', status: 'In Transit', reconciliation: 'Pending' },
+            { paymentDate: '10-31-2024', caseName: 'MORGAN STANLEY', settlementFund: '$190,000,000.00', grossAmount: '$38,901.23', fee: '$389.01', net: '$38,512.22', method: 'Check', reference: 'CHK-2024-1031-007', admin: 'Epiq Systems', status: 'Received', reconciliation: 'Matched' },
+            { paymentDate: '11-01-2024', caseName: 'CITIGROUP INC', settlementFund: '$155,000,000.00', grossAmount: '$27,654.32', fee: '$276.54', net: '$27,377.78', method: 'Wire', reference: 'WIRE-2024-1101-008', admin: 'A.B. Data, Ltd', status: 'Cleared', reconciliation: 'Matched' },
+            { paymentDate: '11-02-2024', caseName: 'BERKSHIRE HATHAWAY', settlementFund: '$380,000,000.00', grossAmount: '$71,234.56', fee: '$712.35', net: '$70,522.21', method: 'ACH', reference: 'ACH-2024-1102-009', admin: 'Gland & Co', status: 'Deposited', reconciliation: 'Matched' },
+            { paymentDate: '11-03-2024', caseName: 'JOHNSON & JOHNSON', settlementFund: '$220,000,000.00', grossAmount: '$43,567.89', fee: '$435.68', net: '$43,132.21', method: 'Wire', reference: 'WIRE-2024-1103-010', admin: 'Garden City Group', status: 'Cleared', reconciliation: 'Flagged' }
+        ];
+
+        const pendingRemittancesData = [
+            { expectedDate: '11-15-2024', caseName: 'APPLE INC', settlementFund: '$490,000,000.00', expectedAmount: '$45,230.12', daysUntil: 12, admin: 'Gland & Co', status: 'Scheduled', lastUpdate: '10-20-2024' },
+            { expectedDate: '11-20-2024', caseName: 'MICROSOFT CORP', settlementFund: '$350,000,000.00', expectedAmount: '$78,945.23', daysUntil: 17, admin: 'Garden City Group', status: 'Confirmed', lastUpdate: '10-22-2024' },
+            { expectedDate: '11-25-2024', caseName: 'AMAZON.COM INC', settlementFund: '$280,000,000.00', expectedAmount: '$56,789.45', daysUntil: 22, admin: 'Epiq Systems', status: 'Scheduled', lastUpdate: '10-23-2024' },
+            { expectedDate: '12-01-2024', caseName: 'ALPHABET INC', settlementFund: '$420,000,000.00', expectedAmount: '$89,123.67', daysUntil: 28, admin: 'A.B. Data, Ltd', status: 'Confirmed', lastUpdate: '10-24-2024' },
+            { expectedDate: '10-15-2024', caseName: 'APACHE CORP', settlementFund: '$65,000,000.00', expectedAmount: '$1,065.95', daysUntil: -18, admin: 'A.B. Data, Ltd', status: 'Overdue', lastUpdate: '09-30-2024' },
+            { expectedDate: '10-20-2024', caseName: 'JPMORGAN', settlementFund: '$150,000,000.00', expectedAmount: '$12,456.78', daysUntil: -13, admin: 'Epiq Systems', status: 'Overdue', lastUpdate: '10-05-2024' }
+        ];
+
+        const unmatchedPaymentsData = [
+            { paymentDate: '10-27-2024', reference: 'CHK-2024-1027-003', amount: '$23,456.78', admin: 'Epiq Systems', suggestedMatch: 'NVIDIA CORP - Claim #4680' },
+            { paymentDate: '11-05-2024', reference: 'WIRE-2024-1105-011', amount: '$15,234.56', admin: 'Gland & Co', suggestedMatch: 'Unknown - Manual Review Required' },
+            { paymentDate: '11-06-2024', reference: 'ACH-2024-1106-012', amount: '$8,901.23', admin: 'Garden City Group', suggestedMatch: 'Multiple Possible Matches' }
+        ];
+
+        const missingPaymentsData = [
+            { expectedDate: '10-15-2024', caseName: 'APACHE CORP', expectedAmount: '$1,065.95', daysOverdue: 18, admin: 'A.B. Data, Ltd' },
+            { expectedDate: '10-20-2024', caseName: 'JPMORGAN', expectedAmount: '$12,456.78', daysOverdue: 13, admin: 'Epiq Systems' },
+            { expectedDate: '10-18-2024', caseName: 'PROCTER & GAMBLE', expectedAmount: '$31,789.01', daysOverdue: 15, admin: 'Epiq Systems' }
+        ];
+
+        // Tab switching
+        document.querySelectorAll('.remittance-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabName = this.dataset.tab;
+                
+                // Update tab active state
+                document.querySelectorAll('.remittance-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show/hide tab content
+                document.querySelectorAll('.report-tab-content').forEach(content => {
+                    content.style.display = 'none';
+                });
+                document.getElementById(tabName + 'Tab').style.display = 'block';
+            });
+        });
+
+        // Populate Recent Remittances Table
+        function populateRecentRemittancesTable() {
+            const tbody = document.getElementById('recentRemittancesTableBody');
+            tbody.innerHTML = '';
+            
+            recentRemittancesData.forEach(row => {
+                const tr = document.createElement('tr');
+                const statusClass = row.status.toLowerCase().replace(' ', '-');
+                const reconClass = row.reconciliation.toLowerCase();
+                
+                tr.innerHTML = `
+                    <td class="date-cell">${row.paymentDate}</td>
+                    <td>${row.caseName}</td>
+                    <td class="currency-cell">${row.settlementFund}</td>
+                    <td class="currency-cell">${row.grossAmount}</td>
+                    <td class="currency-cell">${row.fee}</td>
+                    <td class="currency-cell">${row.net}</td>
+                    <td><span class="payment-method-badge">${row.method}</span></td>
+                    <td style="font-family: 'Courier New', monospace; font-size: 8px;">${row.reference}</td>
+                    <td>${row.admin}</td>
+                    <td><span class="payment-status-badge status-${statusClass}">${row.status}</span></td>
+                    <td><span class="reconciliation-status recon-${reconClass}">${row.reconciliation}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Populate Pending Remittances Table
+        function populatePendingRemittancesTable() {
+            const tbody = document.getElementById('pendingRemittancesTableBody');
+            tbody.innerHTML = '';
+            
+            pendingRemittancesData.forEach(row => {
+                const tr = document.createElement('tr');
+                let daysClass = 'days-normal';
+                let daysText = `${row.daysUntil} days`;
+                
+                if (row.daysUntil < 0) {
+                    daysClass = 'days-overdue';
+                    daysText = `OVERDUE (${Math.abs(row.daysUntil)} days)`;
+                } else if (row.daysUntil <= 7) {
+                    daysClass = 'days-approaching';
+                }
+                
+                tr.innerHTML = `
+                    <td class="date-cell">${row.expectedDate}</td>
+                    <td>${row.caseName}</td>
+                    <td class="currency-cell">${row.settlementFund}</td>
+                    <td class="currency-cell">${row.expectedAmount}</td>
+                    <td><span class="days-indicator ${daysClass}">${daysText}</span></td>
+                    <td>${row.admin}</td>
+                    <td><span class="payment-status-badge status-${row.status.toLowerCase()}">${row.status}</span></td>
+                    <td class="date-cell">${row.lastUpdate}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Populate Unmatched Payments Table
+        function populateUnmatchedTable() {
+            const tbody = document.getElementById('unmatchedTableBody');
+            tbody.innerHTML = '';
+            
+            unmatchedPaymentsData.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="date-cell">${row.paymentDate}</td>
+                    <td style="font-family: 'Courier New', monospace; font-size: 8px;">${row.reference}</td>
+                    <td class="currency-cell">${row.amount}</td>
+                    <td>${row.admin}</td>
+                    <td style="font-size: 8px; color: var(--pbi-text-secondary);">${row.suggestedMatch}</td>
+                    <td>
+                        <button class="export-button" style="padding: 2px 8px; font-size: 8px;" onclick="matchPayment('${row.reference}')">
+                            <i class="fas fa-link"></i> Match
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Populate Missing Payments Table
+        function populateMissingTable() {
+            const tbody = document.getElementById('missingTableBody');
+            tbody.innerHTML = '';
+            
+            missingPaymentsData.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="date-cell">${row.expectedDate}</td>
+                    <td>${row.caseName}</td>
+                    <td class="currency-cell">${row.expectedAmount}</td>
+                    <td><span class="days-indicator days-overdue">${row.daysOverdue} days</span></td>
+                    <td>${row.admin}</td>
+                    <td>
+                        <button class="export-button" style="padding: 2px 8px; font-size: 8px;" onclick="followUpPayment('${row.caseName}')">
+                            <i class="fas fa-envelope"></i> Follow Up
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Populate History Table
+        function populateHistoryTable() {
+            const tbody = document.getElementById('historyTableBody');
+            tbody.innerHTML = '';
+            
+            // Combine recent and add some historical data
+            const allPayments = [...recentRemittancesData, ...recentRemittancesData.map((r, i) => ({
+                ...r,
+                paymentDate: `09-${25 + i}-2024`,
+                daysToPayment: 120 + (i * 5)
+            }))];
+            
+            allPayments.forEach(row => {
+                const tr = document.createElement('tr');
+                const statusClass = row.status.toLowerCase().replace(' ', '-');
+                tr.innerHTML = `
+                    <td class="date-cell">${row.paymentDate}</td>
+                    <td>${row.caseName}</td>
+                    <td class="currency-cell">${row.grossAmount}</td>
+                    <td class="currency-cell">${row.net}</td>
+                    <td><span class="payment-method-badge">${row.method}</span></td>
+                    <td>${row.admin}</td>
+                    <td><span class="payment-status-badge status-${statusClass}">${row.status}</span></td>
+                    <td class="number-cell">${row.daysToPayment || 127}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Chart creation functions
+        function createRemittancesByMonthChart() {
+            const canvas = document.getElementById('remittancesByMonthChart');
+            if (!canvas || typeof Chart === 'undefined') return;
+            
+            const ctx = canvas.getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+                    datasets: [{
+                        label: 'Remittances ($)',
+                        data: [0, 0, 145000, 0, 0, 783416, 0, 180750, 0, 456789],
+                        backgroundColor: 'rgba(16, 124, 16, 0.8)',
+                        borderColor: '#107c10',
+                        borderWidth: 2,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return '$' + context.parsed.y.toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + (value / 1000).toFixed(0) + 'K';
+                                },
+                                font: { size: 9 }
+                            },
+                            grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                        },
+                        x: {
+                            ticks: { font: { size: 9 } },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createPaymentStatusChart() {
+            const canvas = document.getElementById('paymentStatusChart');
+            if (!canvas || typeof Chart === 'undefined') return;
+            
+            const ctx = canvas.getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Received', 'Pending', 'Overdue', 'In Transit'],
+                    datasets: [{
+                        data: [2499756, 856234, 267222, 189450],
+                        backgroundColor: [
+                            'rgba(16, 124, 16, 0.8)',
+                            'rgba(255, 185, 0, 0.8)',
+                            'rgba(209, 52, 56, 0.8)',
+                            'rgba(0, 120, 212, 0.8)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { font: { size: 9 }, padding: 8 }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createPaymentTimelineChart() {
+            const canvas = document.getElementById('paymentTimelineChart');
+            if (!canvas || typeof Chart === 'undefined') return;
+            
+            const ctx = canvas.getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Settled Action', 'Antitrust', 'Non-US'],
+                    datasets: [{
+                        label: 'Avg Days to Payment',
+                        data: [127, 145, 98],
+                        backgroundColor: 'rgba(0, 120, 212, 0.8)',
+                        borderColor: '#0078d4',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y + ' days';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + ' days';
+                                },
+                                font: { size: 9 }
+                            },
+                            grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                        },
+                        x: {
+                            ticks: { font: { size: 9 } },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createRemittancesByAdminChart() {
+            const canvas = document.getElementById('remittancesByAdminChart');
+            if (!canvas || typeof Chart === 'undefined') return;
+            
+            const ctx = canvas.getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Gland & Co', 'Garden City', 'Epiq Systems', 'A.B. Data'],
+                    datasets: [{
+                        label: 'Total Remitted',
+                        data: [856234, 1234567, 456789, 234567],
+                        backgroundColor: 'rgba(0, 120, 212, 0.8)',
+                        borderColor: '#0078d4',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return '$' + context.parsed.x.toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + (value / 1000).toFixed(0) + 'K';
+                                },
+                                font: { size: 9 }
+                            },
+                            grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                        },
+                        y: {
+                            ticks: { font: { size: 9 } },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Export functions
+        function exportRemittances(type) {
+            let tableId;
+            let filename;
+            
+            switch(type) {
+                case 'recent':
+                    tableId = 'recentRemittancesTable';
+                    filename = 'Recent_Remittances';
+                    break;
+                case 'pending':
+                    tableId = 'pendingRemittancesTable';
+                    filename = 'Pending_Remittances';
+                    break;
+                case 'history':
+                    tableId = 'historyTable';
+                    filename = 'Payment_History';
+                    break;
+            }
+            
+            const table = document.getElementById(tableId);
+            if (!table) return;
+            
+            let csv = [];
+            csv.push('FRT FINANCIAL RECOVERY TECHNOLOGIES LLC');
+            csv.push('Remittance Report - ' + document.getElementById('clientSelect').options[document.getElementById('clientSelect').selectedIndex].text);
+            csv.push('Generated: ' + new Date().toLocaleDateString());
+            csv.push('');
+            
+            const rows = table.querySelectorAll('tr');
+            for (let i = 0; i < rows.length; i++) {
+                const row = [];
+                const cols = rows[i].querySelectorAll('td, th');
+                for (let j = 0; j < cols.length; j++) {
+                    let data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/"/g, '""');
+                    row.push('"' + data + '"');
+                }
+                csv.push(row.join(','));
+            }
+            
+            csv.push('');
+            csv.push('This report is confidential and proprietary.');
+            
+            const csvContent = csv.join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', filename + '_' + new Date().toISOString().split('T')[0] + '.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function exportRemittancePDF() {
+            alert('PDF export functionality coming soon!');
+        }
+
+        function matchPayment(reference) {
+            alert('Payment matching functionality: ' + reference);
+        }
+
+        function followUpPayment(caseName) {
+            alert('Follow-up functionality for: ' + caseName);
+        }
+
+        // Tab navigation
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                if (this.textContent.includes('ELIGIBILITY & FILINGS')) {
+                    window.location.href = 'eligibility-filings.html';
+                } else if (this.textContent.includes('STATUS REPORTS')) {
+                    window.location.href = 'client-status-reports.html';
+                } else if (this.textContent.includes('Opt-in Monitoring')) {
+                    window.location.href = 'opt-in-monitoring.html';
+                } else if (this.textContent.includes('Account Manager Dashboard')) {
+                    window.location.href = 'account-manager-dashboard.html';
+                } else {
+                    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            populateRecentRemittancesTable();
+            populatePendingRemittancesTable();
+            populateUnmatchedTable();
+            populateMissingTable();
+            populateHistoryTable();
+            
+            setTimeout(() => {
+                createRemittancesByMonthChart();
+                createPaymentStatusChart();
+                createPaymentTimelineChart();
+                createRemittancesByAdminChart();
+            }, 500);
+        });
+    </script>
+</body>
+</html>
+
