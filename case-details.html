@@ -240,7 +240,7 @@
     <!-- Navigation Tabs -->
     <div class="nav-tabs">
         <button class="nav-tab">CLIENT ELIGIBILITY & FILINGS</button>
-        <button class="nav-tab">CLIENT STATUS REPORTS</button>
+        <button class="nav-tab">STATUS REPORTS</button>
         <button class="nav-tab">Client Opt-in Monitoring</button>
         <button class="nav-tab">AGGREGATE ACCOUNT LOOKUP</button>
         <button class="nav-tab">Client Recoveries</button>
@@ -589,6 +589,8 @@
                     window.location.href = 'opt-in-monitoring.html';
                 } else if (this.textContent.includes('ELIGIBILITY & FILINGS')) {
                     window.location.href = 'eligibility-filings.html';
+                } else if (this.textContent.includes('STATUS REPORTS')) {
+                    window.location.href = 'client-status-reports.html';
                 } else {
                     document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
                     this.classList.add('active');
