@@ -20,27 +20,105 @@
     <link rel="stylesheet" href="style-switcher.css">
     
     <style>
+        /* Cross-browser compatibility fixes */
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+        
         .remittance-kpi-grid {
+            display: -webkit-grid;
             display: grid;
+            -webkit-grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            -webkit-column-gap: 10px;
+            -moz-column-gap: 10px;
+            column-gap: 10px;
+            -webkit-row-gap: 10px;
+            -moz-row-gap: 10px;
+            row-gap: 10px;
             gap: 10px;
             margin-bottom: 12px;
+            width: 100%;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        
+        @supports not (grid-template-columns: repeat(auto-fit, minmax(180px, 1fr))) {
+            .remittance-kpi-grid {
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-flex-wrap: wrap;
+                -ms-flex-wrap: wrap;
+                flex-wrap: wrap;
+                margin: 0 -5px 12px -5px;
+            }
+            
+            .remittance-kpi-grid > * {
+                -webkit-flex: 1 1 180px;
+                -ms-flex: 1 1 180px;
+                flex: 1 1 180px;
+                margin: 0 5px 10px 5px;
+                min-width: 180px;
+            }
         }
         
         .status-cards {
+            display: -webkit-grid;
             display: grid;
+            -webkit-grid-template-columns: repeat(4, 1fr);
             grid-template-columns: repeat(4, 1fr);
+            -webkit-column-gap: 10px;
+            -moz-column-gap: 10px;
+            column-gap: 10px;
+            -webkit-row-gap: 10px;
+            -moz-row-gap: 10px;
+            row-gap: 10px;
             gap: 10px;
             margin-bottom: 12px;
+            width: 100%;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        
+        @supports not (grid-template-columns: repeat(4, 1fr)) {
+            .status-cards {
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-flex-wrap: wrap;
+                -ms-flex-wrap: wrap;
+                flex-wrap: wrap;
+                margin: 0 -5px 12px -5px;
+            }
+            
+            .status-cards > * {
+                -webkit-flex: 1 1 calc(25% - 10px);
+                -ms-flex: 1 1 calc(25% - 10px);
+                flex: 1 1 calc(25% - 10px);
+                margin: 0 5px 10px 5px;
+                min-width: 200px;
+            }
         }
         
         .status-card {
             background: var(--pbi-card-bg);
             border: 1px solid var(--pbi-border);
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
             border-radius: 4px;
             padding: 12px;
+            -webkit-box-shadow: var(--pbi-shadow);
+            -moz-box-shadow: var(--pbi-shadow);
             box-shadow: var(--pbi-shadow);
             border-left: 4px solid;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
         }
         
         .status-card.received {
@@ -81,7 +159,15 @@
         }
         
         .remittance-tabs {
+            display: -webkit-flex;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-column-gap: 4px;
+            -moz-column-gap: 4px;
+            column-gap: 4px;
+            -webkit-row-gap: 4px;
+            -moz-row-gap: 4px;
+            row-gap: 4px;
             gap: 4px;
             margin-bottom: 12px;
             border-bottom: 2px solid var(--pbi-border);
@@ -113,31 +199,52 @@
         
         .remittance-table {
             width: 100%;
+            min-width: 1000px;
             border-collapse: collapse;
             font-size: 9px;
+            table-layout: auto;
         }
         
         .remittance-table thead {
             background: var(--pbi-hover);
+            position: -webkit-sticky;
             position: sticky;
             top: 0;
             z-index: 10;
         }
         
         .remittance-table th {
-            padding: 6px 4px;
+            padding: 6px 8px;
             text-align: left;
             font-weight: 600;
             color: var(--pbi-text);
             border-bottom: 2px solid var(--pbi-border);
             white-space: nowrap;
             font-size: 9px;
+            background: var(--pbi-hover);
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
         
         .remittance-table td {
-            padding: 4px;
+            padding: 6px 8px;
             border-bottom: 1px solid var(--pbi-border-light);
             color: var(--pbi-text);
+            white-space: nowrap;
+        }
+        
+        .remittance-table .currency-cell {
+            text-align: right;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .remittance-table .date-cell {
+            white-space: nowrap;
+        }
+        
+        .remittance-table .number-cell {
+            text-align: right;
         }
         
         .remittance-table tbody tr:hover {
@@ -146,10 +253,13 @@
         
         .payment-status-badge {
             padding: 2px 6px;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
             border-radius: 3px;
             font-size: 8px;
             font-weight: 600;
             text-transform: uppercase;
+            display: inline-block;
         }
         
         .status-received {
@@ -174,9 +284,12 @@
         
         .reconciliation-status {
             padding: 2px 6px;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
             border-radius: 3px;
             font-size: 8px;
             font-weight: 600;
+            display: inline-block;
         }
         
         .recon-matched {
@@ -197,16 +310,22 @@
         .payment-method-badge {
             font-size: 8px;
             padding: 2px 6px;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
             border-radius: 3px;
             background: var(--pbi-hover);
             color: var(--pbi-text);
+            display: inline-block;
         }
         
         .days-indicator {
             font-size: 8px;
             padding: 2px 6px;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
             border-radius: 3px;
             font-weight: 600;
+            display: inline-block;
         }
         
         .days-overdue {
@@ -225,17 +344,46 @@
         }
         
         .filter-bar {
+            display: -webkit-flex;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-column-gap: 8px;
+            -moz-column-gap: 8px;
+            column-gap: 8px;
+            -webkit-row-gap: 8px;
+            -moz-row-gap: 8px;
+            row-gap: 8px;
             gap: 8px;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
             align-items: center;
             margin-bottom: 10px;
+            -webkit-flex-wrap: wrap;
+            -ms-flex-wrap: wrap;
             flex-wrap: wrap;
+            width: 100%;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
         }
         
         .filter-group {
+            display: -webkit-flex;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-column-gap: 6px;
+            -moz-column-gap: 6px;
+            column-gap: 6px;
+            -webkit-row-gap: 6px;
+            -moz-row-gap: 6px;
+            row-gap: 6px;
             gap: 6px;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
             align-items: center;
+            -webkit-flex-shrink: 0;
+            -ms-flex-negative: 0;
+            flex-shrink: 0;
         }
         
         .filter-group label {
@@ -248,15 +396,28 @@
         .filter-group input {
             padding: 4px 8px;
             border: 1px solid var(--pbi-border);
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
             border-radius: 3px;
             font-size: 10px;
             background: var(--pbi-background);
             color: var(--pbi-text);
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
         }
         
         .charts-row {
+            display: -webkit-grid;
             display: grid;
+            -webkit-grid-template-columns: repeat(2, 1fr);
             grid-template-columns: repeat(2, 1fr);
+            -webkit-column-gap: 10px;
+            -moz-column-gap: 10px;
+            column-gap: 10px;
+            -webkit-row-gap: 10px;
+            -moz-row-gap: 10px;
+            row-gap: 10px;
             gap: 10px;
             margin-bottom: 12px;
         }
@@ -264,9 +425,16 @@
         .chart-card {
             background: var(--pbi-card-bg);
             border: 1px solid var(--pbi-border);
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
             border-radius: 4px;
             padding: 10px;
+            -webkit-box-shadow: var(--pbi-shadow);
+            -moz-box-shadow: var(--pbi-shadow);
             box-shadow: var(--pbi-shadow);
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
         }
         
         .chart-title {
@@ -279,6 +447,343 @@
         .chart-container {
             height: 180px;
             position: relative;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        
+        .client-selector-top {
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-justify-content: space-between;
+            -ms-flex-pack: justify;
+            justify-content: space-between;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: var(--pbi-card-bg);
+            border: 1px solid var(--pbi-border);
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+            -webkit-box-shadow: var(--pbi-shadow);
+            -moz-box-shadow: var(--pbi-shadow);
+            box-shadow: var(--pbi-shadow);
+        }
+        
+        .client-selector-top > div {
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-column-gap: 12px;
+            -moz-column-gap: 12px;
+            column-gap: 12px;
+            -webkit-row-gap: 12px;
+            -moz-row-gap: 12px;
+            row-gap: 12px;
+            gap: 12px;
+        }
+        
+        .client-selector-top label {
+            font-size: 11px;
+            font-weight: 500;
+        }
+        
+        .client-selector-top select {
+            padding: 6px 10px;
+            border: 1px solid var(--pbi-border);
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+            font-size: 11px;
+            background: var(--pbi-background);
+            color: var(--pbi-text);
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        
+        .client-selector-top #clientSelect {
+            min-width: 250px;
+        }
+        
+        .export-buttons-container {
+            margin-left: auto;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-column-gap: 8px;
+            -moz-column-gap: 8px;
+            column-gap: 8px;
+            -webkit-row-gap: 8px;
+            -moz-row-gap: 8px;
+            row-gap: 8px;
+            gap: 8px;
+            -webkit-flex-shrink: 0;
+            -ms-flex-negative: 0;
+            flex-shrink: 0;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
+            align-items: center;
+        }
+        
+        .export-button {
+            padding: 6px 12px;
+            background: var(--pbi-primary);
+            color: white;
+            border: none;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: 500;
+            -webkit-transition: background 0.15s ease;
+            -moz-transition: background 0.15s ease;
+            transition: background 0.15s ease;
+            display: -webkit-inline-flex;
+            display: -ms-inline-flexbox;
+            display: inline-flex;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-column-gap: 4px;
+            -moz-column-gap: 4px;
+            column-gap: 4px;
+            gap: 4px;
+            white-space: nowrap;
+        }
+        
+        .export-button:hover {
+            background: var(--pbi-primary-dark);
+        }
+        
+        .export-button.pdf {
+            background: #d13438;
+        }
+        
+        .export-button.pdf:hover {
+            background: #a4262c;
+        }
+        
+        .data-table-container {
+            background: var(--pbi-card-bg);
+            border: 1px solid var(--pbi-border);
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+            padding: 10px;
+            -webkit-box-shadow: var(--pbi-shadow);
+            -moz-box-shadow: var(--pbi-shadow);
+            box-shadow: var(--pbi-shadow);
+            width: 100%;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        
+        .table-header {
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-justify-content: space-between;
+            -ms-flex-pack: justify;
+            justify-content: space-between;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
+            align-items: center;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--pbi-border-light);
+        }
+        
+        .table-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--pbi-text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .table-scroll-container {
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: 400px;
+            -webkit-overflow-scrolling: touch;
+            width: 100%;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        
+        .table-scroll-container.small {
+            max-height: 300px;
+        }
+        
+        .remittance-table {
+            width: 100%;
+            min-width: 1000px;
+            table-layout: auto;
+        }
+        
+        .reconciliation-grid {
+            display: -webkit-grid;
+            display: grid;
+            -webkit-grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(4, 1fr);
+            -webkit-column-gap: 12px;
+            -moz-column-gap: 12px;
+            column-gap: 12px;
+            -webkit-row-gap: 12px;
+            -moz-row-gap: 12px;
+            row-gap: 12px;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        
+        .summary-section {
+            margin-bottom: 12px;
+        }
+        
+        .summary-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--pbi-text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .summary-stat-label {
+            font-size: 10px;
+            color: var(--pbi-text-secondary);
+            margin-bottom: 4px;
+        }
+        
+        .summary-stat-value {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .period-selector {
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-column-gap: 6px;
+            -moz-column-gap: 6px;
+            column-gap: 6px;
+            -webkit-row-gap: 6px;
+            -moz-row-gap: 6px;
+            row-gap: 6px;
+            gap: 6px;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
+            align-items: center;
+        }
+        
+        /* Chrome-specific fixes */
+        @media screen and (-webkit-min-device-pixel-ratio: 0) {
+            .remittance-kpi-grid,
+            .status-cards,
+            .charts-row {
+                -webkit-transform: translateZ(0);
+                transform: translateZ(0);
+            }
+            
+            .status-card,
+            .kpi-card,
+            .chart-card {
+                -webkit-transform: translateZ(0);
+                transform: translateZ(0);
+                will-change: transform;
+            }
+        }
+        
+        /* Additional Safari-specific fixes */
+        @supports (-webkit-appearance: none) {
+            .remittance-table {
+                -webkit-font-smoothing: antialiased;
+            }
+            
+            .status-card-value {
+                -webkit-font-smoothing: antialiased;
+            }
+        }
+        
+        /* Ensure consistent text rendering */
+        .status-card-value,
+        .kpi-value {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* Fix for browsers that don't support gap property */
+        @supports not (gap: 4px) {
+            .remittance-tabs > * + * {
+                margin-left: 4px;
+            }
+            
+            .filter-bar > * + * {
+                margin-left: 8px;
+            }
+            
+            .filter-group > * + * {
+                margin-left: 6px;
+            }
+            
+            .client-selector-top > div > * + * {
+                margin-left: 12px;
+            }
+            
+            .period-selector > * + * {
+                margin-left: 6px;
+            }
+            
+            .export-buttons-container > * + * {
+                margin-left: 8px;
+            }
+        }
+        
+        /* Force hardware acceleration for smoother rendering */
+        /* Override main-container for this page - no sidebar */
+        .main-container {
+            -webkit-grid-template-columns: 1fr !important;
+            grid-template-columns: 1fr !important;
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+            width: 100%;
+            max-width: 100%;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            padding: 12px;
+        }
+        
+        .report-tab-content {
+            width: 100%;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        
+        /* Ensure body and html take full width */
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        
+        /* Ensure proper rendering of CSS variables in Chrome */
+        .status-card,
+        .kpi-card {
+            background-color: var(--pbi-card-bg);
+            border-color: var(--pbi-border);
         }
     </style>
 </head>
@@ -324,9 +829,9 @@
     <div class="main-container">
         <!-- Client Selector -->
         <div class="client-selector-top">
-            <div style="display: flex; align-items: center; gap: 12px;">
-                <label style="font-size: 11px; font-weight: 500;">Client:</label>
-                <select id="clientSelect" style="padding: 6px 10px; border: 1px solid var(--pbi-border); border-radius: 3px; font-size: 11px; min-width: 250px;">
+            <div>
+                <label>Client:</label>
+                <select id="clientSelect">
                     <option value="demo">DEMOFRTCLIENT</option>
                     <option value="wellington">Wellington Management</option>
                     <option value="blackrock">BlackRock</option>
@@ -334,13 +839,13 @@
                 </select>
             </div>
             <div class="period-selector">
-                <label style="font-size: 11px; font-weight: 500;">Period:</label>
-                <select id="periodSelect" style="padding: 6px 10px; border: 1px solid var(--pbi-border); border-radius: 3px; font-size: 11px;">
+                <label>Period:</label>
+                <select id="periodSelect">
                     <option value="monthly">Monthly</option>
                     <option value="quarterly">Quarterly</option>
                     <option value="ytd">Year to Date</option>
                 </select>
-                <select id="monthSelect" style="padding: 6px 10px; border: 1px solid var(--pbi-border); border-radius: 3px; font-size: 11px;">
+                <select id="monthSelect">
                     <option value="2024-10">October 2024</option>
                     <option value="2024-09">September 2024</option>
                     <option value="2024-08">August 2024</option>
@@ -463,11 +968,11 @@
                 </div>
                 <div class="filter-group">
                     <label>Date Range:</label>
-                    <input type="date" id="dateFrom" style="font-size: 10px;">
-                    <span style="font-size: 10px;">to</span>
-                    <input type="date" id="dateTo" style="font-size: 10px;">
+                    <input type="date" id="dateFrom" class="date-input">
+                    <span class="date-separator">to</span>
+                    <input type="date" id="dateTo" class="date-input">
                 </div>
-                <div style="margin-left: auto;">
+                <div class="export-buttons-container">
                     <button class="export-button" onclick="exportRemittances('recent')">
                         <i class="fas fa-file-excel"></i> Export to Excel
                     </button>
@@ -482,7 +987,7 @@
                 <div class="table-header">
                     <div class="table-title">Recent Remittances - This Period</div>
                 </div>
-                <div style="overflow-x: auto; max-height: 400px; overflow-y: auto;">
+                <div class="table-scroll-container">
                     <table class="remittance-table" id="recentRemittancesTable">
                         <thead>
                             <tr>
@@ -531,7 +1036,7 @@
                         <option value="90">Next 90 Days</option>
                     </select>
                 </div>
-                <div style="margin-left: auto;">
+                <div class="export-buttons-container">
                     <button class="export-button" onclick="exportRemittances('pending')">
                         <i class="fas fa-file-excel"></i> Export to Excel
                     </button>
@@ -543,7 +1048,7 @@
                 <div class="table-header">
                     <div class="table-title">Pending Remittances - Expected Payments</div>
                 </div>
-                <div style="overflow-x: auto; max-height: 400px; overflow-y: auto;">
+                <div class="table-scroll-container">
                     <table class="remittance-table" id="pendingRemittancesTable">
                         <thead>
                             <tr>
@@ -568,24 +1073,24 @@
         <!-- Reconciliation Tab -->
         <div class="report-tab-content" id="reconciliationTab" style="display: none;">
             <!-- Reconciliation Summary -->
-            <div class="summary-section" style="margin-bottom: 12px;">
+            <div class="summary-section">
                 <div class="summary-title">Reconciliation Status</div>
-                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 8px;">
+                <div class="reconciliation-grid">
                     <div>
-                        <div style="font-size: 10px; color: var(--pbi-text-secondary); margin-bottom: 4px;">Total Payments</div>
-                        <div style="font-size: 18px; font-weight: 600;">342</div>
+                        <div class="summary-stat-label">Total Payments</div>
+                        <div class="summary-stat-value">342</div>
                     </div>
                     <div>
-                        <div style="font-size: 10px; color: var(--pbi-text-secondary); margin-bottom: 4px;">Matched</div>
-                        <div style="font-size: 18px; font-weight: 600; color: #107c10;">322</div>
+                        <div class="summary-stat-label">Matched</div>
+                        <div class="summary-stat-value" style="color: #107c10;">322</div>
                     </div>
                     <div>
-                        <div style="font-size: 10px; color: var(--pbi-text-secondary); margin-bottom: 4px;">Unmatched</div>
-                        <div style="font-size: 18px; font-weight: 600; color: #ffb900;">15</div>
+                        <div class="summary-stat-label">Unmatched</div>
+                        <div class="summary-stat-value" style="color: #ffb900;">15</div>
                     </div>
                     <div>
-                        <div style="font-size: 10px; color: var(--pbi-text-secondary); margin-bottom: 4px;">Flagged</div>
-                        <div style="font-size: 18px; font-weight: 600; color: #d13438;">5</div>
+                        <div class="summary-stat-label">Flagged</div>
+                        <div class="summary-stat-value" style="color: #d13438;">5</div>
                     </div>
                 </div>
             </div>
@@ -595,7 +1100,7 @@
                 <div class="table-header">
                     <div class="table-title">Unmatched Payments - Require Attention</div>
                 </div>
-                <div style="overflow-x: auto; max-height: 300px; overflow-y: auto;">
+                <div class="table-scroll-container small">
                     <table class="remittance-table" id="unmatchedTable">
                         <thead>
                             <tr>
@@ -619,7 +1124,7 @@
                 <div class="table-header">
                     <div class="table-title">Missing Payments - Expected But Not Received</div>
                 </div>
-                <div style="overflow-x: auto; max-height: 300px; overflow-y: auto;">
+                <div class="table-scroll-container small">
                     <table class="remittance-table" id="missingTable">
                         <thead>
                             <tr>
@@ -682,7 +1187,7 @@
                         </button>
                     </div>
                 </div>
-                <div style="overflow-x: auto; max-height: 400px; overflow-y: auto;">
+                <div class="table-scroll-container">
                     <table class="remittance-table" id="historyTable">
                         <thead>
                             <tr>
@@ -707,12 +1212,12 @@
 
     <!-- FRT Footer -->
     <div class="frt-footer">
-        <div style="margin-bottom: 8px;">
+        <div class="frt-footer-top">
             <strong>FRT Financial Recovery Technologies LLC</strong> | 
             <a href="https://www.frtservices.com" target="_blank">www.frtservices.com</a> | 
             <a href="mailto:info@frtservices.com">info@frtservices.com</a>
         </div>
-        <div style="opacity: 0.9; font-size: 10px;">
+        <div class="frt-footer-bottom">
             This report is confidential and proprietary. Unauthorized distribution is prohibited.
         </div>
     </div>
