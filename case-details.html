@@ -239,12 +239,12 @@
 
     <!-- Navigation Tabs -->
     <div class="nav-tabs">
-        <button class="nav-tab">CLIENT ELIGIBILITY & FILINGS</button>
+        <button class="nav-tab">ELIGIBILITY & FILINGS</button>
         <button class="nav-tab">STATUS REPORTS</button>
-        <button class="nav-tab">Client Opt-in Monitoring</button>
+        <button class="nav-tab">OPT-IN MONITORING</button>
         <button class="nav-tab">AGGREGATE ACCOUNT LOOKUP</button>
         <button class="nav-tab">Client Recoveries</button>
-        <button class="nav-tab">Client Remittance</button>
+        <button class="nav-tab">REMITTANCE</button>
         <button class="nav-tab">Data Update</button>
         <button class="nav-tab" style="background: var(--pbi-hover); border: 1px dashed var(--pbi-border); border-radius: 2px; margin-left: 8px;">+</button>
     </div>
@@ -585,7 +585,7 @@
         // Tab navigation
         document.querySelectorAll('.nav-tab').forEach(tab => {
             tab.addEventListener('click', function() {
-                if (this.textContent.includes('Opt-in Monitoring')) {
+                if (this.textContent.includes('OPT-IN MONITORING')) {
                     window.location.href = 'opt-in-monitoring.html';
                 } else if (this.textContent.includes('ELIGIBILITY & FILINGS')) {
                     window.location.href = 'eligibility-filings.html';
