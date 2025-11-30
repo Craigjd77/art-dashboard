@@ -125,16 +125,19 @@
             border-left-color: #107c10;
         }
         
-        .status-card.pending {
-            border-left-color: #ffb900;
+        /* Payable = funds in FRT lockbox and ready to pay */
+        .status-card.payable {
+            border-left-color: #107c10;
         }
         
-        .status-card.overdue {
-            border-left-color: #d13438;
-        }
-        
-        .status-card.in-transit {
+        /* Paid = wired out to client */
+        .status-card.paid {
             border-left-color: #0078d4;
+        }
+        
+        /* Payment Returned = wire bounced / returned by bank */
+        .status-card.returned {
+            border-left-color: #d13438;
         }
         
         .status-card-title {
@@ -262,24 +265,23 @@
             display: inline-block;
         }
         
+        /* Status badges aligned to remittance lifecycle */
+        .status-payable,
         .status-received {
             background: rgba(16, 124, 16, 0.1);
             color: #107c10;
         }
         
-        .status-pending {
-            background: rgba(255, 185, 0, 0.1);
-            color: #ca5010;
-        }
-        
-        .status-overdue {
-            background: rgba(209, 52, 56, 0.1);
-            color: #d13438;
-        }
-        
-        .status-in-transit {
+        .status-paid,
+        .status-cleared {
             background: rgba(0, 120, 212, 0.1);
             color: #0078d4;
+        }
+        
+        .status-payment-returned,
+        .status-returned {
+            background: rgba(209, 52, 56, 0.1);
+            color: #d13438;
         }
         
         .reconciliation-status {
@@ -871,7 +873,7 @@
                     <span class="kpi-trend">↑</span>
                     <span>Current Period</span>
                 </div>
-                <div class="kpi-subtitle">October 2024</div>
+                <div class="kpi-subtitle" id="kpiPeriodLabel">October 2024</div>
             </div>
             <div class="kpi-card">
                 <div class="kpi-label">Pending Remittances</div>
@@ -902,27 +904,22 @@
             </div>
         </div>
 
-        <!-- Status Cards -->
+        <!-- Lifecycle Status Cards (client-friendly) -->
         <div class="status-cards">
-            <div class="status-card received">
-                <div class="status-card-title">Received</div>
+            <div class="status-card payable">
+                <div class="status-card-title">Payable (Ready to Pay)</div>
+                <div class="status-card-value">$1,123,456</div>
+                <div class="status-card-count">Lockbox funds ready for wiring</div>
+            </div>
+            <div class="status-card paid">
+                <div class="status-card-title">Paid to Client</div>
                 <div class="status-card-value">$2,499,756</div>
-                <div class="status-card-count">342 payments</div>
+                <div class="status-card-count">342 payments wired</div>
             </div>
-            <div class="status-card pending">
-                <div class="status-card-title">Pending</div>
-                <div class="status-card-value">$856,234</div>
-                <div class="status-card-count">156 expected</div>
-            </div>
-            <div class="status-card overdue">
-                <div class="status-card-title">Overdue</div>
-                <div class="status-card-value">$267,222</div>
-                <div class="status-card-count">23 overdue</div>
-            </div>
-            <div class="status-card in-transit">
-                <div class="status-card-title">In Transit</div>
-                <div class="status-card-value">$189,450</div>
-                <div class="status-card-count">12 payments</div>
+            <div class="status-card returned">
+                <div class="status-card-title">Payment Returned</div>
+                <div class="status-card-value">$125,000</div>
+                <div class="status-card-count">3 payments requiring updated instructions</div>
             </div>
         </div>
 
@@ -942,18 +939,17 @@
                     <label>Status:</label>
                     <select id="statusFilter">
                         <option value="all">All</option>
-                        <option value="received">Received</option>
-                        <option value="deposited">Deposited</option>
-                        <option value="cleared">Cleared</option>
+                        <option value="payable">Payable (Ready to Pay)</option>
+                        <option value="paid">Paid</option>
+                        <option value="payment-returned">Payment Returned</option>
                     </select>
                 </div>
                 <div class="filter-group">
-                    <label>Method:</label>
+                    <label>Payment Method:</label>
                     <select id="methodFilter">
                         <option value="all">All</option>
                         <option value="wire">Wire</option>
-                        <option value="ach">ACH</option>
-                        <option value="check">Check</option>
+                        <option value="other">Other</option>
                     </select>
                 </div>
                 <div class="filter-group">
@@ -1227,18 +1223,148 @@
     <script src="style-switcher.js"></script>
 
     <script>
-        // Sample remittance data
+        // Mocked client/period scenarios (as if coming from backend)
+        const remittanceScenarios = {
+            demo: {
+                '2024-10': {
+                    periodLabel: 'October 2024',
+                    kpis: {
+                        totalRemittedYTD: '$2,499,756',
+                        thisPeriodRemitted: '$456,789',
+                        pendingRemittances: '$1,123,456',
+                        reconciliationRate: '94.2%',
+                        avgDaysToPayment: '127'
+                    },
+                    statusCards: {
+                        payableAmount: '$1,123,456',
+                        payableText: 'Lockbox funds ready for wiring',
+                        paidAmount: '$2,499,756',
+                        paidText: '342 payments wired',
+                        returnedAmount: '$125,000',
+                        returnedText: '3 payments requiring updated instructions'
+                    },
+                    statusBreakdown: {
+                        paid: 2499756,
+                        payable: 1123456,
+                        returned: 125000
+                    }
+                },
+                '2024-09': {
+                    periodLabel: 'September 2024',
+                    kpis: {
+                        totalRemittedYTD: '$2,042,967',
+                        thisPeriodRemitted: '$312,450',
+                        pendingRemittances: '$890,120',
+                        reconciliationRate: '92.8%',
+                        avgDaysToPayment: '133'
+                    },
+                    statusCards: {
+                        payableAmount: '$890,120',
+                        payableText: 'Lockbox funds ready for wiring',
+                        paidAmount: '$2,042,967',
+                        paidText: '276 payments wired',
+                        returnedAmount: '$75,000',
+                        returnedText: '2 payments requiring updated instructions'
+                    },
+                    statusBreakdown: {
+                        paid: 2042967,
+                        payable: 890120,
+                        returned: 75000
+                    }
+                }
+            },
+            wellington: {
+                '2024-10': {
+                    periodLabel: 'October 2024',
+                    kpis: {
+                        totalRemittedYTD: '$1,875,420',
+                        thisPeriodRemitted: '$289,340',
+                        pendingRemittances: '$642,900',
+                        reconciliationRate: '95.6%',
+                        avgDaysToPayment: '119'
+                    },
+                    statusCards: {
+                        payableAmount: '$642,900',
+                        payableText: 'Awaiting client wiring instructions',
+                        paidAmount: '$1,875,420',
+                        paidText: '198 payments wired',
+                        returnedAmount: '$45,000',
+                        returnedText: '1 payment requiring updated instructions'
+                    },
+                    statusBreakdown: {
+                        paid: 1875420,
+                        payable: 642900,
+                        returned: 45000
+                    }
+                }
+            }
+        };
+
+        let currentClientKey = 'demo';
+        let currentMonthKey = '2024-10';
+
+        function getCurrentScenario() {
+            const clientScenarios = remittanceScenarios[currentClientKey] || remittanceScenarios.demo;
+            return clientScenarios[currentMonthKey] || clientScenarios['2024-10'];
+        }
+
+        function updateRemittanceView() {
+            const scenario = getCurrentScenario();
+            if (!scenario) return;
+
+            // Update KPI cards
+            const kpis = scenario.kpis;
+            const statusCards = scenario.statusCards;
+
+            const kpiTotalRemittedEl = document.getElementById('kpiTotalRemitted');
+            const kpiPeriodRemittedEl = document.getElementById('kpiPeriodRemitted');
+            const kpiPendingRemittancesEl = document.getElementById('kpiPendingRemittances');
+            const kpiReconciliationRateEl = document.getElementById('kpiReconciliationRate');
+            const kpiAvgDaysEl = document.getElementById('kpiAvgDays');
+            const kpiPeriodLabelEl = document.getElementById('kpiPeriodLabel');
+
+            if (kpiTotalRemittedEl) kpiTotalRemittedEl.textContent = kpis.totalRemittedYTD;
+            if (kpiPeriodRemittedEl) kpiPeriodRemittedEl.textContent = kpis.thisPeriodRemitted;
+            if (kpiPendingRemittancesEl) kpiPendingRemittancesEl.textContent = kpis.pendingRemittances;
+            if (kpiReconciliationRateEl) kpiReconciliationRateEl.textContent = kpis.reconciliationRate;
+            if (kpiAvgDaysEl) kpiAvgDaysEl.textContent = kpis.avgDaysToPayment;
+            if (kpiPeriodLabelEl) kpiPeriodLabelEl.textContent = scenario.periodLabel;
+
+            // Update lifecycle status cards
+            const payableValueEl = document.querySelector('.status-card.payable .status-card-value');
+            const payableTextEl = document.querySelector('.status-card.payable .status-card-count');
+            const paidValueEl = document.querySelector('.status-card.paid .status-card-value');
+            const paidTextEl = document.querySelector('.status-card.paid .status-card-count');
+            const returnedValueEl = document.querySelector('.status-card.returned .status-card-value');
+            const returnedTextEl = document.querySelector('.status-card.returned .status-card-count');
+
+            if (payableValueEl) payableValueEl.textContent = statusCards.payableAmount;
+            if (payableTextEl) payableTextEl.textContent = statusCards.payableText;
+            if (paidValueEl) paidValueEl.textContent = statusCards.paidAmount;
+            if (paidTextEl) paidTextEl.textContent = statusCards.paidText;
+            if (returnedValueEl) returnedValueEl.textContent = statusCards.returnedAmount;
+            if (returnedTextEl) returnedTextEl.textContent = statusCards.returnedText;
+
+            // Update payment status chart to reflect new breakdown
+            createPaymentStatusChart();
+        }
+
+        // Sample remittance data for the default scenario (demo / October 2024)
         const recentRemittancesData = [
-            { paymentDate: '10-25-2024', caseName: 'TESLA INC', settlementFund: '$195,000,000.00', grossAmount: '$34,567.89', fee: '$345.68', net: '$34,222.21', method: 'Wire', reference: 'WIRE-2024-1025-001', admin: 'Gland & Co', status: 'Cleared', reconciliation: 'Matched' },
-            { paymentDate: '10-26-2024', caseName: 'META PLATFORMS', settlementFund: '$310,000,000.00', grossAmount: '$67,890.12', fee: '$678.90', net: '$67,211.22', method: 'ACH', reference: 'ACH-2024-1026-002', admin: 'Garden City Group', status: 'Deposited', reconciliation: 'Matched' },
-            { paymentDate: '10-27-2024', caseName: 'NVIDIA CORP', settlementFund: '$175,000,000.00', grossAmount: '$23,456.78', fee: '$234.57', net: '$23,222.21', method: 'Check', reference: 'CHK-2024-1027-003', admin: 'Epiq Systems', status: 'Received', reconciliation: 'Unmatched' },
-            { paymentDate: '10-28-2024', caseName: 'BANK OF AMERICA', settlementFund: '$225,000,000.00', grossAmount: '$45,678.90', fee: '$456.79', net: '$45,222.11', method: 'Wire', reference: 'WIRE-2024-1028-004', admin: 'A.B. Data, Ltd', status: 'Cleared', reconciliation: 'Matched' },
-            { paymentDate: '10-29-2024', caseName: 'WELLS FARGO & CO', settlementFund: '$140,000,000.00', grossAmount: '$19,876.54', fee: '$198.77', net: '$19,677.77', method: 'ACH', reference: 'ACH-2024-1029-005', admin: 'Gland & Co', status: 'Cleared', reconciliation: 'Matched' },
-            { paymentDate: '10-30-2024', caseName: 'GOLDMAN SACHS', settlementFund: '$265,000,000.00', grossAmount: '$52,345.67', fee: '$523.46', net: '$51,822.21', method: 'Wire', reference: 'WIRE-2024-1030-006', admin: 'Garden City Group', status: 'In Transit', reconciliation: 'Pending' },
-            { paymentDate: '10-31-2024', caseName: 'MORGAN STANLEY', settlementFund: '$190,000,000.00', grossAmount: '$38,901.23', fee: '$389.01', net: '$38,512.22', method: 'Check', reference: 'CHK-2024-1031-007', admin: 'Epiq Systems', status: 'Received', reconciliation: 'Matched' },
-            { paymentDate: '11-01-2024', caseName: 'CITIGROUP INC', settlementFund: '$155,000,000.00', grossAmount: '$27,654.32', fee: '$276.54', net: '$27,377.78', method: 'Wire', reference: 'WIRE-2024-1101-008', admin: 'A.B. Data, Ltd', status: 'Cleared', reconciliation: 'Matched' },
-            { paymentDate: '11-02-2024', caseName: 'BERKSHIRE HATHAWAY', settlementFund: '$380,000,000.00', grossAmount: '$71,234.56', fee: '$712.35', net: '$70,522.21', method: 'ACH', reference: 'ACH-2024-1102-009', admin: 'Gland & Co', status: 'Deposited', reconciliation: 'Matched' },
-            { paymentDate: '11-03-2024', caseName: 'JOHNSON & JOHNSON', settlementFund: '$220,000,000.00', grossAmount: '$43,567.89', fee: '$435.68', net: '$43,132.21', method: 'Wire', reference: 'WIRE-2024-1103-010', admin: 'Garden City Group', status: 'Cleared', reconciliation: 'Flagged' }
+            // Paid wires to clients
+            { paymentDate: '10-25-2024', caseName: 'TESLA INC', settlementFund: '$195,000,000.00', grossAmount: '$34,567.89', fee: '$345.68', net: '$34,222.21', method: 'Wire', reference: 'WIRE-2024-1025-001', admin: 'Gland & Co', status: 'Paid', reconciliation: 'Matched' },
+            { paymentDate: '10-26-2024', caseName: 'META PLATFORMS', settlementFund: '$310,000,000.00', grossAmount: '$67,890.12', fee: '$678.90', net: '$67,211.22', method: 'Wire', reference: 'WIRE-2024-1026-002', admin: 'Garden City Group', status: 'Paid', reconciliation: 'Matched' },
+            { paymentDate: '10-28-2024', caseName: 'BANK OF AMERICA', settlementFund: '$225,000,000.00', grossAmount: '$45,678.90', fee: '$456.79', net: '$45,222.11', method: 'Wire', reference: 'WIRE-2024-1028-004', admin: 'A.B. Data, Ltd', status: 'Paid', reconciliation: 'Matched' },
+            { paymentDate: '11-01-2024', caseName: 'CITIGROUP INC', settlementFund: '$155,000,000.00', grossAmount: '$27,654.32', fee: '$276.54', net: '$27,377.78', method: 'Wire', reference: 'WIRE-2024-1101-008', admin: 'A.B. Data, Ltd', status: 'Paid', reconciliation: 'Matched' },
+            { paymentDate: '11-03-2024', caseName: 'JOHNSON & JOHNSON', settlementFund: '$220,000,000.00', grossAmount: '$43,567.89', fee: '$435.68', net: '$43,132.21', method: 'Wire', reference: 'WIRE-2024-1103-010', admin: 'Garden City Group', status: 'Paid', reconciliation: 'Flagged' },
+            
+            // Payable items – cash in lockbox, not yet wired
+            { paymentDate: '10-27-2024', caseName: 'NVIDIA CORP', settlementFund: '$175,000,000.00', grossAmount: '$23,456.78', fee: '$234.57', net: '$23,222.21', method: 'Wire', reference: 'WIRE-2024-1027-003', admin: 'Epiq Systems', status: 'Payable', reconciliation: 'Unmatched' },
+            { paymentDate: '10-30-2024', caseName: 'GOLDMAN SACHS', settlementFund: '$265,000,000.00', grossAmount: '$52,345.67', fee: '$523.46', net: '$51,822.21', method: 'Wire', reference: 'WIRE-2024-1030-006', admin: 'Garden City Group', status: 'Payable', reconciliation: 'Pending' },
+            
+            // Returned wires needing attention
+            { paymentDate: '10-31-2024', caseName: 'MORGAN STANLEY', settlementFund: '$190,000,000.00', grossAmount: '$38,901.23', fee: '$389.01', net: '$38,512.22', method: 'Wire', reference: 'WIRE-2024-1031-007', admin: 'Epiq Systems', status: 'Payment Returned', reconciliation: 'Unmatched' },
+            { paymentDate: '11-02-2024', caseName: 'BERKSHIRE HATHAWAY', settlementFund: '$380,000,000.00', grossAmount: '$71,234.56', fee: '$712.35', net: '$70,522.21', method: 'Wire', reference: 'WIRE-2024-1102-009', admin: 'Gland & Co', status: 'Payment Returned', reconciliation: 'Pending' }
         ];
 
         const pendingRemittancesData = [
@@ -1279,6 +1405,26 @@
             });
         });
 
+        // Helper function to create case name links
+        function getCaseLink(caseName) {
+            const caseLinks = {
+                'APPLE INC': 'case-apple-inc-securities.html',
+                'ALPHABET INC': 'case-alphabet-inc.html',
+                'Foreign Exchange Antitrust': 'case-foreign-exchange-antitrust.html',
+                'Atos SE': 'case-atos-se.html',
+                'Barclays Plc': 'case-barclays-plc.html',
+                'Grab Holdings': 'case-grab-holdings.html',
+                'GRAB HOLDINGS LIMITED': 'case-grab-holdings.html',
+                'Eagle Bancorp': 'case-eagle-bancorp-fair-fund.html',
+                'EAGLE BANCORP INC Fair Fund': 'case-eagle-bancorp-fair-fund.html'
+            };
+            const url = caseLinks[caseName];
+            if (url) {
+                return `<a href="${url}" style="color: var(--pbi-primary); text-decoration: none; font-weight: 500;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${caseName}</a>`;
+            }
+            return caseName;
+        }
+        
         // Populate Recent Remittances Table
         function populateRecentRemittancesTable() {
             const tbody = document.getElementById('recentRemittancesTableBody');
@@ -1291,7 +1437,7 @@
                 
                 tr.innerHTML = `
                     <td class="date-cell">${row.paymentDate}</td>
-                    <td>${row.caseName}</td>
+                    <td>${getCaseLink(row.caseName)}</td>
                     <td class="currency-cell">${row.settlementFund}</td>
                     <td class="currency-cell">${row.grossAmount}</td>
                     <td class="currency-cell">${row.fee}</td>
@@ -1325,7 +1471,7 @@
                 
                 tr.innerHTML = `
                     <td class="date-cell">${row.expectedDate}</td>
-                    <td>${row.caseName}</td>
+                    <td>${getCaseLink(row.caseName)}</td>
                     <td class="currency-cell">${row.settlementFund}</td>
                     <td class="currency-cell">${row.expectedAmount}</td>
                     <td><span class="days-indicator ${daysClass}">${daysText}</span></td>
@@ -1369,7 +1515,7 @@
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td class="date-cell">${row.expectedDate}</td>
-                    <td>${row.caseName}</td>
+                    <td>${getCaseLink(row.caseName)}</td>
                     <td class="currency-cell">${row.expectedAmount}</td>
                     <td><span class="days-indicator days-overdue">${row.daysOverdue} days</span></td>
                     <td>${row.admin}</td>
@@ -1400,7 +1546,7 @@
                 const statusClass = row.status.toLowerCase().replace(' ', '-');
                 tr.innerHTML = `
                     <td class="date-cell">${row.paymentDate}</td>
-                    <td>${row.caseName}</td>
+                    <td>${getCaseLink(row.caseName)}</td>
                     <td class="currency-cell">${row.grossAmount}</td>
                     <td class="currency-cell">${row.net}</td>
                     <td><span class="payment-method-badge">${row.method}</span></td>
@@ -1464,22 +1610,36 @@
             });
         }
 
+        let paymentStatusChartInstance = null;
+
         function createPaymentStatusChart() {
             const canvas = document.getElementById('paymentStatusChart');
             if (!canvas || typeof Chart === 'undefined') return;
             
+            const scenario = getCurrentScenario();
+            if (!scenario || !scenario.statusBreakdown) return;
+            
+            const breakdown = scenario.statusBreakdown;
+            const dataValues = [breakdown.paid, breakdown.payable, breakdown.returned];
+
             const ctx = canvas.getContext('2d');
-            new Chart(ctx, {
+            
+            if (paymentStatusChartInstance) {
+                paymentStatusChartInstance.data.datasets[0].data = dataValues;
+                paymentStatusChartInstance.update();
+                return;
+            }
+
+            paymentStatusChartInstance = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Received', 'Pending', 'Overdue', 'In Transit'],
+                    labels: ['Paid', 'Payable', 'Payment Returned'],
                     datasets: [{
-                        data: [2499756, 856234, 267222, 189450],
+                        data: dataValues,
                         backgroundColor: [
-                            'rgba(16, 124, 16, 0.8)',
-                            'rgba(255, 185, 0, 0.8)',
-                            'rgba(209, 52, 56, 0.8)',
-                            'rgba(0, 120, 212, 0.8)'
+                            'rgba(0, 120, 212, 0.8)',   // Paid
+                            'rgba(16, 124, 16, 0.8)',   // Payable
+                            'rgba(209, 52, 56, 0.8)'    // Payment Returned
                         ],
                         borderWidth: 2
                     }]
@@ -1686,6 +1846,34 @@
 
         // Initialize
         window.addEventListener('DOMContentLoaded', () => {
+            const clientSelect = document.getElementById('clientSelect');
+            const monthSelect = document.getElementById('monthSelect');
+            const periodSelect = document.getElementById('periodSelect');
+
+            if (clientSelect) {
+                clientSelect.addEventListener('change', () => {
+                    currentClientKey = clientSelect.value || 'demo';
+                    updateRemittanceView();
+                });
+            }
+
+            if (monthSelect) {
+                monthSelect.addEventListener('change', () => {
+                    currentMonthKey = monthSelect.value || '2024-10';
+                    updateRemittanceView();
+                });
+            }
+
+            if (periodSelect) {
+                periodSelect.addEventListener('change', () => {
+                    // For this mock, period type just changes the label;
+                    // the scenario mapping stays keyed by month.
+                    updateRemittanceView();
+                });
+            }
+
+            // Initial data bind
+            updateRemittanceView();
             populateRecentRemittancesTable();
             populatePendingRemittancesTable();
             populateUnmatchedTable();

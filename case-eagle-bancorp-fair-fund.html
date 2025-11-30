@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eagle Bancorp Fair Fund - Case Details | FRT Work Tools</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style-switcher.css">
+    <style>
+        .case-header { background: linear-gradient(135deg, var(--pbi-primary) 0%, var(--pbi-primary-dark) 100%); color: white; padding: 16px 20px; border-radius: 4px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .case-title { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+        .case-subtitle { font-size: 12px; opacity: 0.9; }
+        .back-button { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+        .back-button:hover { background: rgba(255,255,255,0.3); }
+        .details-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; }
+        .info-section { background: var(--pbi-card-bg); border-radius: 4px; box-shadow: 0 1.6px 3.6px rgba(0, 0, 0, 0.13), 0 0.3px 0.9px rgba(0, 0, 0, 0.11); padding: 16px; border: 1px solid var(--pbi-border); }
+        .section-title { font-size: 13px; font-weight: 600; color: var(--pbi-text-primary); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--pbi-border); display: flex; align-items: center; gap: 8px; }
+        .info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--pbi-border-light); font-size: 11px; }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { color: var(--pbi-text-secondary); font-weight: 500; }
+        .info-value { color: var(--pbi-text-primary); font-weight: 600; text-align: right; }
+        .text-content { font-size: 11px; line-height: 1.6; color: var(--pbi-text-primary); margin-bottom: 12px; }
+        .timeline-container { background: var(--pbi-card-bg); border-radius: 4px; box-shadow: 0 1.6px 3.6px rgba(0, 0, 0, 0.13), 0 0.3px 0.9px rgba(0, 0, 0, 0.11); padding: 16px; border: 1px solid var(--pbi-border); margin-bottom: 12px; }
+        .timeline { position: relative; padding: 20px 0; }
+        .timeline-line { position: absolute; left: 30px; top: 0; bottom: 0; width: 2px; background: var(--pbi-border); }
+        .timeline-item { position: relative; padding-left: 60px; margin-bottom: 24px; }
+        .timeline-item:last-child { margin-bottom: 0; }
+        .timeline-dot { position: absolute; left: 22px; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: var(--pbi-primary); border: 3px solid var(--pbi-card-bg); z-index: 2; }
+        .timeline-dot.completed { background: #107c10; }
+        .timeline-dot.current { background: #ffb900; animation: pulse 2s infinite; }
+        .timeline-dot.future { background: var(--pbi-border); }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .timeline-date { font-size: 10px; color: var(--pbi-text-secondary); font-weight: 600; margin-bottom: 4px; }
+        .timeline-title { font-size: 12px; font-weight: 600; color: var(--pbi-text-primary); margin-bottom: 4px; }
+        .timeline-description { font-size: 10px; color: var(--pbi-text-secondary); line-height: 1.4; }
+        .timeline-status { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 9px; font-weight: 600; text-transform: uppercase; margin-top: 4px; }
+        .timeline-status.completed { background: rgba(16, 124, 16, 0.1); color: #107c10; }
+        .timeline-status.current { background: rgba(255, 185, 0, 0.1); color: #ca5010; }
+        .timeline-status.future { background: var(--pbi-hover); color: var(--pbi-text-secondary); }
+        .damages-table { width: 100%; font-size: 10px; }
+        .damages-table th { background: var(--pbi-background); padding: 8px; text-align: left; font-weight: 600; font-size: 9px; border-bottom: 2px solid var(--pbi-border); }
+        .damages-table td { padding: 8px; border-bottom: 1px solid var(--pbi-border-light); }
+        .cusip-tag { background: var(--pbi-background); border: 1px solid var(--pbi-border); padding: 4px 10px; border-radius: 3px; font-size: 10px; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <div class="logo">FRT Work Tools</div>
+            <div class="header-title">Case Details</div>
+        </div>
+        <div class="header-right">
+            <div class="user-info">Craig D'Alessio</div>
+            <button>Share</button>
+        </div>
+    </div>
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+        <button class="nav-tab">
+            <i class="fas fa-file-check"></i>
+            ELIGIBILITY & FILINGS
+        </button>
+        <button class="nav-tab">
+            <i class="fas fa-chart-line"></i>
+            STATUS REPORTS
+        </button>
+        <button class="nav-tab">
+            <i class="fas fa-bell"></i>
+            OPT-IN MONITORING
+        </button>
+        <button class="nav-tab">
+            <i class="fas fa-money-bill-wave"></i>
+            REMITTANCE
+        </button>
+        <button class="nav-tab">
+            <i class="fas fa-user-tie"></i>
+            Account Manager Dashboard
+        </button>
+        <button class="nav-tab">+</button>
+    </div>
+    <div class="main-container">
+        <div class="content-area" style="grid-column: 1 / -1;">
+            <div class="case-header">
+                <div>
+                    <div class="case-title">Eagle Bancorp Inc Fair Fund</div>
+                    <div class="case-subtitle">Case ID: EAGL-2020-001 | Type: US CA Settled (Fair Fund) | Status: <span class="case-status-badge status-confirmed">ACTIVE</span></div>
+                </div>
+                <a href="eligibility-filings.html" class="back-button">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Cases
+                </a>
+            </div>
+            <div class="timeline-container">
+                <div class="section-title">
+                    <i class="fas fa-project-diagram"></i>
+                    Case Timeline & Lifecycle
+                </div>
+                <div class="timeline">
+                    <div class="timeline-line"></div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot completed"></div>
+                        <div class="timeline-date">March 15, 2020</div>
+                        <div class="timeline-title">SEC Enforcement Action</div>
+                        <div class="timeline-description">SEC filed enforcement action against Eagle Bancorp for accounting violations and disclosure failures.</div>
+                        <span class="timeline-status completed">Completed</span>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot completed"></div>
+                        <div class="timeline-date">June 10, 2020</div>
+                        <div class="timeline-title">Settlement Agreement</div>
+                        <div class="timeline-description">Eagle Bancorp agreed to settle SEC charges and establish Fair Fund for distribution to harmed investors.</div>
+                        <span class="timeline-status completed">Completed</span>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot completed"></div>
+                        <div class="timeline-date">August 5, 2020</div>
+                        <div class="timeline-title">Fair Fund Established</div>
+                        <div class="timeline-description">Court approved establishment of Fair Fund. Claims administrator appointed.</div>
+                        <span class="timeline-status completed">Completed</span>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot current"></div>
+                        <div class="timeline-date">November 30, 2024</div>
+                        <div class="timeline-title">Proof of Claim Deadline</div>
+                        <div class="timeline-description">Deadline for submitting proof of claim forms to the Fair Fund administrator.</div>
+                        <span class="timeline-status current">Current Phase</span>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot future"></div>
+                        <div class="timeline-date">Q2 2025 (Expected)</div>
+                        <div class="timeline-title">First Disbursement</div>
+                        <div class="timeline-description">Initial distribution of Fair Fund proceeds to approved claimants.</div>
+                        <span class="timeline-status future">Pending</span>
+                    </div>
+                </div>
+            </div>
+            <div class="details-grid">
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div class="info-section">
+                        <div class="section-title"><i class="fas fa-file-alt"></i>Case Summary</div>
+                        <div class="text-content">
+                            <strong>Allegations:</strong> Eagle Bancorp Inc. was charged by the SEC with accounting violations and failure to disclose material information regarding related-party transactions and loan portfolio risks, in violation of federal securities laws.
+                        </div>
+                        <div class="text-content">
+                            <strong>Fair Fund Period:</strong> Investors who purchased Eagle Bancorp securities between <strong>January 1, 2018</strong> and <strong>March 15, 2020</strong> may be eligible for distribution from the Fair Fund.
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Fair Fund Amount:</span>
+                            <span class="info-value">$24,000,000.00</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Claims Administrator:</span>
+                            <span class="info-value">Epiq Systems</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Court:</span>
+                            <span class="info-value">U.S. District Court, District of Maryland</span>
+                        </div>
+                    </div>
+                    <div class="info-section">
+                        <div class="section-title"><i class="fas fa-chart-line"></i>Account Level Recovery Details</div>
+                        <div style="overflow-x: auto;">
+                            <table class="damages-table">
+                                <thead>
+                                    <tr>
+                                        <th>Account Name</th>
+                                        <th style="text-align: right;">Recovered Amount</th>
+                                        <th style="text-align: right;">FRT Fee</th>
+                                        <th style="text-align: right;">Net to Client</th>
+                                        <th style="text-align: center;">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Account Name - Fair Fund Claim</td>
+                                        <td style="text-align: right; font-weight: 600;">$125,000.00</td>
+                                        <td style="text-align: right;">$1,250.00</td>
+                                        <td style="text-align: right; font-weight: 600;">$123,750.00</td>
+                                        <td style="text-align: center;"><span class="case-status-badge status-confirmed">FILED</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div class="info-section">
+                        <div class="section-title"><i class="fas fa-info-circle"></i>Quick Stats</div>
+                        <div class="info-row">
+                            <span class="info-label">Fair Fund Amount:</span>
+                            <span class="info-value">$24,000,000.00</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Case Type:</span>
+                            <span class="info-value">US CA Settled (Fair Fund)</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Proof of Claim Deadline:</span>
+                            <span class="info-value" style="color: #d13438; font-weight: 700;">November 30, 2024</span>
+                        </div>
+                    </div>
+                    <div class="info-section">
+                        <div class="section-title"><i class="fas fa-file-download"></i>Case Documents</div>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <button class="download-button" style="width: 100%; justify-content: center; background: var(--pbi-primary); color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 11px;">
+                                <i class="fas fa-download"></i>
+                                Fair Fund Notice (PDF)
+                            </button>
+                            <button class="download-button" style="width: 100%; justify-content: center; background: var(--pbi-primary); color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 11px;">
+                                <i class="fas fa-download"></i>
+                                Proof of Claim Form
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="page-info">
+            <span>Case Details - Eagle Bancorp Fair Fund</span>
+        </div>
+    </div>
+    <script src="style-switcher.js"></script>
+    <script>
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                if (this.textContent.includes('ELIGIBILITY & FILINGS')) window.location.href = 'eligibility-filings.html';
+                else if (this.textContent.includes('STATUS REPORTS')) window.location.href = 'client-status-reports.html';
+                else if (this.textContent.includes('OPT-IN MONITORING')) window.location.href = 'opt-in-monitoring.html';
+                else if (this.textContent.includes('REMITTANCE')) window.location.href = 'client-remittance.html';
+                else if (this.textContent.includes('ACCOUNT MANAGER')) window.location.href = 'account-manager-dashboard.html';
+            });
+        });
+    </script>
+</body>
+</html>

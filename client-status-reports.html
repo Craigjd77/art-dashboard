@@ -933,7 +933,7 @@
             <div class="frt-logo-header">
                 <div class="frt-logo">FRT</div>
                 <div>
-                    <div class="report-title">FRT FINANCIAL RECOVERY TECH</div>
+                    <div class="report-title" id="reportTitle">FRT FINANCIAL RECOVERY TECH</div>
                     <div class="report-subtitle">Status Report for <span id="reportClientName">DEMOFRTCLIENT</span></div>
                     <div class="report-period">Period from <span id="reportPeriodStart">10/1/2024</span> to <span id="reportPeriodEnd">10/31/2024</span></div>
                 </div>
@@ -1014,49 +1014,18 @@
             </div>
         </div>
 
-        <!-- Deadline Risk Alerts -->
-        <div class="alert-section">
-            <div class="alert-header">
-                <div class="alert-title">
-                    <i class="fas fa-exclamation-triangle" style="color: #d13438;"></i>
-                    Upcoming Deadlines
-                    <span class="alert-badge" id="alertCount">3</span>
-                </div>
-            </div>
-            <div id="alertItems">
-                <div class="alert-item">
-                    <div class="alert-priority critical"></div>
-                    <div class="alert-case">Foreign Exchange Antitrust - Stock (Lending) IFER</div>
-                    <div class="alert-deadline">07-08-2024</div>
-                    <div class="alert-days critical">7 days</div>
-                </div>
-                <div class="alert-item">
-                    <div class="alert-priority warning"></div>
-                    <div class="alert-case">BHP Billiton - Non-US Group Recovery</div>
-                    <div class="alert-deadline">11-30-2024</div>
-                    <div class="alert-days warning">40 days</div>
-                </div>
-                <div class="alert-item">
-                    <div class="alert-priority info"></div>
-                    <div class="alert-case">Medibank Private Ltd - Non-US Group Recovery</div>
-                    <div class="alert-deadline">12-15-2024</div>
-                    <div class="alert-days info">55 days</div>
-                </div>
-            </div>
-        </div>
-
         <!-- Report Tabs Container -->
         <div class="report-tabs-container">
             <!-- Report Tabs (Left Sidebar) -->
         <div class="report-tabs">
-            <button class="report-tab active" data-tab="settled">Settled Action Recovery</button>
-            <button class="report-tab" data-tab="antitrust">Antitrust Recovery</button>
-            <button class="report-tab" data-tab="nonus">Non-US Group Recovery</button>
+            <button class="report-tab active" data-tab="settled">US & CA Settlements</button>
+            <button class="report-tab" data-tab="antitrust">US Antitrust Settlements</button>
+            <button class="report-tab" data-tab="nonus">Non-US Group Actions</button>
         </div>
 
             <!-- Report Content (Right Side) -->
             <div class="report-content-wrapper">
-        <!-- Settled Action Recovery Tab -->
+        <!-- US & CA Settlements Tab -->
         <div class="report-tab-content" id="settledTab">
             <!-- Summary Section -->
             <div class="summary-section">
@@ -1202,7 +1171,7 @@
             <!-- Data Table -->
             <div class="data-table-container">
                 <div class="table-header">
-                    <div class="table-title">Settled Action Recovery Details</div>
+                    <div class="table-title">US & CA Settlements Details</div>
                     <div class="table-controls">
                         <button class="export-button" onclick="exportTable('settledTable', 'Settled_Action_Recovery')">
                             <i class="fas fa-file-excel"></i> Export to Excel
@@ -1239,7 +1208,7 @@
             </div>
         </div>
 
-        <!-- Antitrust Recovery Tab -->
+        <!-- US Antitrust Settlements Tab -->
         <div class="report-tab-content" id="antitrustTab" style="display: none;">
             <!-- Summary Section -->
             <div class="summary-section">
@@ -1313,7 +1282,7 @@
             <!-- Data Table -->
             <div class="data-table-container">
                 <div class="table-header">
-                    <div class="table-title">Antitrust Recovery Details</div>
+                    <div class="table-title">US Antitrust Settlements Details</div>
                     <div class="table-controls">
                         <button class="export-button" onclick="exportTable('antitrustTable', 'Antitrust_Recovery')">
                             <i class="fas fa-download"></i> Export to Excel
@@ -1344,7 +1313,7 @@
             </div>
         </div>
 
-        <!-- Non-US Group Recovery Tab -->
+        <!-- Non-US Group Actions Tab -->
         <div class="report-tab-content" id="nonusTab" style="display: none;">
             <!-- Summary Section -->
             <div class="summary-section">
@@ -1533,6 +1502,68 @@
             { caseName: 'Boral Limited', cusip: '099535100', accountName: 'Account Name 9012', accountNumber: 'Account Number 9012', deadline: '01-15-2025', participationDate: '09-20-2024', fund: '$95,000,000.00', periodStart: '03-01-2020', periodEnd: '06-01-2021', damages: '$7,423,533.25', shares: '148,471' }
         ];
 
+        // Mocked client/period scenarios (as if coming from backend)
+        const statusReportProfiles = {
+            demo: {
+                factor: 1,
+                periods: {
+                    '2024-10': { start: '10/1/2024', end: '10/31/2024' },
+                    '2024-09': { start: '9/1/2024', end: '9/30/2024' },
+                    '2024-08': { start: '8/1/2024', end: '8/31/2024' }
+                }
+            },
+            wellington: {
+                factor: 0.65,
+                periods: {
+                    '2024-10': { start: '10/1/2024', end: '10/31/2024' },
+                    '2024-09': { start: '9/1/2024', end: '9/30/2024' }
+                }
+            },
+            blackrock: {
+                factor: 0.5,
+                periods: {
+                    '2024-10': { start: '10/1/2024', end: '10/31/2024' }
+                }
+            },
+            schwab: {
+                factor: 0.4,
+                periods: {
+                    '2024-10': { start: '10/1/2024', end: '10/31/2024' }
+                }
+            }
+        };
+
+        let currentClientKey = 'demo';
+        let currentMonthKey = '2024-10';
+
+        function getStatusReportProfile() {
+            return statusReportProfiles[currentClientKey] || statusReportProfiles.demo;
+        }
+
+        function getCurrentPeriodRange() {
+            const profile = getStatusReportProfile();
+            if (!profile || !profile.periods) return null;
+            return profile.periods[currentMonthKey] || profile.periods['2024-10'] || null;
+        }
+
+        function filterForCurrentClient(arr) {
+            if (!Array.isArray(arr)) return [];
+            // DEMO uses all data; others use simple index-based splits to simulate different books.
+            if (currentClientKey === 'demo') return arr.slice();
+            return arr.filter((row, idx) => {
+                switch (currentClientKey) {
+                    case 'wellington':
+                        return idx % 2 === 0;
+                    case 'blackrock':
+                        return idx % 2 === 1;
+                    case 'schwab':
+                        return idx % 3 === 0;
+                    default:
+                        return true;
+                }
+            });
+        }
+
         // Tab switching
         document.querySelectorAll('.report-tab').forEach(tab => {
             tab.addEventListener('click', function() {
@@ -1551,14 +1582,41 @@
         });
 
         // Populate tables
+        // Helper function to create case name links
+        function getCaseLink(caseName) {
+            const caseLinks = {
+                'APPLE INC': 'case-apple-inc-securities.html',
+                'ALPHABET INC': 'case-alphabet-inc.html',
+                'Foreign Exchange Antitrust': 'case-foreign-exchange-antitrust.html',
+                'Stock (Lending) IFER': 'case-foreign-exchange-antitrust.html',
+                'Atos SE': 'case-atos-se.html',
+                'Atos SE (Master Case)': 'case-atos-se.html',
+                'Barclays Plc': 'case-barclays-plc.html',
+                'Barclays Plc (Staley Action)': 'case-barclays-plc.html',
+                'Barclays Plc (Staley Action) (Master Case)': 'case-barclays-plc.html',
+                'Grab Holdings': 'case-grab-holdings.html',
+                'GRAB HOLDINGS LIMITED': 'case-grab-holdings.html',
+                'Grab Holdings Limited': 'case-grab-holdings.html',
+                'Eagle Bancorp': 'case-eagle-bancorp-fair-fund.html',
+                'EAGLE BANCORP INC Fair Fund': 'case-eagle-bancorp-fair-fund.html',
+                'Eagle Bancorp Fair Fund': 'case-eagle-bancorp-fair-fund.html',
+                'Eagle Bancorp Inc Fair Fund': 'case-eagle-bancorp-fair-fund.html'
+            };
+            const url = caseLinks[caseName];
+            if (url) {
+                return `<a href="${url}" style="color: var(--pbi-primary); text-decoration: none; font-weight: 500;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${caseName}</a>`;
+            }
+            return caseName;
+        }
+        
         function populateSettledTable() {
             const tbody = document.getElementById('settledTableBody');
             tbody.innerHTML = '';
             
-            settledData.forEach(row => {
+            filterForCurrentClient(settledData).forEach(row => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${row.company}</td>
+                    <td>${getCaseLink(row.company)}</td>
                     <td>${row.cusip}</td>
                     <td>${row.accountName}</td>
                     <td>${row.accountNumber}</td>
@@ -1580,10 +1638,10 @@
             const tbody = document.getElementById('settledNewlyPaidTableBody');
             tbody.innerHTML = '';
             
-            settledNewlyPaidData.forEach(row => {
+            filterForCurrentClient(settledNewlyPaidData).forEach(row => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${row.company}</td>
+                    <td>${getCaseLink(row.company)}</td>
                     <td>${row.cusip}</td>
                     <td>${row.accountName}</td>
                     <td>${row.accountNumber}</td>
@@ -1605,10 +1663,10 @@
             const tbody = document.getElementById('antitrustNewlyPaidTableBody');
             tbody.innerHTML = '';
             
-            antitrustNewlyPaidData.forEach(row => {
+            filterForCurrentClient(antitrustNewlyPaidData).forEach(row => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${row.caseName}</td>
+                    <td>${getCaseLink(row.caseName)}</td>
                     <td>${row.accountName}</td>
                     <td>${row.accountNumber}</td>
                     <td class="date-cell">${row.deadline}</td>
@@ -1628,10 +1686,12 @@
             const tbody = document.getElementById('antitrustTableBody');
             tbody.innerHTML = '';
             
-            antitrustData.forEach(row => {
+            filterForCurrentClient(antitrustData).forEach(row => {
                 const tr = document.createElement('tr');
+                // Combine case name for full match
+                const fullCaseName = row.caseName === 'Stock (Lending) IFER' ? 'Foreign Exchange Antitrust - Stock (Lending) IFER' : row.caseName;
                 tr.innerHTML = `
-                    <td>${row.caseName}</td>
+                    <td>${getCaseLink(fullCaseName)}</td>
                     <td>${row.accountName}</td>
                     <td>${row.accountNumber}</td>
                     <td class="date-cell">${row.deadline}</td>
@@ -1650,10 +1710,10 @@
             const tbody = document.getElementById('nonusNewlyPaidTableBody');
             tbody.innerHTML = '';
             
-            nonusNewlyPaidData.forEach(row => {
+            filterForCurrentClient(nonusNewlyPaidData).forEach(row => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${row.caseName}</td>
+                    <td>${getCaseLink(row.caseName)}</td>
                     <td>${row.cusip}</td>
                     <td>${row.accountName}</td>
                     <td>${row.accountNumber}</td>
@@ -1674,10 +1734,10 @@
             const tbody = document.getElementById('nonusTableBody');
             tbody.innerHTML = '';
             
-            nonusData.forEach(row => {
+            filterForCurrentClient(nonusData).forEach(row => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${row.caseName}</td>
+                    <td>${getCaseLink(row.caseName)}</td>
                     <td>${row.cusip}</td>
                     <td>${row.accountName}</td>
                     <td>${row.accountNumber}</td>
@@ -1693,10 +1753,73 @@
             });
         }
 
+        function updateReportTitle() {
+            const titleEl = document.getElementById('reportTitle');
+            const clientNameEl = document.getElementById('reportClientName');
+            if (!titleEl || !clientNameEl) return;
+            
+            const clientName = clientNameEl.textContent || '';
+            if (currentClientKey === 'demo') {
+                titleEl.textContent = 'FRT FINANCIAL RECOVERY TECH';
+            } else {
+                titleEl.textContent = clientName;
+            }
+        }
+
+        function updateReportPeriodHeader() {
+            const range = getCurrentPeriodRange();
+            const startEl = document.getElementById('reportPeriodStart');
+            const endEl = document.getElementById('reportPeriodEnd');
+            if (range && startEl && endEl) {
+                startEl.textContent = range.start;
+                endEl.textContent = range.end;
+            }
+        }
+
+        function refreshStatusReportView() {
+            updateReportTitle();
+            updateReportPeriodHeader();
+            populateSettledNewlyPaidTable();
+            populateSettledTable();
+            populateAntitrustNewlyPaidTable();
+            populateAntitrustTable();
+            populateNonusNewlyPaidTable();
+            populateNonusTable();
+            updateKPIs();
+            buildSearchIndex();
+            
+            createRecoveryByMonthChart();
+            createTopCompaniesChart();
+            createCumulativeTrendChart();
+            createRecoveryByTypeChart();
+            createYOYComparisonChart();
+        }
+
         // Client selection
-        document.getElementById('clientSelect').addEventListener('change', function() {
-            document.getElementById('reportClientName').textContent = this.options[this.selectedIndex].text;
-        });
+        const clientSelectEl = document.getElementById('clientSelect');
+        if (clientSelectEl) {
+            clientSelectEl.addEventListener('change', function() {
+                currentClientKey = this.value || 'demo';
+                document.getElementById('reportClientName').textContent = this.options[this.selectedIndex].text;
+                refreshStatusReportView();
+            });
+        }
+
+        const monthSelectEl = document.getElementById('monthSelect');
+        if (monthSelectEl) {
+            monthSelectEl.addEventListener('change', function() {
+                currentMonthKey = this.value || '2024-10';
+                refreshStatusReportView();
+            });
+        }
+
+        const periodSelectEl = document.getElementById('periodSelect');
+        if (periodSelectEl) {
+            periodSelectEl.addEventListener('change', function() {
+                // For this mock, period type is informational; ranges are driven by month.
+                refreshStatusReportView();
+            });
+        }
         
         // Comparison mode selection
         document.getElementById('comparisonMode').addEventListener('change', function() {
@@ -1717,7 +1840,7 @@
             // Add settled data
             settledData.forEach((row, idx) => {
                 allSearchData.push({
-                    type: 'Settled Action Recovery',
+                    type: 'US & CA Settlements',
                     category: 'settled',
                     company: row.company || '',
                     cusip: row.cusip || '',
@@ -1731,7 +1854,7 @@
             
             settledNewlyPaidData.forEach((row, idx) => {
                 allSearchData.push({
-                    type: 'Settled Action Recovery - Newly Paid',
+                    type: 'US & CA Settlements - Newly Paid',
                     category: 'settled',
                     company: row.company || '',
                     cusip: row.cusip || '',
@@ -1746,7 +1869,7 @@
             // Add antitrust data
             antitrustData.forEach((row, idx) => {
                 allSearchData.push({
-                    type: 'Antitrust Recovery',
+                    type: 'US Antitrust Settlements',
                     category: 'antitrust',
                     company: row.caseName || '',
                     cusip: '',
@@ -1760,7 +1883,7 @@
             
             antitrustNewlyPaidData.forEach((row, idx) => {
                 allSearchData.push({
-                    type: 'Antitrust Recovery - Newly Paid',
+                    type: 'US Antitrust Settlements - Newly Paid',
                     category: 'antitrust',
                     company: row.caseName || '',
                     cusip: '',
@@ -1775,7 +1898,7 @@
             // Add non-US data
             nonusData.forEach((row, idx) => {
                 allSearchData.push({
-                    type: 'Non-US Group Recovery',
+                    type: 'Non-US Group Actions',
                     category: 'nonus',
                     company: row.caseName || '',
                     cusip: row.cusip || '',
@@ -1790,7 +1913,7 @@
             
             nonusNewlyPaidData.forEach((row, idx) => {
                 allSearchData.push({
-                    type: 'Non-US Group Recovery - Newly Paid',
+                    type: 'Non-US Group Actions - Newly Paid',
                     category: 'nonus',
                     company: row.caseName || '',
                     cusip: row.cusip || '',
@@ -1959,7 +2082,10 @@
             }
             
             const ctx = canvas.getContext('2d');
-            const monthlyData = [0, 0, 145000, 0, 0, 783416, 0, 180750, 0, 2499756];
+            const baseMonthlyData = [0, 0, 145000, 0, 0, 783416, 0, 180750, 0, 2499756];
+            const profile = getStatusReportProfile();
+            const factor = profile ? profile.factor : 1;
+            const monthlyData = baseMonthlyData.map(v => Math.round(v * factor));
             
             chartInstances.recoveryByMonth = new Chart(ctx, {
                 type: type,
@@ -2018,9 +2144,9 @@
                 chartInstances.topCompanies.destroy();
             }
             
-            // Calculate top companies by recovery
+            // Calculate top companies by recovery (filtered per client)
             const companyTotals = {};
-            settledData.forEach(row => {
+            filterForCurrentClient(settledData).forEach(row => {
                 const recovered = parseFloat(row.recovered.replace(/[$,]/g, ''));
                 if (!companyTotals[row.company]) {
                     companyTotals[row.company] = 0;
@@ -2090,7 +2216,10 @@
             }
             
             // Historical monthly data (cumulative)
-            const monthlyData = [0, 0, 145000, 145000, 145000, 928416, 928416, 1109166, 1109166, 3608922];
+            const baseMonthlyData = [0, 0, 145000, 145000, 145000, 928416, 928416, 1109166, 1109166, 3608922];
+            const profile = getStatusReportProfile();
+            const factor = profile ? profile.factor : 1;
+            const monthlyData = baseMonthlyData.map(v => Math.round(v * factor));
             const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'];
             
             const ctx = canvas.getContext('2d');
@@ -2156,12 +2285,24 @@
             }
             
             const ctx = canvas.getContext('2d');
+
+            // Totals by program type based on filtered data
+            const settledTotals = filterForCurrentClient(settledData)
+                .concat(filterForCurrentClient(settledNewlyPaidData))
+                .reduce((sum, row) => sum + parseFloat((row.recovered || '0').replace(/[$,]/g, '')), 0);
+            
+            const antitrustTotals = filterForCurrentClient(antitrustNewlyPaidData)
+                .reduce((sum, row) => sum + parseFloat((row.recovered || '0').replace(/[$,]/g, '')), 0);
+            
+            const nonusTotals = filterForCurrentClient(nonusNewlyPaidData)
+                .reduce((sum, row) => sum + parseFloat((row.recovered || '0').replace(/[$,]/g, '')), 0);
+
             chartInstances.recoveryByType = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Settled Action', 'Antitrust', 'Non-US Group'],
+                    labels: ['US & CA Settlements', 'US Antitrust Settlements', 'Non-US Group Actions'],
                     datasets: [{
-                        data: [2499756, 127179, 0],
+                        data: [settledTotals, antitrustTotals, nonusTotals],
                         backgroundColor: [
                             'rgba(0, 120, 212, 0.8)',
                             'rgba(16, 124, 16, 0.8)',
@@ -2212,6 +2353,10 @@
             }
             
             const ctx = canvas.getContext('2d');
+            const profile = getStatusReportProfile();
+            const factor = profile ? profile.factor : 1;
+            const base2024 = [1450000, 928416, 2499756, null];
+            const scaled2024 = base2024.map(v => (v == null ? null : Math.round(v * factor)));
             chartInstances.yoyComparison = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -2224,7 +2369,7 @@
                         borderWidth: 1
                     }, {
                         label: '2024',
-                        data: [1450000, 928416, 2499756, null],
+                        data: scaled2024,
                         backgroundColor: 'rgba(0, 120, 212, 0.8)',
                         borderColor: '#0078d4',
                         borderWidth: 2
@@ -2662,13 +2807,13 @@
             let totalSettlementFund = 0;
             
             // From settled newly paid
-            settledNewlyPaidData.forEach(row => {
+            filterForCurrentClient(settledNewlyPaidData).forEach(row => {
                 totalRecovered += parseFloat(row.recovered.replace(/[$,]/g, ''));
                 totalClaims++;
             });
             
             // From settled data (including previously filed)
-            settledData.forEach(row => {
+            filterForCurrentClient(settledData).forEach(row => {
                 totalRecovered += parseFloat(row.recovered.replace(/[$,]/g, ''));
                 totalClaims++;
                 totalSettlementFund += parseFloat(row.fund.replace(/[$,]/g, ''));
@@ -2685,7 +2830,9 @@
             document.getElementById('kpiRecoveryRate').textContent = recoveryRate + '%';
             
             // Calculate pending recovery (estimate - this would come from actual data)
-            const pendingRecovery = 7123456; // Placeholder - would calculate from filed but unpaid claims
+            const profile = getStatusReportProfile();
+            const factor = profile ? profile.factor : 1;
+            const pendingRecovery = Math.round(7123456 * factor); // Placeholder scaled per client
             document.getElementById('kpiPendingRecovery').textContent = '$' + pendingRecovery.toLocaleString('en-US', {maximumFractionDigits: 0});
             
             // Update comparisons if mode is active
@@ -2693,31 +2840,10 @@
         }
         
         // Update alert count dynamically
-        function updateAlertCount() {
-            const alertCount = document.querySelectorAll('.alert-item').length;
-            document.getElementById('alertCount').textContent = alertCount;
-        }
-
         // Initialize
         window.addEventListener('DOMContentLoaded', () => {
-            populateSettledNewlyPaidTable();
-            populateSettledTable();
-            populateAntitrustNewlyPaidTable();
-            populateAntitrustTable();
-            populateNonusNewlyPaidTable();
-            populateNonusTable();
-            updateKPIs();
-            updateAlertCount();
-            buildSearchIndex();
-            
-            // Create charts after a short delay to ensure Chart.js is loaded
-            setTimeout(() => {
-                createRecoveryByMonthChart();
-                createTopCompaniesChart();
-                createCumulativeTrendChart();
-                createRecoveryByTypeChart();
-                createYOYComparisonChart();
-            }, 500);
+            // Initial render for default client/period
+            refreshStatusReportView();
         });
     </script>
 </body>

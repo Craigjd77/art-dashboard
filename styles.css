@@ -788,6 +788,34 @@ body {
     gap: 12px;
 }
 
+.grid-5 {
+    display: -webkit-grid;
+    display: grid;
+    -webkit-grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(5, 1fr);
+    -webkit-column-gap: 10px;
+    -moz-column-gap: 10px;
+    column-gap: 10px;
+    -webkit-row-gap: 10px;
+    -moz-row-gap: 10px;
+    row-gap: 10px;
+    gap: 10px;
+}
+
+.grid-6 {
+    display: -webkit-grid;
+    display: grid;
+    -webkit-grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(6, 1fr);
+    -webkit-column-gap: 8px;
+    -moz-column-gap: 8px;
+    column-gap: 8px;
+    -webkit-row-gap: 8px;
+    -moz-row-gap: 8px;
+    row-gap: 8px;
+    gap: 8px;
+}
+
 /* Footer */
 .footer {
     background: var(--pbi-card-bg);

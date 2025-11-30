@@ -3,18 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Case Details | FRT Work Tools</title>
-    
-    <!-- Chart.js for visualizations -->
+    <title>Atos SE (Master Case) - Case Details | FRT Work Tools</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    
-    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Shared Styles -->
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="style-switcher.css">
-    
     <style>
         .case-header {
             background: linear-gradient(135deg, var(--pbi-primary) 0%, var(--pbi-primary-dark) 100%);
@@ -209,7 +202,7 @@
         
         .risk-indicator.high {
             background: #ffebee;
-            color: #c62828;
+            color: #c62838;
         }
         
         .risk-dot {
@@ -225,7 +218,6 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
     <div class="header">
         <div class="header-left">
             <div class="logo">FRT Work Tools</div>
@@ -236,7 +228,6 @@
             <button>Share</button>
         </div>
     </div>
-
     <!-- Navigation Tabs -->
     <div class="nav-tabs">
         <button class="nav-tab">
@@ -261,22 +252,18 @@
         </button>
         <button class="nav-tab">+</button>
     </div>
-
-    <!-- Main Container -->
     <div class="main-container">
         <div class="content-area" style="grid-column: 1 / -1;">
-            <!-- Case Header -->
             <div class="case-header">
                 <div>
-                    <div class="case-title" id="caseTitle">British American Tobacco Plc (Master Case)</div>
-                    <div class="case-subtitle">Case ID: BAT-2024-001 | Country: GB | Status: <span class="case-status-badge status-eligible">ELIGIBLE</span></div>
+                    <div class="case-title">Atos SE (Master Case)</div>
+                    <div class="case-subtitle">Case ID: ATOS-2024-001 | Country: FR | Status: <span class="case-status-badge status-requested">REQUESTED</span></div>
                 </div>
                 <a href="opt-in-monitoring.html" class="back-button">
                     <i class="fas fa-arrow-left"></i>
                     Back to Cases
                 </a>
             </div>
-
             <!-- Main Details Grid -->
             <div class="details-grid">
                 <!-- Left Column: Main Details -->
@@ -288,18 +275,18 @@
                             Case Summary
                         </div>
                         <div class="text-content">
-                            <strong>Fraud Allegations:</strong> British American Tobacco Plc and certain executives are alleged to have made materially false and misleading statements regarding the company's compliance with anti-bribery and corruption laws, as well as its business practices in various international markets. The complaint alleges violations of Sections 10(b) and 20(a) of the Securities Exchange Act of 1934.
+                            <strong>Fraud Allegations:</strong> Atos SE and certain executives are alleged to have made materially false and misleading statements regarding the company's financial performance, business outlook, and operational capabilities. The complaint alleges violations of French securities laws and European Union market abuse regulations.
                         </div>
                         <div class="text-content">
-                            <strong>Class Period:</strong> The class period covers purchases of British American Tobacco securities between <strong>February 7, 2019</strong> and <strong>December 6, 2023</strong>.
+                            <strong>Class Period:</strong> The class period covers purchases of Atos SE securities between <strong>February 1, 2019</strong> and <strong>May 1, 2020</strong>.
                         </div>
                         <div class="info-row">
                             <span class="info-label">Filing Date:</span>
-                            <span class="info-value">March 15, 2024</span>
+                            <span class="info-value">March 20, 2024</span>
                         </div>
                         <div class="info-row">
                             <span class="info-label">Lead Plaintiff Deadline:</span>
-                            <span class="info-value">May 14, 2024</span>
+                            <span class="info-value">May 20, 2024</span>
                         </div>
                     </div>
 
@@ -307,14 +294,11 @@
                     <div class="info-section">
                         <div class="section-title">
                             <i class="fas fa-barcode"></i>
-                            CUSIPs
+                            CUSIPs / ISINs
                         </div>
-                        <div class="cusip-list" id="cusipList">
-                            <span class="cusip-tag">110448104</span>
-                            <span class="cusip-tag">110448112</span>
-                            <span class="cusip-tag">110448120</span>
-                            <span class="cusip-tag">110448138</span>
-                            <span class="cusip-tag">110448146</span>
+                        <div class="cusip-list">
+                            <span class="cusip-tag">FR0000051732</span>
+                            <span class="cusip-tag">FR0010282825</span>
                         </div>
                     </div>
 
@@ -326,11 +310,11 @@
                         </div>
                         <div class="info-row">
                             <span class="info-label">Opt-in Deadline:</span>
-                            <span class="info-value" style="color: #d13438; font-weight: 700;">April 14, 2026</span>
+                            <span class="info-value" style="color: #d13438; font-weight: 700;">September 30, 2025</span>
                         </div>
                         <div class="info-row">
                             <span class="info-label">Document Submission Deadline:</span>
-                            <span class="info-value">March 14, 2026</span>
+                            <span class="info-value">August 30, 2025</span>
                         </div>
                         <div class="info-row">
                             <span class="info-label">Settlement Hearing:</span>
@@ -338,7 +322,7 @@
                         </div>
                         <div class="info-row">
                             <span class="info-label">Expected Settlement Date:</span>
-                            <span class="info-value">Q2 2026</span>
+                            <span class="info-value">Q1 2026</span>
                         </div>
                     </div>
 
@@ -364,8 +348,8 @@
                                 <tfoot>
                                     <tr style="background: var(--pbi-background); font-weight: 600;">
                                         <td>Total</td>
-                                        <td style="text-align: right;" id="totalDamages">$194,115</td>
-                                        <td style="text-align: right;" id="totalShares">45,230</td>
+                                        <td style="text-align: right;" id="totalDamages">$3,702,082</td>
+                                        <td style="text-align: right;" id="totalShares">125,000</td>
                                         <td></td>
                                     </tr>
                                 </tfoot>
@@ -401,15 +385,15 @@
                         </div>
                         <div class="info-row">
                             <span class="info-label">Organizer Damages:</span>
-                            <span class="info-value">$194,115</span>
+                            <span class="info-value">$3,702,082</span>
                         </div>
                         <div class="info-row">
                             <span class="info-label"># of Accounts:</span>
-                            <span class="info-value">3</span>
+                            <span class="info-value">1</span>
                         </div>
                         <div class="info-row">
                             <span class="info-label">Jurisdiction:</span>
-                            <span class="info-value risk-high">GB (High Risk)</span>
+                            <span class="info-value risk-high">FR (High Risk)</span>
                         </div>
                         <div class="info-row">
                             <span class="info-label">Case Type:</span>
@@ -425,15 +409,15 @@
                         </div>
                         <div class="info-row">
                             <span class="info-label">Organizer Name:</span>
-                            <span class="info-value">Master Case Organizer Ltd.</span>
+                            <span class="info-value">European Litigation Partners</span>
                         </div>
                         <div class="info-row">
                             <span class="info-label">Funder Name:</span>
-                            <span class="info-value">Litigation Funding Partners</span>
+                            <span class="info-value">Continental Funding Group</span>
                         </div>
                         <div class="info-row">
                             <span class="info-label">Organizer Contact:</span>
-                            <span class="info-value" style="font-size: 10px;">legal@mastercase.com</span>
+                            <span class="info-value" style="font-size: 10px;">legal@eurocase.com</span>
                         </div>
                     </div>
 
@@ -448,23 +432,23 @@
                         </div>
                         <div class="info-row">
                             <span class="info-label">Legal Strength:</span>
-                            <span class="score-badge score-good">Good (7.5/10)</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Economic Viability:</span>
-                            <span class="score-badge score-excellent">Excellent (9.0/10)</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Strategic Value:</span>
                             <span class="score-badge score-good">Good (7.0/10)</span>
                         </div>
                         <div class="info-row">
+                            <span class="info-label">Economic Viability:</span>
+                            <span class="score-badge score-excellent">Excellent (8.5/10)</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Strategic Value:</span>
+                            <span class="score-badge score-fair">Fair (6.0/10)</span>
+                        </div>
+                        <div class="info-row">
                             <span class="info-label">Governance Risk:</span>
-                            <span class="score-badge score-fair">Fair (6.5/10)</span>
+                            <span class="score-badge score-fair">Fair (6.0/10)</span>
                         </div>
                         <div class="info-row" style="margin-top: 8px; padding-top: 12px; border-top: 2px solid var(--pbi-border);">
                             <span class="info-label" style="font-weight: 600;">Overall Score:</span>
-                            <span class="info-value" style="font-size: 14px; color: var(--pbi-primary);">7.5/10</span>
+                            <span class="info-value" style="font-size: 14px; color: var(--pbi-primary);">6.9/10</span>
                         </div>
                     </div>
 
@@ -477,10 +461,10 @@
                         <div style="margin-bottom: 12px;">
                             <div class="risk-indicator high">
                                 <span class="risk-dot high"></span>
-                                <span>Jurisdiction Risk: High (GB)</span>
+                                <span>Jurisdiction Risk: High (FR)</span>
                             </div>
                             <div style="font-size: 10px; color: var(--pbi-text-secondary); margin-top: 4px; margin-left: 20px;">
-                                Based on: Anonymity, Cost, Discovery burden
+                                Based on: Civil law system, Discovery burden, Cost structure, Anonymity concerns
                             </div>
                         </div>
                         <div style="margin-bottom: 12px;">
@@ -489,11 +473,11 @@
                                 <span>Case-Specific Risk: Medium</span>
                             </div>
                             <div style="font-size: 10px; color: var(--pbi-text-secondary); margin-top: 4px; margin-left: 20px;">
-                                Complex regulatory environment, multiple jurisdictions
+                                Complex financial reporting allegations, multiple jurisdictions involved
                             </div>
                         </div>
                         <div class="text-content" style="font-size: 10px; margin-top: 8px;">
-                            <strong>Risk Factors:</strong> High discovery burden in UK jurisdiction, potential for extensive document production requirements, and complex multi-jurisdictional coordination.
+                            <strong>Risk Factors:</strong> High discovery burden in French jurisdiction with civil law system requiring extensive document production. French courts have different procedural requirements compared to common law jurisdictions. Potential for higher costs due to translation requirements and local legal representation. Limited anonymity protections compared to some other European jurisdictions.
                         </div>
                     </div>
 
@@ -522,26 +506,16 @@
             </div>
         </div>
     </div>
-
-    <!-- Footer -->
     <div class="footer">
-        <div class="page-info">
-            <span>Case Details</span>
-        </div>
-        <div style="display: flex; align-items: center; gap: 16px;">
-            <span>Zoom: 100%</span>
-        </div>
+        <div class="page-info"><span>Case Details - Atos SE (Master Case)</span></div>
     </div>
-
     <!-- Style Switcher -->
     <script src="style-switcher.js"></script>
 
     <script>
         // Sample account damages data
         const accountDamages = [
-            { account: 'Broker CLIENT A - Account 12345', loss: 120000, shares: 28000, status: 'FILED' },
-            { account: 'Broker CLIENT A - Account 67890', loss: 54115, shares: 12500, status: 'FILED' },
-            { account: 'Private Wealth Client #1', loss: 20000, shares: 4730, status: 'PENDING' },
+            { account: 'Broker CLIENT A - Account 12345', loss: 3702082, shares: 125000, status: 'REQUESTED' },
         ];
 
         function formatCurrency(amount) {
@@ -582,19 +556,6 @@
             document.getElementById('totalShares').textContent = totalShares.toLocaleString();
         }
 
-        // Get case details from URL parameter
-        function loadCaseDetails() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const caseId = urlParams.get('case');
-            
-            // In a real app, this would fetch from an API
-            // For now, we'll use the case ID to determine which case to show
-            if (caseId) {
-                // Update case title and details based on case ID
-                // This is a placeholder - you'd fetch real data
-            }
-        }
-
         // Tab navigation
         document.querySelectorAll('.nav-tab').forEach(tab => {
             tab.addEventListener('click', function() {
@@ -604,6 +565,10 @@
                     window.location.href = 'eligibility-filings.html';
                 } else if (this.textContent.includes('STATUS REPORTS')) {
                     window.location.href = 'client-status-reports.html';
+                } else if (this.textContent.includes('REMITTANCE')) {
+                    window.location.href = 'client-remittance.html';
+                } else if (this.textContent.includes('ACCOUNT MANAGER')) {
+                    window.location.href = 'account-manager-dashboard.html';
                 } else {
                     document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
                     this.classList.add('active');
@@ -614,9 +579,7 @@
         // Initialize
         window.addEventListener('DOMContentLoaded', () => {
             populateDamagesTable();
-            loadCaseDetails();
         });
     </script>
 </body>
 </html>
-

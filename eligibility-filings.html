@@ -64,6 +64,261 @@
             padding: 8px;
             margin-bottom: 8px;
         }
+        
+        .toggle-btn.active {
+            background: var(--pbi-primary) !important;
+            color: white !important;
+            border-color: var(--pbi-primary) !important;
+        }
+        
+        .toggle-btn:hover:not(.active) {
+            background: var(--pbi-hover);
+            border-color: var(--pbi-primary);
+        }
+        
+        /* Professional Institutional Styling */
+        .viz-card {
+            padding: 12px !important;
+            margin-bottom: 12px !important;
+        }
+        
+        .viz-title {
+            font-size: 12px !important;
+            font-weight: 600 !important;
+            margin-bottom: 6px !important;
+            color: var(--pbi-text-primary) !important;
+            letter-spacing: 0.3px;
+        }
+        
+        .viz-subtitle {
+            font-size: 10px !important;
+            color: var(--pbi-text-secondary) !important;
+            margin-bottom: 10px !important;
+        }
+        
+        .bar-chart-container {
+            position: relative;
+            height: 240px !important;
+            width: 100% !important;
+        }
+        
+        .bar-chart-container canvas {
+            max-height: 240px !important;
+            width: 100% !important;
+            height: 240px !important;
+        }
+        
+        .donut-container {
+            position: relative;
+            height: 240px !important;
+            width: 100% !important;
+        }
+        
+        .donut-container canvas {
+            max-height: 240px !important;
+            max-width: 240px !important;
+            width: 240px !important;
+            height: 240px !important;
+        }
+        
+        .grid-4 > .viz-card,
+        .grid-5 > .viz-card,
+        .grid-6 > .viz-card {
+            padding: 8px 10px !important;
+        }
+        
+        .grid-6 {
+            display: -webkit-grid;
+            display: grid;
+            -webkit-grid-template-columns: repeat(6, 1fr);
+            grid-template-columns: repeat(6, 1fr);
+            -webkit-column-gap: 8px;
+            -moz-column-gap: 8px;
+            column-gap: 8px;
+            -webkit-row-gap: 8px;
+            -moz-row-gap: 8px;
+            row-gap: 8px;
+            gap: 8px;
+        }
+        
+        .kpi-card-flashy {
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        
+        .kpi-card-flashy:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        @media (max-width: 1600px) {
+            .grid-6 {
+                grid-template-columns: repeat(3, 1fr) !important;
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .grid-6 {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+        
+        /* Compact layout - reduce all spacing */
+        .content-area {
+            gap: 8px !important;
+        }
+        
+        .viz-card {
+            margin-bottom: 8px !important;
+            padding: 10px !important;
+        }
+        
+        .bar-chart-container {
+            height: 200px !important;
+        }
+        
+        .bar-chart-container canvas {
+            max-height: 200px !important;
+            height: 200px !important;
+        }
+        
+        .donut-container {
+            height: 200px !important;
+        }
+        
+        .donut-container canvas {
+            max-height: 200px !important;
+            max-width: 200px !important;
+            width: 200px !important;
+            height: 200px !important;
+        }
+        
+        .data-table {
+            font-size: 10px !important;
+        }
+        
+        /* Upcoming Deadlines Alert Section */
+        .alert-section {
+            background: var(--pbi-card-bg);
+            border: 1px solid var(--pbi-border);
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 12px;
+            box-shadow: var(--pbi-shadow);
+        }
+        
+        .alert-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .alert-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--pbi-text-primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .alert-badge {
+            background: #d13438;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 9px;
+            font-weight: 600;
+        }
+        
+        .alert-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 8px;
+            border-bottom: 1px solid var(--pbi-border-light);
+            font-size: 10px;
+        }
+        
+        .alert-item:last-child {
+            border-bottom: none;
+        }
+        
+        .alert-priority {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        .alert-priority.critical {
+            background: #d13438;
+            box-shadow: 0 0 4px rgba(209, 52, 56, 0.5);
+        }
+        
+        .alert-priority.warning {
+            background: #ffb900;
+            box-shadow: 0 0 4px rgba(255, 185, 0, 0.5);
+        }
+        
+        .alert-priority.info {
+            background: #0078d4;
+        }
+        
+        .alert-case {
+            font-weight: 600;
+            color: var(--pbi-text-primary);
+            flex: 1;
+            font-size: 10px;
+        }
+        
+        .alert-deadline {
+            color: var(--pbi-text-secondary);
+            font-family: 'Courier New', monospace;
+            min-width: 90px;
+            font-size: 10px;
+        }
+        
+        .alert-days {
+            font-size: 9px;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        
+        .alert-days.critical {
+            background: rgba(209, 52, 56, 0.1);
+            color: #d13438;
+        }
+        
+        .alert-days.warning {
+            background: rgba(255, 185, 0, 0.1);
+            color: #ca5010;
+        }
+        
+        .alert-days.info {
+            background: rgba(0, 120, 212, 0.1);
+            color: #0078d4;
+        }
+        
+        .data-table th {
+            padding: 6px 8px !important;
+            font-size: 10px !important;
+            font-weight: 600 !important;
+        }
+        
+        .data-table td {
+            padding: 6px 8px !important;
+            font-size: 10px !important;
+        }
+        
+        .badge {
+            font-size: 9px !important;
+            padding: 2px 6px !important;
+        }
     </style>
 </head>
 <body>
@@ -106,167 +361,185 @@
 
     <!-- Main Container -->
     <div class="main-container">
-        <!-- Left Panel (Eligibility & Filings) -->
-        <div class="left-panel">
-            <!-- Client Selector -->
-            <div class="client-selector">
-                <label>Select a Client</label>
-                <select id="clientSelect">
+        <!-- Main Content Area - Full Width for Simplified Layout -->
+        <div class="content-area" style="grid-column: 1 / -1;">
+            <!-- Client Selector - Top Left -->
+            <div style="display: flex; justify-content: flex-start; align-items: center; margin-bottom: 8px; gap: 8px;">
+                <label style="font-size: 11px; font-weight: 500; color: var(--pbi-text-primary);">Client:</label>
+                <select id="clientSelect" style="padding: 4px 10px; font-size: 11px; border: 1px solid var(--pbi-border); border-radius: 2px; min-width: 200px;">
                     <option value="DEMOFRTCLIENT" selected>DEMOFRTCLIENT</option>
                     <option value="CLIENT2">Client 2</option>
                     <option value="CLIENT3">Client 3</option>
                 </select>
             </div>
 
-            <!-- KPI Cards -->
-            <div class="kpi-grid">
-                <div class="kpi-card">
-                    <div class="kpi-label">Recognized Loss</div>
-                    <div class="kpi-value" id="recognizedLoss">$393.6M</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-label">Est. Recovery (NET)</div>
-                    <div class="kpi-value" id="estRecovery">$16.7M</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-label">Total Est FRT Fees</div>
-                    <div class="kpi-value" id="totalFees">$0.0</div>
-                </div>
+            <!-- Toggle Buttons - View Type (Less Prominent) -->
+            <div style="display: flex; gap: 4px; margin-bottom: 8px; justify-content: flex-end;">
+                <button class="toggle-btn active" id="eligibleBtn" style="padding: 4px 10px; font-size: 9px; font-weight: 500; border: 1px solid var(--pbi-border); background: var(--pbi-primary); color: white; border-radius: 2px; cursor: pointer; transition: all 0.2s;">
+                    Eligible
+                </button>
+                <button class="toggle-btn" id="filedBtn" style="padding: 4px 10px; font-size: 9px; font-weight: 500; border: 1px solid var(--pbi-border); background: var(--pbi-card-bg); color: var(--pbi-text-secondary); border-radius: 2px; cursor: pointer; transition: all 0.2s;">
+                    Filed
+                </button>
             </div>
 
-            <!-- Toggle Buttons -->
-            <div class="toggle-group">
-                <button class="toggle-btn active" id="eligibleBtn">ELIGIBLE</button>
-                <button class="toggle-btn" id="filedBtn">FILED</button>
-            </div>
-
-            <!-- Date Range -->
-            <div class="date-range">
-                <i class="fas fa-calendar-alt" style="color: var(--pbi-text-secondary);"></i>
-                <input type="date" id="startDate" value="2013-04-25">
-                <span>to</span>
-                <input type="date" id="endDate" value="2026-04-14">
-            </div>
-
-            <!-- Recently Filed Claims -->
-            <div class="viz-card">
-                <div class="viz-title">Recently Filed Claims</div>
-                <div class="recent-claims-table">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Case Name</th>
-                                <th>Deadline</th>
-                                <th style="text-align: right;">Loss</th>
-                                <th style="text-align: center;">Accts</th>
-                                <th>Filed Date</th>
-                            </tr>
-                        </thead>
-                        <tbody id="recentClaimsBody">
-                            <!-- Data populated by JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Main Content Area -->
-        <div class="content-area">
-            <!-- Quick View Summary Cards -->
-            <div class="grid-4" style="margin-bottom: 12px;">
-                <div class="viz-card" style="border-left: 4px solid var(--pbi-primary); padding: 12px;">
-                    <div style="font-size: 10px; color: var(--pbi-text-secondary); margin-bottom: 4px;">TOTAL ELIGIBLE</div>
-                    <div style="font-size: 20px; font-weight: 600; color: var(--pbi-primary);">$393.6M</div>
-                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">Organizer Damages</div>
-                </div>
-                <div class="viz-card" style="border-left: 4px solid var(--chart-green); padding: 12px;">
-                    <div style="font-size: 10px; color: var(--pbi-text-secondary); margin-bottom: 4px;">FILED CASES</div>
-                    <div style="font-size: 20px; font-weight: 600; color: var(--chart-green);">127</div>
-                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">Total Claims Filed</div>
-                </div>
-                <div class="viz-card" style="border-left: 4px solid var(--chart-orange); padding: 12px;">
-                    <div style="font-size: 10px; color: var(--pbi-text-secondary); margin-bottom: 4px;">RECOVERIES</div>
-                    <div style="font-size: 20px; font-weight: 600; color: var(--chart-orange);">$16.7M</div>
-                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">Net to Client</div>
-                </div>
-                <div class="viz-card" style="border-left: 4px solid var(--chart-purple); padding: 12px;">
-                    <div style="font-size: 10px; color: var(--pbi-text-secondary); margin-bottom: 4px;">PENDING</div>
-                    <div style="font-size: 20px; font-weight: 600; color: var(--chart-purple);">$2.1M</div>
-                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">Upcoming Disbursements</div>
-                </div>
-            </div>
-
-            <!-- Action Items Quick View -->
-            <div class="grid-2" style="margin-bottom: 12px;">
-                <div class="viz-card" style="border-left: 4px solid #ff8c00;">
-                    <div class="viz-title" style="display: flex; justify-content: space-between; align-items: center;">
-                        <span><i class="fas fa-exclamation-triangle" style="color: #ff8c00; margin-right: 6px;"></i>Action Required</span>
-                        <span class="badge" style="background: #ff8c00;">12</span>
+            <!-- Hero Summary Section - Eligibility & Filings Focused KPIs -->
+            <div class="grid-4" style="margin-bottom: 8px; gap: 8px;">
+                <div class="kpi-card-flashy" style="background: linear-gradient(135deg, #0078d4 0%, #005a9e 100%); border: none; padding: 12px 14px; min-width: 0;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                        <i class="fas fa-chart-line" style="font-size: 18px; color: rgba(255,255,255,0.9);"></i>
+                        <span style="font-size: 10px; color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Recognized Loss</span>
                     </div>
-                    <div style="font-size: 10px; color: var(--pbi-text-secondary); margin: 8px 0;">
-                        Cases with upcoming deadlines or missing documentation
+                    <div style="font-size: 28px; font-weight: 700; color: white; line-height: 1; margin-bottom: 4px;" id="recognizedLoss">$287.5M</div>
+                    <div style="font-size: 9px; color: rgba(255,255,255,0.8);">Total recognized loss</div>
+                </div>
+                <div class="kpi-card-flashy" style="background: linear-gradient(135deg, #107c10 0%, #0d6b0d 100%); border: none; padding: 12px 14px; min-width: 0;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                        <i class="fas fa-dollar-sign" style="font-size: 18px; color: rgba(255,255,255,0.9);"></i>
+                        <span style="font-size: 10px; color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Expected Recovery</span>
                     </div>
-                    <div style="max-height: 150px; overflow-y: auto;">
-                        <table class="data-table" style="font-size: 9px;">
-                            <thead>
-                                <tr>
-                                    <th>Case</th>
-                                    <th>Deadline</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Apple Inc Securities</td>
-                                    <td>11-30-2024</td>
-                                    <td><span class="badge" style="background: #ff8c00;">Urgent</span></td>
-                                </tr>
-                                <tr>
-                                    <td>JPMorgan Chase</td>
-                                    <td>12-15-2024</td>
-                                    <td><span class="badge" style="background: #ff8c00;">Docs Needed</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Microsoft Corp</td>
-                                    <td>12-20-2024</td>
-                                    <td><span class="badge" style="background: #ff8c00;">Review</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div style="font-size: 28px; font-weight: 700; color: white; line-height: 1; margin-bottom: 4px;" id="totalPotential">$393.6M</div>
+                    <div style="font-size: 9px; color: rgba(255,255,255,0.8);">Potential recovery amount</div>
+                </div>
+                <div class="kpi-card-flashy" style="background: linear-gradient(135deg, #ff8c00 0%, #e67e00 100%); border: none; padding: 12px 14px; min-width: 0;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                        <i class="fas fa-file-contract" style="font-size: 18px; color: rgba(255,255,255,0.9);"></i>
+                        <span style="font-size: 10px; color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Cases Filed</span>
+                    </div>
+                    <div style="font-size: 28px; font-weight: 700; color: white; line-height: 1; margin-bottom: 4px;" id="casesFiled">127</div>
+                    <div style="font-size: 9px; color: rgba(255,255,255,0.8);">Active claims in process</div>
+                </div>
+                <div class="kpi-card-flashy" style="background: linear-gradient(135deg, #8764b8 0%, #6b4f9a 100%); border: none; padding: 12px 14px; min-width: 0;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                        <i class="fas fa-list-check" style="font-size: 18px; color: rgba(255,255,255,0.9);"></i>
+                        <span style="font-size: 10px; color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Eligible Cases</span>
+                    </div>
+                    <div style="font-size: 28px; font-weight: 700; color: white; line-height: 1; margin-bottom: 4px;" id="eligibleCases">145</div>
+                    <div style="font-size: 9px; color: rgba(255,255,255,0.8);">Cases available to file</div>
+                </div>
+            </div>
+
+            <!-- Case Tracking Search -->
+            <div class="viz-card" style="margin-bottom: 8px; border-left: 3px solid var(--pbi-primary); padding: 8px 10px;">
+                <div class="viz-title" style="margin-bottom: 8px; font-size: 12px; font-weight: 600;">
+                    Is FRT Tracking This Case?
+                </div>
+                <div style="position: relative;">
+                    <input type="text" id="caseSearchInput" placeholder="Type case name, company, or notice details..." 
+                           style="width: 100%; padding: 8px 12px; padding-right: 36px; font-size: 11px; border: 1px solid var(--pbi-border); border-radius: 2px; background: var(--pbi-card-bg); color: var(--pbi-text-primary);"
+                           autocomplete="off">
+                    <i class="fas fa-search" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--pbi-text-secondary); pointer-events: none;"></i>
+                    <div id="searchResults" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--pbi-card-bg); border: 1px solid var(--pbi-border); border-top: none; border-radius: 0 0 2px 2px; max-height: 300px; overflow-y: auto; z-index: 1000; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin-top: 1px;"></div>
+                </div>
+            </div>
+
+            <!-- Upcoming Deadlines -->
+            <div class="alert-section" style="margin-bottom: 8px; padding: 8px;">
+                <div class="alert-header" style="margin-bottom: 6px;">
+                    <div class="alert-title" style="font-size: 11px;">
+                        <i class="fas fa-exclamation-triangle" style="color: #d13438; font-size: 12px;"></i>
+                        Upcoming Deadlines
+                        <span class="alert-badge" id="alertCount" style="font-size: 8px; padding: 1px 5px;">3</span>
                     </div>
                 </div>
-                <div class="viz-card" style="border-left: 4px solid var(--chart-green);">
-                    <div class="viz-title" style="display: flex; justify-content: space-between; align-items: center;">
-                        <span><i class="fas fa-check-circle" style="color: var(--chart-green); margin-right: 6px;"></i>Recent Activity</span>
-                        <span class="badge" style="background: var(--chart-green);">8</span>
+                <div id="alertItems">
+                    <div class="alert-item">
+                        <div class="alert-priority critical"></div>
+                        <div class="alert-case"><a href="case-foreign-exchange-antitrust.html" style="color: var(--pbi-primary); text-decoration: none; font-weight: 500;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Foreign Exchange Antitrust - Stock (Lending) IFER</a></div>
+                        <div class="alert-deadline">07-08-2024</div>
+                        <div class="alert-days critical">7 days</div>
                     </div>
-                    <div style="font-size: 10px; color: var(--pbi-text-secondary); margin: 8px 0;">
+                    <div class="alert-item">
+                        <div class="alert-priority warning"></div>
+                        <div class="alert-case">BHP Billiton - Non-US Group Actions</div>
+                        <div class="alert-deadline">11-30-2024</div>
+                        <div class="alert-days warning">40 days</div>
+                    </div>
+                    <div class="alert-item">
+                        <div class="alert-priority info"></div>
+                        <div class="alert-case">Medibank Private Ltd - Non-US Group Actions</div>
+                        <div class="alert-deadline">12-15-2024</div>
+                        <div class="alert-days info">55 days</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity & Action Required - Swapped -->
+            <div class="grid-2" style="margin-bottom: 8px; gap: 8px;">
+                <div class="viz-card" style="border-left: 3px solid var(--chart-green);">
+                    <div class="viz-title" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Recent Activity</span>
+                        <span class="badge" style="background: var(--chart-green); color: white; padding: 2px 6px; border-radius: 2px; font-size: 9px; font-weight: 600;">8</span>
+                    </div>
+                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-bottom: 8px;">
                         Recently filed claims and recoveries received
                     </div>
-                    <div style="max-height: 150px; overflow-y: auto;">
-                        <table class="data-table" style="font-size: 9px;">
+                    <div style="max-height: 160px; overflow-y: auto;">
+                        <table class="data-table">
                             <thead>
                                 <tr>
                                     <th>Case</th>
                                     <th>Date</th>
-                                    <th>Amount</th>
+                                    <th style="text-align: right;">Amount</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td>Amazon.com Inc</td>
-                                    <td>10-28-2024</td>
-                                    <td style="text-align: right; color: var(--chart-green);">$45,678</td>
+                                    <td class="date-cell">10-28-2024</td>
+                                    <td style="text-align: right; color: var(--chart-green); font-weight: 600;">$45,678</td>
                                 </tr>
                                 <tr>
-                                    <td>Alphabet Inc</td>
-                                    <td>10-25-2024</td>
-                                    <td style="text-align: right; color: var(--chart-green);">$78,901</td>
+                                    <td><a href="case-alphabet-inc.html" style="color: var(--pbi-primary); text-decoration: none; font-weight: 500;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Alphabet Inc</a></td>
+                                    <td class="date-cell">10-25-2024</td>
+                                    <td style="text-align: right; color: var(--chart-green); font-weight: 600;">$78,901</td>
                                 </tr>
                                 <tr>
                                     <td>Berkshire Hathaway</td>
-                                    <td>10-22-2024</td>
-                                    <td style="text-align: right; color: var(--chart-green);">$12,345</td>
+                                    <td class="date-cell">10-22-2024</td>
+                                    <td style="text-align: right; color: var(--chart-green); font-weight: 600;">$12,345</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="case-foreign-exchange-antitrust.html" style="color: var(--pbi-primary); text-decoration: none; font-weight: 500;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Foreign Exchange Antitrust</a></td>
+                                    <td class="date-cell">10-15-2024</td>
+                                    <td style="text-align: right; color: var(--chart-green); font-weight: 600;">$125,678</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="viz-card" style="border-left: 3px solid #ff8c00;">
+                    <div class="viz-title" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Action Required</span>
+                        <span class="badge" style="background: #ff8c00; color: white; padding: 2px 6px; border-radius: 2px; font-size: 9px; font-weight: 600;">12</span>
+                    </div>
+                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-bottom: 8px;">
+                        Cases with upcoming deadlines or missing documentation
+                    </div>
+                    <div style="max-height: 160px; overflow-y: auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Case</th>
+                                    <th>Deadline</th>
+                                    <th style="text-align: center;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><a href="case-apple-inc-securities.html" style="color: var(--pbi-primary); text-decoration: none; font-weight: 500;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Apple Inc Securities</a></td>
+                                    <td class="date-cell" style="font-weight: 600;">11-30-2024</td>
+                                    <td style="text-align: center;"><span class="badge" style="background: #ff8c00; color: white; padding: 2px 6px; border-radius: 2px; font-size: 8px;">Urgent</span></td>
+                                </tr>
+                                <tr>
+                                    <td>JPMorgan Chase</td>
+                                    <td class="date-cell" style="font-weight: 600;">12-15-2024</td>
+                                    <td style="text-align: center;"><span class="badge" style="background: #ff8c00; color: white; padding: 2px 6px; border-radius: 2px; font-size: 8px;">Docs Needed</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Microsoft Corp</td>
+                                    <td class="date-cell" style="font-weight: 600;">12-20-2024</td>
+                                    <td style="text-align: center;"><span class="badge" style="background: #ff8c00; color: white; padding: 2px 6px; border-radius: 2px; font-size: 8px;">Review</span></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -274,107 +547,100 @@
                 </div>
             </div>
 
-            <!-- Organizer Damages Highlight -->
-            <div class="organizer-damages-highlight">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <div style="font-size: 10px; font-weight: 600; color: #ff8c00; margin-bottom: 2px;">ORGANIZER DAMAGES SUMMARY</div>
-                        <div style="font-size: 9px; color: var(--pbi-text-secondary);">
-                            This represents the total potential recovery amount if cases are successful. 
-                            Organizer Damages are calculated before and after case registration.
-                        </div>
-                    </div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 18px; font-weight: 600; color: #ff8c00;">$393.59M</div>
-                        <div style="font-size: 8px; color: var(--pbi-text-secondary);">Total Outstanding</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Outstanding Recognized Loss / Damages Donut Chart -->
-            <div class="viz-card">
-                <div class="viz-title">Outstanding Recognized Loss / Damages</div>
-                <div class="viz-subtitle">Filed Between: 06/28/2013 to 08/15/2025</div>
-                <div class="donut-container">
-                    <canvas id="outstandingDonutChart"></canvas>
-                    <div class="donut-center">
-                        <div class="donut-total">$393.59M</div>
-                        <div class="donut-label">Total</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Two Column: Account Details & Recognized Loss -->
-            <div class="grid-2">
-                <!-- Account Details Bar Chart -->
+            <!-- Charts Section - Two Column Layout -->
+            <div class="grid-2" style="margin-bottom: 8px; gap: 8px;">
+                <!-- Account Details Chart -->
                 <div class="viz-card">
-                    <div class="viz-title">Account Details</div>
-                    <div class="viz-subtitle">Organizer Damages by Account Name</div>
-                    <div class="bar-chart-container" style="height: 250px;">
+                    <div class="viz-title">Account Breakdown</div>
+                    <div class="viz-subtitle" id="accountChartSubtitle">Potential recovery by account</div>
+                    <div class="bar-chart-container">
                         <canvas id="accountDetailsChart"></canvas>
                     </div>
                 </div>
 
-                <!-- Recognized Loss / Damages Bar Chart -->
+                <!-- Cases Filed Chart -->
                 <div class="viz-card">
-                    <div class="viz-title">Recognized Loss / Damages by Case</div>
-                    <div class="viz-subtitle">Filed Between: 06/28/2013 to 08/15/2025</div>
-                    <div class="bar-chart-container" style="height: 250px;">
-                        <canvas id="recognizedLossChart"></canvas>
+                    <div class="viz-title">Top Cases</div>
+                    <div class="viz-subtitle" id="casesChartSubtitle">Largest potential recoveries</div>
+                    <div class="bar-chart-container">
+                        <canvas id="casesChart"></canvas>
                     </div>
                 </div>
             </div>
 
-            <!-- Recovery & Disbursement Preview -->
-            <div class="viz-card">
-                <div class="viz-title">
-                    Recovery & Disbursement Preview
-                    <span style="font-size: 9px; font-weight: 400; color: var(--pbi-text-secondary);">Recent payments and upcoming disbursements</span>
+            <!-- Recovery Overview & Timeline -->
+            <div class="grid-2" style="margin-bottom: 8px; gap: 8px;">
+                <!-- Recovery Overview Donut -->
+                <div class="viz-card">
+                    <div class="viz-title">Recovery Overview</div>
+                    <div class="viz-subtitle">Breakdown by case type</div>
+                    <div class="donut-container" style="max-width: 300px; margin: 0 auto;">
+                        <canvas id="outstandingDonutChart"></canvas>
+                        <div class="donut-center">
+                            <div class="donut-total" id="donutTotal" style="font-size: 16px; font-weight: 700;">$393.59M</div>
+                            <div class="donut-label" style="font-size: 9px;">Total Potential</div>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Recent & Upcoming Timeline -->
+                <div class="viz-card">
+                    <div class="viz-title">Recent & Upcoming Activity</div>
+                    <div class="viz-subtitle">Timeline of filings and deadlines</div>
+                    <div class="bar-chart-container">
+                        <canvas id="timelineChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Your Cases - Professional Table -->
+            <div class="viz-card">
+                <div class="viz-title">Your Cases</div>
+                <div class="viz-subtitle">Key cases with recovery potential and payment status</div>
                 <div style="overflow-x: auto;">
                     <table class="data-table">
                         <thead>
-                            <tr>
+                            <tr style="background: var(--pbi-hover);">
                                 <th>Case Name</th>
-                                <th>Status</th>
-                                <th style="text-align: right;">Organizer Damages</th>
+                                <th style="text-align: center;">Status</th>
+                                <th style="text-align: right;">Potential Recovery</th>
                                 <th style="text-align: right;">Recovery Amount</th>
-                                <th>Payment Date</th>
-                                <th>Disbursement Status</th>
+                                <th style="text-align: center;">Payment Date</th>
+                                <th style="text-align: center;">Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td><strong>GRAB HOLDINGS LIMITED</strong></td>
-                                <td><span class="case-status-badge status-registered">REGISTERED</span></td>
-                                <td class="currency">$37.0M</td>
-                                <td class="currency">$1.2M</td>
-                                <td class="date-cell">8/20/2025</td>
-                                <td><span style="color: var(--chart-green); font-weight: 600;">Scheduled</span></td>
+                                <td><a href="case-grab-holdings.html" style="color: var(--pbi-primary); text-decoration: none; font-weight: 500;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Grab Holdings Limited</a></td>
+                                <td style="text-align: center;"><span class="case-status-badge status-registered" style="font-size: 9px;">REGISTERED</span></td>
+                                <td class="currency" style="font-weight: 600;">$37.0M</td>
+                                <td class="currency" style="font-weight: 600; color: var(--chart-green);">$1.2M</td>
+                                <td class="date-cell" style="text-align: center;">8/20/2025</td>
+                                <td style="text-align: center;"><span style="color: var(--chart-green); font-weight: 600; font-size: 9px;">Scheduled</span></td>
                             </tr>
                             <tr>
-                                <td><strong>EMERGENT BIOSOLUTIONS INC</strong></td>
-                                <td><span class="case-status-badge status-registered">REGISTERED</span></td>
-                                <td class="currency">$53.0M</td>
-                                <td class="currency">$850K</td>
-                                <td class="date-cell">8/25/2025</td>
-                                <td><span style="color: var(--chart-green); font-weight: 600;">Scheduled</span></td>
+                                <td>Emergent Biosolutions Inc</td>
+                                <td style="text-align: center;"><span class="case-status-badge status-registered" style="font-size: 9px;">REGISTERED</span></td>
+                                <td class="currency" style="font-weight: 600;">$53.0M</td>
+                                <td class="currency" style="font-weight: 600; color: var(--chart-green);">$850K</td>
+                                <td class="date-cell" style="text-align: center;">8/25/2025</td>
+                                <td style="text-align: center;"><span style="color: var(--chart-green); font-weight: 600; font-size: 9px;">Scheduled</span></td>
                             </tr>
                             <tr>
-                                <td><strong>CERENCE INC</strong></td>
-                                <td><span class="case-status-badge status-registered">REGISTERED</span></td>
-                                <td class="currency">$42.0M</td>
-                                <td class="currency">$650K</td>
-                                <td class="date-cell">9/1/2025</td>
-                                <td><span style="color: #ff8c00; font-weight: 600;">Pending</span></td>
+                                <td>Cerence Inc</td>
+                                <td style="text-align: center;"><span class="case-status-badge status-registered" style="font-size: 9px;">REGISTERED</span></td>
+                                <td class="currency" style="font-weight: 600;">$42.0M</td>
+                                <td class="currency" style="font-weight: 600; color: var(--chart-green);">$650K</td>
+                                <td class="date-cell" style="text-align: center;">9/1/2025</td>
+                                <td style="text-align: center;"><span style="color: #ff8c00; font-weight: 600; font-size: 9px;">Pending</span></td>
                             </tr>
                             <tr>
-                                <td><strong>EAGLE BANCORP INC Fair Fund</strong></td>
-                                <td><span class="case-status-badge status-registered">REGISTERED</span></td>
-                                <td class="currency">$24.0M</td>
-                                <td class="currency">$240K</td>
-                                <td class="date-cell">7/15/2025</td>
-                                <td><span style="color: var(--chart-green); font-weight: 600;">Paid</span></td>
+                                <td><a href="case-eagle-bancorp-fair-fund.html" style="color: var(--pbi-primary); text-decoration: none; font-weight: 500;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Eagle Bancorp Inc Fair Fund</a></td>
+                                <td style="text-align: center;"><span class="case-status-badge status-registered" style="font-size: 9px;">REGISTERED</span></td>
+                                <td class="currency" style="font-weight: 600;">$24.0M</td>
+                                <td class="currency" style="font-weight: 600; color: var(--chart-green);">$240K</td>
+                                <td class="date-cell" style="text-align: center;">7/15/2025</td>
+                                <td style="text-align: center;"><span style="color: var(--chart-green); font-weight: 600; font-size: 9px;">Paid</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -397,36 +663,230 @@
     <script src="style-switcher.js"></script>
 
     <script>
-        // Sample data from screenshot
-        const recentClaimsData = [
-            { caseName: 'ALLOVIR INC', deadline: '8/19/2025', loss: 277906, accounts: 2, filed: '8/15/2025' },
-            { caseName: 'KOOTENAY ZINC CORP', deadline: '8/15/2025', loss: 0, accounts: 1, filed: '8/12/2025' },
-            { caseName: 'GORES HOLDINGS IV INC', deadline: '8/13/2025', loss: 0, accounts: 2, filed: '' },
-        ];
-
-        const accountDetailsData = [
-            { account: 'Broker CLIENT A', amount: 231000000 },
-            { account: 'Broker CLIENT B', amount: 105000000 },
-            { account: 'Private Wealth Client #1', amount: 46000000 },
-            { account: 'Demo Account 1442781', amount: 9000000 },
-            { account: 'Private Wealth Client #2', amount: 2000000 },
-            { account: 'Demo Account 1443265', amount: 0 },
-            { account: 'Demo Account 1422348', amount: 0 },
-        ];
-
-        const recognizedLossData = [
-            { case: 'GRAB HOLDINGS LIMITED', amount: 37000000 },
-            { case: 'EMERGENT BIOSOLUTIONS INC', amount: 53000000 },
-            { case: 'CERENCE INC', amount: 42000000 },
-            { case: 'ASTEC INDUSTRIES INC', amount: 12000000 },
-            { case: 'EAGLE BANCORP INC Fair Fund', amount: 24000000 },
-            { case: 'TUSIMPLE HOLDING INC', amount: 9000000 },
-        ];
-
-        const outstandingDonutData = {
-            'Non-US Group': 150000000,
-            'US/CA Settled': 243590000
+        // Data for Eligible vs Filed views
+        const eligibleData = {
+            recognizedLoss: 393600000,
+            totalPotential: 393600000,
+            casesCount: 145,
+            accountDetails: [
+                { account: 'Broker CLIENT A', amount: 231000000 },
+                { account: 'Broker CLIENT B', amount: 105000000 },
+                { account: 'Private Wealth Client #1', amount: 46000000 },
+                { account: 'Demo Account 1442781', amount: 9000000 },
+                { account: 'Private Wealth Client #2', amount: 2000000 },
+            ],
+            topCases: [
+                { case: 'Emergent Biosolutions Inc', amount: 53000000 },
+                { case: 'Cerence Inc', amount: 42000000 },
+                { case: 'Grab Holdings Limited', amount: 37000000 },
+                { case: 'Foreign Exchange Antitrust', amount: 125000000 },
+                { case: 'Eagle Bancorp Inc Fair Fund', amount: 24000000 },
+            ],
+            donutData: {
+                'Non-US Group': 150000000,
+                'US/CA Settled': 243590000
+            },
+            timelineData: [
+                { month: 'Oct 2024', filed: 8, upcoming: 3 },
+                { month: 'Nov 2024', filed: 12, upcoming: 5 },
+                { month: 'Dec 2024', filed: 15, upcoming: 7 },
+                { month: 'Jan 2025', filed: 10, upcoming: 12 },
+                { month: 'Feb 2025', filed: 8, upcoming: 15 },
+            ]
         };
+
+        const filedData = {
+            recognizedLoss: 287500000,
+            totalPotential: 287500000,
+            casesCount: 127,
+            accountDetails: [
+                { account: 'Broker CLIENT A', amount: 180000000 },
+                { account: 'Broker CLIENT B', amount: 75000000 },
+                { account: 'Private Wealth Client #1', amount: 25000000 },
+                { account: 'Demo Account 1442781', amount: 7500000 },
+            ],
+            topCases: [
+                { case: 'Foreign Exchange Antitrust', amount: 125000000 },
+                { case: 'Apple Inc Securities', amount: 45000000 },
+                { case: 'Alphabet Inc', amount: 38000000 },
+                { case: 'JPMorgan Chase', amount: 32000000 },
+                { case: 'Microsoft Corp', amount: 28000000 },
+            ],
+            donutData: {
+                'Non-US Group': 120000000,
+                'US/CA Settled': 167500000
+            },
+            timelineData: [
+                { month: 'Oct 2024', filed: 5, upcoming: 2 },
+                { month: 'Nov 2024', filed: 8, upcoming: 4 },
+                { month: 'Dec 2024', filed: 10, upcoming: 6 },
+                { month: 'Jan 2025', filed: 7, upcoming: 8 },
+                { month: 'Feb 2025', filed: 6, upcoming: 10 },
+            ]
+        };
+
+        // Comprehensive case tracking data for search
+        const allCasesData = [
+            {
+                caseName: 'Apple Inc Securities',
+                company: 'Apple Inc',
+                caseType: 'US CA Settled',
+                status: 'FILED',
+                recognizedLoss: 45000000,
+                trackingStatus: 'TRACKING',
+                noticeTypes: ['Initial Notice', 'Settlement Pending Notice', 'Claim Notice'],
+                settlementStatus: 'Settlement Pending',
+                claimDeadline: '2024-10-15',
+                admin: 'Gland & Co',
+                detailUrl: 'case-apple-inc-securities.html'
+            },
+            {
+                caseName: 'Alphabet Inc',
+                company: 'Alphabet Inc',
+                caseType: 'US CA Settled',
+                status: 'FILED',
+                recognizedLoss: 38000000,
+                trackingStatus: 'TRACKING',
+                noticeTypes: ['Initial Notice', 'Settlement Pending Notice', 'Claim Notice'],
+                settlementStatus: 'Settlement Pending',
+                claimDeadline: '2024-10-24',
+                admin: 'A.B. Data, Ltd',
+                detailUrl: 'case-alphabet-inc.html'
+            },
+            {
+                caseName: 'Foreign Exchange Antitrust - Stock (Lending) IFER',
+                company: 'Various Banks',
+                caseType: 'US Antitrust',
+                status: 'FILED',
+                recognizedLoss: 125000000,
+                trackingStatus: 'TRACKING',
+                noticeTypes: ['Initial Notice', 'Settlement Pending Notice', 'Claim Notice'],
+                settlementStatus: 'Settled',
+                claimDeadline: '2024-06-15',
+                admin: 'Garden City Group',
+                detailUrl: 'case-foreign-exchange-antitrust.html'
+            },
+            {
+                caseName: 'JPMorgan Chase',
+                company: 'JPMorgan Chase',
+                caseType: 'US CA Settled',
+                status: 'FILED',
+                recognizedLoss: 32000000,
+                trackingStatus: 'TRACKING',
+                noticeTypes: ['Initial Notice', 'Settlement Pending Notice'],
+                settlementStatus: 'Settlement Pending',
+                claimDeadline: '2024-12-15',
+                admin: 'Epiq Systems',
+                detailUrl: null
+            },
+            {
+                caseName: 'Microsoft Corp',
+                company: 'Microsoft Corp',
+                caseType: 'US CA Settled',
+                status: 'FILED',
+                recognizedLoss: 28000000,
+                trackingStatus: 'TRACKING',
+                noticeTypes: ['Initial Notice', 'Settlement Pending Notice'],
+                settlementStatus: 'Settlement Pending',
+                claimDeadline: '2024-12-20',
+                admin: 'Garden City Group',
+                detailUrl: null
+            },
+            {
+                caseName: 'Amazon.com Inc',
+                company: 'Amazon.com Inc',
+                caseType: 'US CA Settled',
+                status: 'FILED',
+                recognizedLoss: 25000000,
+                trackingStatus: 'TRACKING',
+                noticeTypes: ['Initial Notice', 'Settlement Pending Notice', 'Claim Notice'],
+                settlementStatus: 'Settled',
+                claimDeadline: '2024-10-28',
+                admin: 'Epiq Systems',
+                detailUrl: null
+            },
+            {
+                caseName: 'Grab Holdings Limited',
+                company: 'Grab Holdings',
+                caseType: 'Non-US Group',
+                status: 'REGISTERED',
+                recognizedLoss: 37000000,
+                trackingStatus: 'TRACKING',
+                noticeTypes: ['Initial Notice', 'Opt-in Notice'],
+                settlementStatus: 'In Progress',
+                claimDeadline: '2025-08-20',
+                admin: 'A.B. Data, Ltd',
+                detailUrl: 'case-grab-holdings.html'
+            },
+            {
+                caseName: 'Eagle Bancorp Inc Fair Fund',
+                company: 'Eagle Bancorp',
+                caseType: 'US CA Settled (Fair Fund)',
+                status: 'FILED',
+                recognizedLoss: 24000000,
+                trackingStatus: 'TRACKING',
+                noticeTypes: ['Fair Fund Notice', 'Claim Notice'],
+                settlementStatus: 'Settled',
+                claimDeadline: '2024-11-30',
+                admin: 'Epiq Systems',
+                detailUrl: 'case-eagle-bancorp-fair-fund.html'
+            },
+            {
+                caseName: 'Atos SE (Master Case)',
+                company: 'Atos SE',
+                caseType: 'Non-US Group',
+                status: 'REQUESTED',
+                recognizedLoss: 3702082,
+                trackingStatus: 'TRACKING',
+                noticeTypes: ['Initial Notice', 'Opt-in Notice'],
+                settlementStatus: 'In Progress',
+                claimDeadline: '2025-09-30',
+                admin: 'Epiq Systems',
+                detailUrl: 'case-atos-se.html'
+            },
+            {
+                caseName: 'Barclays Plc (Staley Action)',
+                company: 'Barclays Plc',
+                caseType: 'Non-US Group',
+                status: 'REGISTERED',
+                recognizedLoss: 180750,
+                trackingStatus: 'TRACKING',
+                noticeTypes: ['Initial Notice', 'Opt-in Notice'],
+                settlementStatus: 'In Progress',
+                claimDeadline: '2025-07-03',
+                admin: 'Epiq Systems',
+                detailUrl: 'case-barclays-plc.html'
+            },
+            {
+                caseName: 'Emergent Biosolutions Inc',
+                company: 'Emergent Biosolutions',
+                caseType: 'US CA Settled',
+                status: 'REGISTERED',
+                recognizedLoss: 53000000,
+                trackingStatus: 'TRACKING',
+                noticeTypes: ['Initial Notice', 'Settlement Pending Notice'],
+                settlementStatus: 'Settlement Pending',
+                claimDeadline: '2025-08-25',
+                admin: 'A.B. Data, Ltd',
+                detailUrl: null
+            },
+            {
+                caseName: 'Cerence Inc',
+                company: 'Cerence Inc',
+                caseType: 'US CA Settled',
+                status: 'REGISTERED',
+                recognizedLoss: 42000000,
+                trackingStatus: 'TRACKING',
+                noticeTypes: ['Initial Notice', 'Settlement Pending Notice'],
+                settlementStatus: 'Settlement Pending',
+                claimDeadline: '2025-09-01',
+                admin: 'Epiq Systems',
+                detailUrl: null
+            }
+        ];
+
+        let currentView = 'eligible';
+        let chartInstances = {};
 
         function formatCurrency(amount) {
             if (amount >= 1000000) {
@@ -437,32 +897,351 @@
             return '$' + amount.toLocaleString();
         }
 
-        function populateRecentClaims() {
-            const tbody = document.getElementById('recentClaimsBody');
-            tbody.innerHTML = '';
+        function updateKPIs() {
+            const data = currentView === 'eligible' ? eligibleData : filedData;
+            document.getElementById('recognizedLoss').textContent = formatCurrency(data.recognizedLoss);
+            document.getElementById('totalPotential').textContent = formatCurrency(data.totalPotential);
+            document.getElementById('casesFiled').textContent = data.casesCount;
+            document.getElementById('eligibleCases').textContent = currentView === 'eligible' ? '145' : '0';
+            document.getElementById('donutTotal').textContent = formatCurrency(data.totalPotential);
+        }
+
+        // Case Search Functionality
+        function performCaseSearch(query) {
+            if (!query || query.length < 2) {
+                return [];
+            }
             
-            recentClaimsData.forEach(claim => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${claim.caseName}</td>
-                    <td class="date-cell">${claim.deadline}</td>
-                    <td class="currency">${formatCurrency(claim.loss)}</td>
-                    <td style="text-align: center;">${claim.accounts}</td>
-                    <td class="date-cell">${claim.filed || '—'}</td>
+            const lowerQuery = query.toLowerCase();
+            return allCasesData.filter(caseItem => {
+                return caseItem.caseName.toLowerCase().includes(lowerQuery) ||
+                       caseItem.company.toLowerCase().includes(lowerQuery) ||
+                       caseItem.caseType.toLowerCase().includes(lowerQuery) ||
+                       caseItem.admin.toLowerCase().includes(lowerQuery) ||
+                       caseItem.noticeTypes.some(notice => notice.toLowerCase().includes(lowerQuery));
+            }).slice(0, 10); // Limit to 10 results
+        }
+
+        function renderSearchResults(results) {
+            const resultsContainer = document.getElementById('searchResults');
+            
+            if (results.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div style="padding: 12px; text-align: center; color: var(--pbi-text-secondary); font-size: 10px;">
+                        <i class="fas fa-info-circle" style="margin-right: 6px;"></i>
+                        No cases found. Try a different search term.
+                    </div>
                 `;
-                tbody.appendChild(tr);
+                resultsContainer.style.display = 'block';
+                return;
+            }
+            
+            resultsContainer.innerHTML = results.map(caseItem => {
+                const statusColor = caseItem.status === 'FILED' ? 'var(--chart-green)' : 
+                                   caseItem.status === 'REGISTERED' ? 'var(--pbi-primary)' : '#ff8c00';
+                const noticeBadges = caseItem.noticeTypes.map(notice => 
+                    `<span style="background: var(--pbi-hover); color: var(--pbi-text-primary); padding: 2px 6px; border-radius: 2px; font-size: 8px; margin-right: 4px;">${notice}</span>`
+                ).join('');
+                
+                return `
+                    <div style="padding: 10px; border-bottom: 1px solid var(--pbi-border-light); cursor: pointer; transition: background 0.2s;" 
+                         onmouseover="this.style.background='var(--pbi-hover)'" 
+                         onmouseout="this.style.background='var(--pbi-card-bg)'"
+                         ${caseItem.detailUrl ? `onclick="window.location.href='${caseItem.detailUrl}'"` : ''}>
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 6px;">
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; font-size: 11px; color: var(--pbi-text-primary); margin-bottom: 4px;">
+                                    ${caseItem.caseName}
+                                </div>
+                                <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-bottom: 4px;">
+                                    ${caseItem.company} • ${caseItem.caseType}
+                                </div>
+                                <div style="margin-top: 6px;">
+                                    ${noticeBadges}
+                                </div>
+                            </div>
+                            <div style="text-align: right; margin-left: 12px;">
+                                <div style="font-size: 9px; color: ${statusColor}; font-weight: 600; margin-bottom: 4px;">
+                                    ${caseItem.trackingStatus}
+                                </div>
+                                <div style="font-size: 9px; color: var(--pbi-text-secondary);">
+                                    ${caseItem.settlementStatus}
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 9px; color: var(--pbi-text-secondary); margin-top: 6px;">
+                            <span>Recognized Loss: <strong style="color: var(--pbi-text-primary);">${formatCurrency(caseItem.recognizedLoss)}</strong></span>
+                            <span>Admin: ${caseItem.admin}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            resultsContainer.style.display = 'block';
+        }
+
+        // Search input handler
+        let searchTimeout;
+        document.getElementById('caseSearchInput').addEventListener('input', function(e) {
+            clearTimeout(searchTimeout);
+            const query = e.target.value.trim();
+            
+            if (query.length < 2) {
+                document.getElementById('searchResults').style.display = 'none';
+                return;
+            }
+            
+            searchTimeout = setTimeout(() => {
+                const results = performCaseSearch(query);
+                renderSearchResults(results);
+            }, 150);
+        });
+
+        // Close search results when clicking outside
+        document.addEventListener('click', function(e) {
+            const searchContainer = document.getElementById('caseSearchInput').closest('.viz-card');
+            if (!searchContainer.contains(e.target)) {
+                document.getElementById('searchResults').style.display = 'none';
+            }
+        });
+
+        function createAccountDetailsChart() {
+            const canvas = document.getElementById('accountDetailsChart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const data = currentView === 'eligible' ? eligibleData : filedData;
+            
+            if (chartInstances.accountDetails) {
+                chartInstances.accountDetails.destroy();
+            }
+            
+            chartInstances.accountDetails = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.accountDetails.map(d => d.account),
+                    datasets: [{
+                        label: 'Potential Recovery',
+                        data: data.accountDetails.map(d => d.amount),
+                        backgroundColor: data.accountDetails.map((d, i) => 
+                            i % 2 === 0 ? '#0078d4' : '#005a9e'
+                        ),
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return 'Potential Recovery: ' + formatCurrency(context.parsed.x);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                },
+                                font: { size: 9 },
+                                padding: 4
+                            },
+                            grid: {
+                                color: 'var(--pbi-border-light)',
+                                drawBorder: false
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                font: { size: 9 },
+                                padding: 4
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createCasesChart() {
+            const canvas = document.getElementById('casesChart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const data = currentView === 'eligible' ? eligibleData : filedData;
+            
+            if (chartInstances.cases) {
+                chartInstances.cases.destroy();
+            }
+            
+            // Truncate long case names for display
+            const labels = data.topCases.map(d => {
+                const name = d.case;
+                return name.length > 25 ? name.substring(0, 22) + '...' : name;
+            });
+            
+            chartInstances.cases = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Potential Recovery',
+                        data: data.topCases.map(d => d.amount),
+                        backgroundColor: '#ff8c00',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return 'Potential Recovery: ' + formatCurrency(context.parsed.x);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                },
+                                font: { size: 9 },
+                                padding: 4
+                            },
+                            grid: {
+                                color: 'var(--pbi-border-light)',
+                                drawBorder: false
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                font: { size: 9 },
+                                padding: 4
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createTimelineChart() {
+            const canvas = document.getElementById('timelineChart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const data = currentView === 'eligible' ? eligibleData : filedData;
+            
+            if (chartInstances.timeline) {
+                chartInstances.timeline.destroy();
+            }
+            
+            chartInstances.timeline = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.timelineData.map(d => d.month),
+                    datasets: [
+                        {
+                            label: 'Filed',
+                            data: data.timelineData.map(d => d.filed),
+                            backgroundColor: '#0078d4',
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Upcoming',
+                            data: data.timelineData.map(d => d.upcoming),
+                            backgroundColor: '#ff8c00',
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: { size: 9 },
+                                usePointStyle: true,
+                                padding: 8,
+                                boxWidth: 8
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y + ' cases';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: { size: 9 },
+                                padding: 4
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 2,
+                                font: { size: 9 },
+                                padding: 4
+                            },
+                            grid: {
+                                color: 'var(--pbi-border-light)',
+                                drawBorder: false
+                            }
+                        }
+                    }
+                }
             });
         }
 
         function createOutstandingDonutChart() {
-            const ctx = document.getElementById('outstandingDonutChart').getContext('2d');
+            const canvas = document.getElementById('outstandingDonutChart');
+            if (!canvas) return;
             
-            new Chart(ctx, {
+            const ctx = canvas.getContext('2d');
+            const data = currentView === 'eligible' ? eligibleData : filedData;
+            
+            if (chartInstances.donut) {
+                chartInstances.donut.destroy();
+            }
+            
+            chartInstances.donut = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: Object.keys(outstandingDonutData),
+                    labels: Object.keys(data.donutData),
                     datasets: [{
-                        data: Object.values(outstandingDonutData),
+                        data: Object.values(data.donutData),
                         backgroundColor: ['#0078d4', '#ff8c00'],
                         borderWidth: 0
                     }]
@@ -474,8 +1253,8 @@
                         legend: {
                             position: 'right',
                             labels: {
-                                padding: 15,
-                                font: { size: 11 },
+                                padding: 10,
+                                font: { size: 9 },
                                 usePointStyle: true,
                                 pointStyle: 'circle'
                             }
@@ -493,131 +1272,51 @@
             });
         }
 
-        function createAccountDetailsChart() {
-            const ctx = document.getElementById('accountDetailsChart').getContext('2d');
+        function updateAllCharts() {
+            updateKPIs();
+            createAccountDetailsChart();
+            createCasesChart();
+            createTimelineChart();
+            createOutstandingDonutChart();
             
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: accountDetailsData.map(d => d.account),
-                    datasets: [{
-                        label: 'Organizer Damages',
-                        data: accountDetailsData.map(d => d.amount),
-                        backgroundColor: accountDetailsData.map((d, i) => 
-                            d.amount === 0 ? '#e1dfdd' : (i % 2 === 0 ? '#0078d4' : '#005a9e')
-                        ),
-                        borderRadius: 2
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return 'Organizer Damages: ' + formatCurrency(context.parsed.x);
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return formatCurrency(value);
-                                },
-                                font: { size: 9 }
-                            },
-                            grid: {
-                                color: 'var(--pbi-border-light)'
-                            }
-                        },
-                        y: {
-                            ticks: {
-                                font: { size: 9 }
-                            },
-                            grid: {
-                                display: false
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        function createRecognizedLossChart() {
-            const ctx = document.getElementById('recognizedLossChart').getContext('2d');
-            
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: recognizedLossData.map(d => d.case),
-                    datasets: [{
-                        label: 'Organizer Damages',
-                        data: recognizedLossData.map(d => d.amount),
-                        backgroundColor: '#0078d4',
-                        borderRadius: 2
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return 'Organizer Damages: ' + formatCurrency(context.parsed.x);
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            max: 60000000,
-                            ticks: {
-                                callback: function(value) {
-                                    return formatCurrency(value);
-                                },
-                                font: { size: 9 }
-                            },
-                            grid: {
-                                color: 'var(--pbi-border-light)'
-                            }
-                        },
-                        y: {
-                            ticks: {
-                                font: { size: 9 }
-                            },
-                            grid: {
-                                display: false
-                            }
-                        }
-                    }
-                }
-            });
+            // Update subtitles
+            document.getElementById('accountChartSubtitle').textContent = 
+                currentView === 'eligible' ? 'Potential recovery by account' : 'Filed cases by account';
+            document.getElementById('casesChartSubtitle').textContent = 
+                currentView === 'eligible' ? 'Largest potential recoveries' : 'Top filed cases';
         }
 
         // Toggle button handlers
         document.getElementById('eligibleBtn').addEventListener('click', function() {
-            document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+            currentView = 'eligible';
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.style.background = 'var(--pbi-card-bg)';
+                btn.style.color = 'var(--pbi-text-secondary)';
+                btn.style.borderColor = 'var(--pbi-border)';
+            });
             this.classList.add('active');
+            this.style.background = 'var(--pbi-primary)';
+            this.style.color = 'white';
+            this.style.borderColor = 'var(--pbi-primary)';
+            updateAllCharts();
         });
 
         document.getElementById('filedBtn').addEventListener('click', function() {
-            document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+            currentView = 'filed';
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.style.background = 'var(--pbi-card-bg)';
+                btn.style.color = 'var(--pbi-text-secondary)';
+                btn.style.borderColor = 'var(--pbi-border)';
+            });
             this.classList.add('active');
+            this.style.background = 'var(--pbi-primary)';
+            this.style.color = 'white';
+            this.style.borderColor = 'var(--pbi-primary)';
+            updateAllCharts();
         });
+
 
         // Tab navigation
         document.querySelectorAll('.nav-tab').forEach(tab => {
@@ -635,12 +1334,19 @@
             });
         });
 
+        // Update alert count
+        function updateAlertCount() {
+            const alertCount = document.querySelectorAll('.alert-item').length;
+            const alertCountEl = document.getElementById('alertCount');
+            if (alertCountEl) {
+                alertCountEl.textContent = alertCount;
+            }
+        }
+
         // Initialize on load
         window.addEventListener('DOMContentLoaded', () => {
-            populateRecentClaims();
-            createOutstandingDonutChart();
-            createAccountDetailsChart();
-            createRecognizedLossChart();
+            updateAllCharts();
+            updateAlertCount();
         });
     </script>
 </body>

@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apple Inc Securities - Case Details | FRT Work Tools</title>
+    
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Shared Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style-switcher.css">
+    
+    <style>
+        .case-header {
+            background: linear-gradient(135deg, var(--pbi-primary) 0%, var(--pbi-primary-dark) 100%);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .case-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .case-subtitle {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .back-button {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .back-button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .details-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 12px;
+        }
+        
+        .info-section {
+            background: var(--pbi-card-bg);
+            border-radius: 4px;
+            box-shadow: 0 1.6px 3.6px rgba(0, 0, 0, 0.13), 0 0.3px 0.9px rgba(0, 0, 0, 0.11);
+            padding: 16px;
+            border: 1px solid var(--pbi-border);
+        }
+        
+        .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--pbi-text-primary);
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--pbi-border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--pbi-border-light);
+            font-size: 11px;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            color: var(--pbi-text-secondary);
+            font-weight: 500;
+        }
+        
+        .info-value {
+            color: var(--pbi-text-primary);
+            font-weight: 600;
+            text-align: right;
+        }
+        
+        .text-content {
+            font-size: 11px;
+            line-height: 1.6;
+            color: var(--pbi-text-primary);
+            margin-bottom: 12px;
+        }
+        
+        .timeline-container {
+            background: var(--pbi-card-bg);
+            border-radius: 4px;
+            box-shadow: 0 1.6px 3.6px rgba(0, 0, 0, 0.13), 0 0.3px 0.9px rgba(0, 0, 0, 0.11);
+            padding: 16px;
+            border: 1px solid var(--pbi-border);
+            margin-bottom: 12px;
+        }
+        
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        
+        .timeline-line {
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--pbi-border);
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 60px;
+            margin-bottom: 24px;
+        }
+        
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            left: 22px;
+            top: 4px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--pbi-primary);
+            border: 3px solid var(--pbi-card-bg);
+            z-index: 2;
+        }
+        
+        .timeline-dot.completed {
+            background: #107c10;
+        }
+        
+        .timeline-dot.current {
+            background: #ffb900;
+            animation: pulse 2s infinite;
+        }
+        
+        .timeline-dot.future {
+            background: var(--pbi-border);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .timeline-date {
+            font-size: 10px;
+            color: var(--pbi-text-secondary);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .timeline-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--pbi-text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .timeline-description {
+            font-size: 10px;
+            color: var(--pbi-text-secondary);
+            line-height: 1.4;
+        }
+        
+        .timeline-status {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 9px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+        
+        .timeline-status.completed {
+            background: rgba(16, 124, 16, 0.1);
+            color: #107c10;
+        }
+        
+        .timeline-status.current {
+            background: rgba(255, 185, 0, 0.1);
+            color: #ca5010;
+        }
+        
+        .timeline-status.future {
+            background: var(--pbi-hover);
+            color: var(--pbi-text-secondary);
+        }
+        
+        .damages-table {
+            width: 100%;
+            font-size: 10px;
+        }
+        
+        .damages-table th {
+            background: var(--pbi-background);
+            padding: 8px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 9px;
+            border-bottom: 2px solid var(--pbi-border);
+        }
+        
+        .damages-table td {
+            padding: 8px;
+            border-bottom: 1px solid var(--pbi-border-light);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <div class="logo">FRT Work Tools</div>
+            <div class="header-title">Case Details</div>
+        </div>
+        <div class="header-right">
+            <div class="user-info">Craig D'Alessio</div>
+            <button>Share</button>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+        <button class="nav-tab">
+            <i class="fas fa-file-check"></i>
+            ELIGIBILITY & FILINGS
+        </button>
+        <button class="nav-tab">
+            <i class="fas fa-chart-line"></i>
+            STATUS REPORTS
+        </button>
+        <button class="nav-tab">
+            <i class="fas fa-bell"></i>
+            OPT-IN MONITORING
+        </button>
+        <button class="nav-tab">
+            <i class="fas fa-money-bill-wave"></i>
+            REMITTANCE
+        </button>
+        <button class="nav-tab">
+            <i class="fas fa-user-tie"></i>
+            Account Manager Dashboard
+        </button>
+        <button class="nav-tab">+</button>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <div class="content-area" style="grid-column: 1 / -1;">
+            <!-- Case Header -->
+            <div class="case-header">
+                <div>
+                    <div class="case-title">Apple Inc Securities Litigation</div>
+                    <div class="case-subtitle">Case ID: AAPL-2019-001 | Type: US CA Settled | Status: <span class="case-status-badge status-confirmed">ACTIVE</span></div>
+                </div>
+                <a href="eligibility-filings.html" class="back-button">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Cases
+                </a>
+            </div>
+
+            <!-- Case Timeline -->
+            <div class="timeline-container">
+                <div class="section-title">
+                    <i class="fas fa-project-diagram"></i>
+                    Case Timeline & Lifecycle
+                </div>
+                <div class="timeline">
+                    <div class="timeline-line"></div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot completed"></div>
+                        <div class="timeline-date">January 2, 2019</div>
+                        <div class="timeline-title">Initial Complaint Filed</div>
+                        <div class="timeline-description">Class action complaint filed in U.S. District Court alleging securities fraud violations.</div>
+                        <span class="timeline-status completed">Completed</span>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot completed"></div>
+                        <div class="timeline-date">March 15, 2019</div>
+                        <div class="timeline-title">Consolidation Order</div>
+                        <div class="timeline-description">Multiple related cases consolidated into single action. Lead plaintiff appointed.</div>
+                        <span class="timeline-status completed">Completed</span>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot completed"></div>
+                        <div class="timeline-date">May 20, 2019</div>
+                        <div class="timeline-title">Lead Plaintiff Deadline</div>
+                        <div class="timeline-description">Deadline for filing motions to serve as lead plaintiff passed.</div>
+                        <span class="timeline-status completed">Completed</span>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot completed"></div>
+                        <div class="timeline-date">June 10, 2019</div>
+                        <div class="timeline-title">Opt-Out Deadline</div>
+                        <div class="timeline-description">Final deadline for class members to exclude themselves from the class action.</div>
+                        <span class="timeline-status completed">Completed</span>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot current"></div>
+                        <div class="timeline-date">October 15, 2024</div>
+                        <div class="timeline-title">Proof of Claim Deadline</div>
+                        <div class="timeline-description">Deadline for submitting proof of claim forms to the claims administrator.</div>
+                        <span class="timeline-status current">Current Phase</span>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot future"></div>
+                        <div class="timeline-date">Q1 2025 (Expected)</div>
+                        <div class="timeline-title">First Disbursement</div>
+                        <div class="timeline-description">Initial distribution of settlement proceeds to approved claimants.</div>
+                        <span class="timeline-status future">Pending</span>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot future"></div>
+                        <div class="timeline-date">Q3 2025 (Expected)</div>
+                        <div class="timeline-title">Second Disbursement</div>
+                        <div class="timeline-description">Additional distribution following resolution of appeals and final claim determinations.</div>
+                        <span class="timeline-status future">Pending</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Details Grid -->
+            <div class="details-grid">
+                <!-- Left Column: Main Details -->
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <!-- Case Summary -->
+                    <div class="info-section">
+                        <div class="section-title">
+                            <i class="fas fa-file-alt"></i>
+                            Case Summary
+                        </div>
+                        <div class="text-content">
+                            <strong>Allegations:</strong> Apple Inc. and certain executives are alleged to have made materially false and misleading statements regarding iPhone sales in China, revenue guidance, and the company's business outlook, in violation of Sections 10(b) and 20(a) of the Securities Exchange Act of 1934.
+                        </div>
+                        <div class="text-content">
+                            <strong>Class Period:</strong> The class period covers purchases of Apple securities between <strong>November 2, 2018</strong> and <strong>January 2, 2019</strong>.
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Settlement Fund:</span>
+                            <span class="info-value">$490,000,000.00</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Claims Administrator:</span>
+                            <span class="info-value">Gland & Co</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Court:</span>
+                            <span class="info-value">U.S. District Court, Northern District of California</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Case Number:</span>
+                            <span class="info-value">4:19-cv-00012</span>
+                        </div>
+                    </div>
+
+                    <!-- CUSIPs -->
+                    <div class="info-section">
+                        <div class="section-title">
+                            <i class="fas fa-barcode"></i>
+                            CUSIPs
+                        </div>
+                        <div class="cusip-list" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;">
+                            <span class="cusip-tag" style="background: var(--pbi-background); border: 1px solid var(--pbi-border); padding: 4px 10px; border-radius: 3px; font-size: 10px; font-family: monospace;">037833100</span>
+                        </div>
+                    </div>
+
+                    <!-- Account Level Damages -->
+                    <div class="info-section">
+                        <div class="section-title">
+                            <i class="fas fa-chart-line"></i>
+                            Account Level Recovery Details
+                        </div>
+                        <div style="overflow-x: auto;">
+                            <table class="damages-table">
+                                <thead>
+                                    <tr>
+                                        <th>Account Name</th>
+                                        <th style="text-align: right;">Recovered Amount</th>
+                                        <th style="text-align: right;">FRT Fee</th>
+                                        <th style="text-align: right;">Net to Client</th>
+                                        <th style="text-align: center;">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="damagesTableBody">
+                                    <tr>
+                                        <td>Account Name 5678</td>
+                                        <td style="text-align: right; font-weight: 600;">$45,230.12</td>
+                                        <td style="text-align: right;">$452.30</td>
+                                        <td style="text-align: right; font-weight: 600;">$44,777.82</td>
+                                        <td style="text-align: center;"><span class="case-status-badge status-confirmed">PAID</span></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr style="background: var(--pbi-background); font-weight: 600;">
+                                        <td>Total</td>
+                                        <td style="text-align: right;">$45,230.12</td>
+                                        <td style="text-align: right;">$452.30</td>
+                                        <td style="text-align: right;">$44,777.82</td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Sidebar Info -->
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <!-- Quick Stats -->
+                    <div class="info-section">
+                        <div class="section-title">
+                            <i class="fas fa-info-circle"></i>
+                            Quick Stats
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Total Recovered:</span>
+                            <span class="info-value">$45,230.12</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label"># of Accounts:</span>
+                            <span class="info-value">1</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Case Type:</span>
+                            <span class="info-value">US CA Settled</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Recovery Date:</span>
+                            <span class="info-value">10-20-2024</span>
+                        </div>
+                    </div>
+
+                    <!-- Important Dates -->
+                    <div class="info-section">
+                        <div class="section-title">
+                            <i class="fas fa-calendar-times"></i>
+                            Important Dates
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Proof of Claim Deadline:</span>
+                            <span class="info-value" style="color: #d13438; font-weight: 700;">October 15, 2024</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">First Disbursement:</span>
+                            <span class="info-value">Q1 2025 (Expected)</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Second Disbursement:</span>
+                            <span class="info-value">Q3 2025 (Expected)</span>
+                        </div>
+                    </div>
+
+                    <!-- Document Downloads -->
+                    <div class="info-section">
+                        <div class="section-title">
+                            <i class="fas fa-file-download"></i>
+                            Case Documents
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <button class="download-button" style="width: 100%; justify-content: center; background: var(--pbi-primary); color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 11px;">
+                                <i class="fas fa-download"></i>
+                                Settlement Notice (PDF)
+                            </button>
+                            <button class="download-button" style="width: 100%; justify-content: center; background: var(--pbi-primary); color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 11px;">
+                                <i class="fas fa-download"></i>
+                                Proof of Claim Form
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="page-info">
+            <span>Case Details - Apple Inc Securities</span>
+        </div>
+    </div>
+
+    <!-- Style Switcher -->
+    <script src="style-switcher.js"></script>
+
+    <script>
+        // Tab navigation
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                if (this.textContent.includes('ELIGIBILITY & FILINGS')) {
+                    window.location.href = 'eligibility-filings.html';
+                } else if (this.textContent.includes('STATUS REPORTS')) {
+                    window.location.href = 'client-status-reports.html';
+                } else if (this.textContent.includes('OPT-IN MONITORING')) {
+                    window.location.href = 'opt-in-monitoring.html';
+                } else if (this.textContent.includes('REMITTANCE')) {
+                    window.location.href = 'client-remittance.html';
+                } else if (this.textContent.includes('ACCOUNT MANAGER')) {
+                    window.location.href = 'account-manager-dashboard.html';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+

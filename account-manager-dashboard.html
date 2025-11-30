@@ -43,24 +43,26 @@
         }
         
         .child-client-badge {
-            background: var(--pbi-background);
-            border: 1px solid var(--pbi-border);
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
             padding: 4px 10px;
             border-radius: 3px;
-            font-size: 11px;
+            font-size: 10px;
             cursor: pointer;
             transition: all 0.2s ease;
+            color: white;
         }
         
         .child-client-badge:hover {
-            background: var(--pbi-hover);
-            border-color: var(--pbi-primary);
+            background: rgba(255,255,255,0.25);
+            border-color: rgba(255,255,255,0.5);
         }
         
         .child-client-badge.active {
-            background: var(--pbi-primary);
-            color: white;
-            border-color: var(--pbi-primary);
+            background: white;
+            color: var(--pbi-primary);
+            border-color: white;
+            font-weight: 600;
         }
         
         .info-grid {
@@ -426,14 +428,60 @@
 
             <!-- Page 1: Overview -->
             <div class="dashboard-page active" id="page1">
-                <!-- Client Hierarchy -->
-                <div class="client-hierarchy">
-                <div class="parent-client">
-                    <i class="fas fa-building"></i>
-                    <span id="parentClientName">Wellington Management</span>
+                <!-- Client Header with Quick Actions -->
+            <div class="viz-card" style="margin-bottom: 12px; background: linear-gradient(135deg, var(--pbi-primary) 0%, var(--pbi-primary-dark) 100%); color: white; padding: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                            <i class="fas fa-building" style="font-size: 24px;"></i>
+                            <div>
+                                <div style="font-size: 20px; font-weight: 700;" id="parentClientName">Wellington Management</div>
+                                <div style="font-size: 11px; opacity: 0.9; margin-top: 2px;" id="clientSubtitle">Since 2020 • Strategic Partner</div>
+                            </div>
+                        </div>
+                        <div class="child-clients" id="childClients" style="margin-top: 8px;">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 8px 16px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s;" 
+                                onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                            <i class="fas fa-envelope" style="margin-right: 6px;"></i>Email
+                        </button>
+                        <button style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 8px 16px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s;"
+                                onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                            <i class="fas fa-phone" style="margin-right: 6px;"></i>Call
+                        </button>
+                        <button style="background: white; border: none; color: var(--pbi-primary); padding: 8px 16px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s;"
+                                onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                            <i class="fas fa-calendar-plus" style="margin-right: 6px;"></i>Schedule
+                        </button>
+                    </div>
                 </div>
-                <div class="child-clients" id="childClients">
-                    <!-- Populated by JavaScript -->
+            </div>
+
+            <!-- Smart Action Center - AI-Powered Insights -->
+            <div class="grid-2" style="margin-bottom: 12px; gap: 12px;">
+                <!-- Predictive Insights & Recommendations -->
+                <div class="viz-card" style="border-left: 4px solid #8764b8; background: linear-gradient(135deg, rgba(135, 100, 184, 0.05) 0%, rgba(135, 100, 184, 0.02) 100%);">
+                    <div class="viz-title" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <span><i class="fas fa-brain" style="color: #8764b8; margin-right: 6px;"></i>Smart Recommendations</span>
+                        <span class="badge" style="background: #8764b8; font-size: 9px;">AI-Powered</span>
+                    </div>
+                    <div id="smartRecommendations">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Revenue Opportunities & Upsell -->
+                <div class="viz-card" style="border-left: 4px solid var(--chart-green); background: linear-gradient(135deg, rgba(16, 124, 16, 0.05) 0%, rgba(16, 124, 16, 0.02) 100%);">
+                    <div class="viz-title" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <span><i class="fas fa-chart-line" style="color: var(--chart-green); margin-right: 6px;"></i>Revenue Opportunities</span>
+                        <span class="badge" style="background: var(--chart-green); font-size: 9px;" id="opportunityValue">$1.2M Potential</span>
+                    </div>
+                    <div id="revenueOpportunities">
+                        <!-- Populated by JavaScript -->
+                    </div>
                 </div>
             </div>
 
@@ -488,30 +536,127 @@
                 </div>
             </div>
 
-            <!-- Key Metrics - Secondary Info -->
+            <!-- Performance Metrics & Benchmarking -->
             <div class="grid-4" style="margin-bottom: 12px;">
-                <div class="info-card" style="text-align: center; padding: 10px;">
-                    <div class="info-card-label">Total Recoveries</div>
-                    <div class="info-card-value" style="font-size: 18px; color: var(--chart-green);">$8.4M</div>
+                <div class="viz-card" style="border-left: 3px solid var(--pbi-primary); padding: 10px; text-align: center;">
+                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-bottom: 4px; text-transform: uppercase;">Recovery Rate</div>
+                    <div style="font-size: 24px; font-weight: 700; color: var(--pbi-primary);" id="recoveryRate">18.4%</div>
+                    <div style="font-size: 8px; color: var(--chart-green); margin-top: 2px;">
+                        <i class="fas fa-arrow-up"></i> +2.3% vs avg
+                    </div>
                 </div>
-                <div class="info-card" style="text-align: center; padding: 10px;">
-                    <div class="info-card-label">Claims Filed</div>
-                    <div class="info-card-value" style="font-size: 18px;">47</div>
+                <div class="viz-card" style="border-left: 3px solid var(--chart-green); padding: 10px; text-align: center;">
+                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-bottom: 4px; text-transform: uppercase;">Filing Efficiency</div>
+                    <div style="font-size: 24px; font-weight: 700; color: var(--chart-green);" id="filingEfficiency">94%</div>
+                    <div style="font-size: 8px; color: var(--chart-green); margin-top: 2px;">
+                        <i class="fas fa-check-circle"></i> Excellent
+                    </div>
                 </div>
-                <div class="info-card" style="text-align: center; padding: 10px;">
-                    <div class="info-card-label">Eligible Cases</div>
-                    <div class="info-card-value" style="font-size: 18px; color: var(--chart-green);">32</div>
+                <div class="viz-card" style="border-left: 3px solid #ff8c00; padding: 10px; text-align: center;">
+                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-bottom: 4px; text-transform: uppercase;">Avg Days to Recovery</div>
+                    <div style="font-size: 24px; font-weight: 700; color: #ff8c00;" id="avgDaysToRecovery">127</div>
+                    <div style="font-size: 8px; color: var(--chart-green); margin-top: 2px;">
+                        <i class="fas fa-arrow-down"></i> 15 days faster
+                    </div>
                 </div>
-                <div class="info-card" style="text-align: center; padding: 10px;">
-                    <div class="info-card-label">Expected Recovery</div>
-                    <div class="info-card-value" style="font-size: 18px;">$12.2M</div>
+                <div class="viz-card" style="border-left: 3px solid #8764b8; padding: 10px; text-align: center;">
+                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-bottom: 4px; text-transform: uppercase;">Client Satisfaction</div>
+                    <div style="font-size: 24px; font-weight: 700; color: #8764b8;" id="clientSatisfaction">4.8/5</div>
+                    <div style="font-size: 8px; color: var(--chart-green); margin-top: 2px;">
+                        <i class="fas fa-star"></i> Top 10%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Metrics - Flashy Cards -->
+            <div class="grid-4" style="margin-bottom: 12px;">
+                <div class="kpi-card-flashy" style="background: linear-gradient(135deg, var(--chart-green) 0%, #0d6b0d 100%); border: none; padding: 12px; text-align: center; color: white;">
+                    <div style="font-size: 9px; color: rgba(255,255,255,0.9); margin-bottom: 4px; text-transform: uppercase;">Total Recoveries</div>
+                    <div style="font-size: 28px; font-weight: 700; color: white; margin-bottom: 2px;" id="totalRecoveriesKPI">$8.4M</div>
+                    <div style="font-size: 8px; color: rgba(255,255,255,0.8);">YTD</div>
+                </div>
+                <div class="kpi-card-flashy" style="background: linear-gradient(135deg, var(--pbi-primary) 0%, var(--pbi-primary-dark) 100%); border: none; padding: 12px; text-align: center; color: white;">
+                    <div style="font-size: 9px; color: rgba(255,255,255,0.9); margin-bottom: 4px; text-transform: uppercase;">Claims Filed</div>
+                    <div style="font-size: 28px; font-weight: 700; color: white; margin-bottom: 2px;" id="claimsFiledKPI">47</div>
+                    <div style="font-size: 8px; color: rgba(255,255,255,0.8);">Active</div>
+                </div>
+                <div class="kpi-card-flashy" style="background: linear-gradient(135deg, #ff8c00 0%, #e67e00 100%); border: none; padding: 12px; text-align: center; color: white;">
+                    <div style="font-size: 9px; color: rgba(255,255,255,0.9); margin-bottom: 4px; text-transform: uppercase;">Eligible Cases</div>
+                    <div style="font-size: 28px; font-weight: 700; color: white; margin-bottom: 2px;" id="eligibleCasesKPI">32</div>
+                    <div style="font-size: 8px; color: rgba(255,255,255,0.8);">Opportunities</div>
+                </div>
+                <div class="kpi-card-flashy" style="background: linear-gradient(135deg, #8764b8 0%, #6b4f9a 100%); border: none; padding: 12px; text-align: center; color: white;">
+                    <div style="font-size: 9px; color: rgba(255,255,255,0.9); margin-bottom: 4px; text-transform: uppercase;">Expected Recovery</div>
+                    <div style="font-size: 28px; font-weight: 700; color: white; margin-bottom: 2px;" id="expectedRecoveryKPI">$12.2M</div>
+                    <div style="font-size: 8px; color: rgba(255,255,255,0.8);">Pipeline</div>
+                </div>
+            </div>
+
+            <!-- Client Value & Health Section -->
+            <div class="grid-2" style="margin-bottom: 12px; gap: 12px;">
+                <!-- 9 Box Rating -->
+                <div class="viz-card" style="border-left: 4px solid var(--pbi-primary);">
+                    <div class="viz-title" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <span><i class="fas fa-th" style="color: var(--pbi-primary); margin-right: 6px;"></i>Client Value Matrix (9 Box)</span>
+                        <span class="badge" id="nineBoxRating" style="background: var(--chart-green); font-size: 10px; padding: 4px 8px;">High Value / Low Cost</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: 8px;">
+                        <div style="text-align: center; font-size: 9px; color: var(--pbi-text-secondary); padding: 4px;">High Cost</div>
+                        <div style="text-align: center; font-size: 9px; color: var(--pbi-text-secondary); padding: 4px;">Medium Cost</div>
+                        <div style="text-align: center; font-size: 9px; color: var(--pbi-text-secondary); padding: 4px;">Low Cost</div>
+                    </div>
+                    <div id="nineBoxGrid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; aspect-ratio: 1;">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 4px;">
+                        <div style="text-align: center; font-size: 9px; color: var(--pbi-text-secondary); padding: 4px;">Low Value</div>
+                        <div style="text-align: center; font-size: 9px; color: var(--pbi-text-secondary); padding: 4px;">Medium Value</div>
+                        <div style="text-align: center; font-size: 9px; color: var(--pbi-text-secondary); padding: 4px;">High Value</div>
+                    </div>
+                </div>
+
+                <!-- Account Health & Quick Stats -->
+                <div class="viz-card" style="border-left: 4px solid var(--chart-green);">
+                    <div class="viz-title" style="margin-bottom: 12px;">
+                        <i class="fas fa-heartbeat" style="color: var(--chart-green); margin-right: 6px;"></i>Account Health
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                        <div style="flex: 1;">
+                            <div style="font-size: 10px; color: var(--pbi-text-secondary); margin-bottom: 4px;">Overall Health Score</div>
+                            <div style="font-size: 32px; font-weight: 700; color: var(--chart-green);" id="healthScore">85</div>
+                            <div style="font-size: 9px; color: var(--pbi-text-secondary);">Excellent</div>
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="font-size: 10px; color: var(--pbi-text-secondary); margin-bottom: 4px;">Last Contact</div>
+                            <div style="font-size: 14px; font-weight: 600;" id="lastContact">2 days ago</div>
+                            <div style="font-size: 9px; color: var(--pbi-text-secondary);" id="lastContactType">Email</div>
+                        </div>
+                    </div>
+                    <div class="info-grid" style="grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 0;">
+                        <div class="info-card" style="padding: 8px;">
+                            <div class="info-card-label">Contract Value</div>
+                            <div class="info-card-value" style="font-size: 12px; color: var(--chart-green);" id="contractValue">$2.4M</div>
+                        </div>
+                        <div class="info-card" style="padding: 8px;">
+                            <div class="info-card-label">Renewal Date</div>
+                            <div class="info-card-value" style="font-size: 12px;" id="renewalDate">3/15/2025</div>
+                        </div>
+                        <div class="info-card" style="padding: 8px;">
+                            <div class="info-card-label">Engagement Level</div>
+                            <div class="info-card-value" style="font-size: 12px; color: var(--chart-green);" id="engagementLevel">High</div>
+                        </div>
+                        <div class="info-card" style="padding: 8px;">
+                            <div class="info-card-label">Churn Risk</div>
+                            <div class="info-card-value" style="font-size: 12px; color: var(--chart-green);" id="churnRisk">Low</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Client Information -->
             <div class="viz-card" style="margin-bottom: 12px;">
                 <div class="viz-title">Client Information</div>
-                <div class="info-grid" style="grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0;">
+                <div class="info-grid" style="grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 0;">
                     <div class="info-card" style="padding: 10px;">
                         <div class="info-card-label">Contract Date</div>
                         <div class="info-card-value" style="font-size: 12px;" id="contractDate">3/15/2020</div>
@@ -536,15 +681,50 @@
                         <div class="info-card-label">Recognized Loss</div>
                         <div class="info-card-value" style="font-size: 12px;" id="recognizedLoss">$45.8M</div>
                     </div>
+                    <div class="info-card" style="padding: 10px;">
+                        <div class="info-card-label">Primary Contact</div>
+                        <div class="info-card-value" style="font-size: 12px;" id="primaryContact">Sarah Johnson</div>
+                    </div>
+                    <div class="info-card" style="padding: 10px;">
+                        <div class="info-card-label">Account Manager</div>
+                        <div class="info-card-value" style="font-size: 12px;" id="accountManager">Craig D'Alessio</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Relationship Timeline & Insights -->
+            <div class="grid-2" style="margin-bottom: 12px; gap: 12px;">
+                <!-- Relationship Timeline -->
+                <div class="viz-card" style="border-left: 4px solid var(--pbi-primary);">
+                    <div class="viz-title" style="margin-bottom: 12px;">
+                        <i class="fas fa-history" style="color: var(--pbi-primary); margin-right: 6px;"></i>Relationship Timeline
+                    </div>
+                    <div id="relationshipTimeline" style="position: relative; padding-left: 24px;">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Engagement Heatmap -->
+                <div class="viz-card" style="border-left: 4px solid var(--chart-green);">
+                    <div class="viz-title" style="margin-bottom: 12px;">
+                        <i class="fas fa-calendar-alt" style="color: var(--chart-green); margin-right: 6px;"></i>Engagement Activity (Last 90 Days)
+                    </div>
+                    <div id="engagementHeatmap" style="display: grid; grid-template-columns: repeat(13, 1fr); gap: 4px;">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 12px; font-size: 9px; color: var(--pbi-text-secondary);">
+                        <span>90 days ago</span>
+                        <span>Today</span>
+                    </div>
                 </div>
             </div>
 
             <!-- Charts Row -->
-            <div class="grid-2" style="margin-bottom: 12px; margin-top: 12px;">
+            <div class="grid-2" style="margin-bottom: 12px;">
                 <!-- Recovery Trend Chart -->
                 <div class="viz-card">
                     <div class="viz-title">Recovery Trend Over Time</div>
-                    <div class="bar-chart-container" style="height: 300px;">
+                    <div class="bar-chart-container" style="height: 280px;">
                         <canvas id="recoveryTrendChart"></canvas>
                     </div>
                 </div>
@@ -552,7 +732,7 @@
                 <!-- Case Status Distribution -->
                 <div class="viz-card">
                     <div class="viz-title">Case Status Distribution</div>
-                    <div class="donut-container" style="height: 300px;">
+                    <div class="donut-container" style="height: 280px;">
                         <canvas id="caseStatusChart"></canvas>
                         <div class="donut-center">
                             <div class="donut-total" style="font-size: 20px;">47</div>
@@ -743,9 +923,188 @@
                 claimsFiled: 47,
                 eligibleCases: 32,
                 totalRecoveries: 8400000,
-                expectedRecovery: 12200000
+                expectedRecovery: 12200000,
+                // New fields for account management
+                nineBoxValue: 'high', // 'high', 'medium', 'low'
+                nineBoxCost: 'low', // 'high', 'medium', 'low'
+                healthScore: 85,
+                lastContact: '2 days ago',
+                lastContactType: 'Email',
+                contractValue: '$2.4M',
+                renewalDate: '3/15/2025',
+                engagementLevel: 'High',
+                churnRisk: 'Low',
+                primaryContact: 'Sarah Johnson',
+                accountManager: 'Craig D\'Alessio',
+                clientSubtitle: 'Since 2020 • Strategic Partner',
+                // Performance metrics
+                recoveryRate: 18.4,
+                filingEfficiency: 94,
+                avgDaysToRecovery: 127,
+                clientSatisfaction: 4.8,
+                // Smart recommendations
+                recommendations: [
+                    { type: 'renewal', priority: 'high', title: 'Renewal Discussion', desc: 'Contract expires in 45 days - schedule renewal meeting', action: 'Schedule Meeting', value: '$2.4M' },
+                    { type: 'upsell', priority: 'medium', title: 'Additional Services', desc: 'Client eligible for expanded coverage - $450K potential', action: 'Propose Upsell', value: '$450K' },
+                    { type: 'engagement', priority: 'low', title: 'Quarterly Review', desc: 'Time for Q4 performance review - last one was 90 days ago', action: 'Schedule Review', value: null }
+                ],
+                revenueOpportunities: [
+                    { type: 'new-cases', title: '15 New Eligible Cases', desc: 'Recently identified cases worth $1.2M potential recovery', value: '$1.2M', urgency: 'high' },
+                    { type: 'expanded-coverage', title: 'Expanded Service Tier', desc: 'Upgrade to premium tier for additional case monitoring', value: '$180K ARR', urgency: 'medium' }
+                ],
+                relationshipTimeline: [
+                    { date: '3/15/2020', event: 'Contract Signed', type: 'milestone', icon: 'fa-file-contract' },
+                    { date: '6/20/2020', event: 'First Recovery Received', type: 'success', icon: 'fa-money-bill-wave' },
+                    { date: '9/15/2021', event: 'Contract Renewal', type: 'milestone', icon: 'fa-sync' },
+                    { date: '12/10/2022', event: 'Expanded Service Agreement', type: 'upsell', icon: 'fa-arrow-trend-up' },
+                    { date: '3/20/2024', event: 'Second Renewal', type: 'milestone', icon: 'fa-sync' }
+                ],
+                engagementData: [
+                    // Last 90 days of engagement (0-3 interactions per day)
+                    0,1,0,2,1,0,0,1,3,2,1,0,1,2,1,0,0,1,2,3,1,0,1,1,2,0,0,1,2,1,
+                    0,1,3,2,1,0,1,2,1,0,0,1,2,1,3,2,1,0,1,2,1,0,0,1,2,3,1,0,1,1,
+                    2,0,0,1,2,1,0,1,3,2,1,0,1,2,1,0,0,1,2,1,3,2,1,0,1,2,1,0,0,1,
+                    2,3,1,0,1,1,2,0,0,1,2,1,0,1,3,2,1,0,1,2,1
+                ]
+            },
+            blackrock: {
+                parent: 'BlackRock',
+                children: [],
+                contractDate: '1/10/2019',
+                atfSignatureDate: '1/18/2019',
+                dataSource: 'Custodian Direct',
+                dataRefresh: 'Weekly',
+                cusipClient: true,
+                recognizedLoss: '$125.3M',
+                claimsFiled: 89,
+                eligibleCases: 67,
+                totalRecoveries: 24500000,
+                expectedRecovery: 35000000,
+                nineBoxValue: 'high',
+                nineBoxCost: 'medium',
+                healthScore: 92,
+                lastContact: '1 day ago',
+                lastContactType: 'Phone Call',
+                contractValue: '$5.8M',
+                renewalDate: '1/10/2025',
+                engagementLevel: 'Very High',
+                churnRisk: 'Very Low',
+                primaryContact: 'Michael Chen',
+                accountManager: 'Craig D\'Alessio',
+                clientSubtitle: 'Since 2019 • Premium Client',
+                relationshipTimeline: [
+                    { date: '1/10/2019', event: 'Contract Signed', type: 'milestone', icon: 'fa-file-contract' },
+                    { date: '4/15/2019', event: 'First Recovery Received', type: 'success', icon: 'fa-money-bill-wave' },
+                    { date: '1/10/2022', event: 'Contract Renewal', type: 'milestone', icon: 'fa-sync' },
+                    { date: '6/20/2023', event: 'Expanded Service Agreement', type: 'upsell', icon: 'fa-arrow-trend-up' },
+                    { date: '1/10/2024', event: 'Second Renewal', type: 'milestone', icon: 'fa-sync' }
+                ],
+                engagementData: Array(90).fill(0).map(() => Math.floor(Math.random() * 4))
+            },
+            schwab: {
+                parent: 'Charles Schwab Investment Management',
+                children: [],
+                contractDate: '6/5/2021',
+                atfSignatureDate: '6/12/2021',
+                dataSource: 'Custodian Direct',
+                dataRefresh: 'Monthly',
+                cusipClient: false,
+                recognizedLoss: '$28.7M',
+                claimsFiled: 34,
+                eligibleCases: 28,
+                totalRecoveries: 4200000,
+                expectedRecovery: 8500000,
+                nineBoxValue: 'medium',
+                nineBoxCost: 'low',
+                healthScore: 78,
+                lastContact: '5 days ago',
+                lastContactType: 'Email',
+                contractValue: '$1.2M',
+                renewalDate: '6/5/2025',
+                engagementLevel: 'Medium',
+                churnRisk: 'Medium',
+                primaryContact: 'Jennifer Williams',
+                accountManager: 'Craig D\'Alessio',
+                clientSubtitle: 'Since 2021 • Growth Client',
+                relationshipTimeline: [
+                    { date: '6/5/2021', event: 'Contract Signed', type: 'milestone', icon: 'fa-file-contract' },
+                    { date: '9/20/2021', event: 'First Recovery Received', type: 'success', icon: 'fa-money-bill-wave' }
+                ],
+                engagementData: Array(90).fill(0).map(() => Math.floor(Math.random() * 3))
             }
         };
+
+        // 9 Box grid positions: [row][col] where row=value (0=low, 1=medium, 2=high), col=cost (0=high, 1=medium, 2=low)
+        function renderNineBoxGrid(value, cost) {
+            const grid = document.getElementById('nineBoxGrid');
+            if (!grid) return;
+            
+            const valueMap = { 'low': 0, 'medium': 1, 'high': 2 };
+            const costMap = { 'high': 0, 'medium': 1, 'low': 2 };
+            const valueIndex = valueMap[value] || 1;
+            const costIndex = costMap[cost] || 1;
+            
+            grid.innerHTML = '';
+            
+            for (let row = 2; row >= 0; row--) { // High value at top
+                for (let col = 0; col < 3; col++) { // High cost on left
+                    const cell = document.createElement('div');
+                    const isActive = (row === valueIndex && col === costIndex);
+                    
+                    if (isActive) {
+                        cell.style.background = 'linear-gradient(135deg, var(--pbi-primary) 0%, var(--pbi-primary-dark) 100%)';
+                        cell.style.border = '2px solid var(--pbi-primary-dark)';
+                        cell.style.color = 'white';
+                        cell.style.fontWeight = '700';
+                        cell.innerHTML = '<i class="fas fa-check-circle" style="font-size: 20px;"></i>';
+                    } else {
+                        cell.style.background = 'var(--pbi-background)';
+                        cell.style.border = '1px solid var(--pbi-border)';
+                        cell.style.color = 'var(--pbi-text-tertiary)';
+                    }
+                    
+                    cell.style.borderRadius = '4px';
+                    cell.style.display = 'flex';
+                    cell.style.alignItems = 'center';
+                    cell.style.justifyContent = 'center';
+                    cell.style.cursor = 'pointer';
+                    cell.style.transition = 'all 0.2s';
+                    
+                    cell.onmouseover = function() {
+                        if (!isActive) {
+                            this.style.background = 'var(--pbi-hover)';
+                            this.style.borderColor = 'var(--pbi-border)';
+                        }
+                    };
+                    cell.onmouseout = function() {
+                        if (!isActive) {
+                            this.style.background = 'var(--pbi-background)';
+                            this.style.borderColor = 'var(--pbi-border)';
+                        }
+                    };
+                    
+                    grid.appendChild(cell);
+                }
+            }
+            
+            // Update badge
+            const valueLabels = { 'low': 'Low', 'medium': 'Medium', 'high': 'High' };
+            const costLabels = { 'high': 'High', 'medium': 'Medium', 'low': 'Low' };
+            const badge = document.getElementById('nineBoxRating');
+            if (badge) {
+                badge.textContent = `${valueLabels[value]} Value / ${costLabels[cost]} Cost`;
+                // Color code badge
+                if (value === 'high' && cost === 'low') {
+                    badge.style.background = 'var(--chart-green)';
+                } else if (value === 'high' && cost === 'high') {
+                    badge.style.background = '#ff8c00';
+                } else if (value === 'low' && cost === 'high') {
+                    badge.style.background = '#d13438';
+                } else {
+                    badge.style.background = 'var(--pbi-primary)';
+                }
+            }
+        }
 
         // Sample open items
         const openItems = [
@@ -817,6 +1176,266 @@
             return '$' + amount.toLocaleString();
         }
 
+        function updateClientData(clientKey) {
+            const client = clientData[clientKey];
+            if (!client) return;
+            
+            // Update basic client info
+            document.getElementById('parentClientName').textContent = client.parent;
+            if (document.getElementById('clientSubtitle')) {
+                document.getElementById('clientSubtitle').textContent = client.clientSubtitle || 'Client since ' + (client.contractDate ? client.contractDate.split('/')[2] : '2020');
+            }
+            document.getElementById('contractDate').textContent = client.contractDate;
+            document.getElementById('atfSignatureDate').textContent = client.atfSignatureDate;
+            document.getElementById('dataSource').textContent = client.dataSource;
+            document.getElementById('dataRefresh').textContent = client.dataRefresh;
+            document.getElementById('cusipClient').textContent = client.cusipClient ? 'Yes' : 'No';
+            document.getElementById('cusipClient').className = client.cusipClient ? 'info-card-value yes' : 'info-card-value no';
+            document.getElementById('recognizedLoss').textContent = client.recognizedLoss;
+            
+            // Update new account management fields
+            if (document.getElementById('healthScore')) {
+                document.getElementById('healthScore').textContent = client.healthScore || 85;
+                const healthColor = client.healthScore >= 80 ? 'var(--chart-green)' : 
+                                   client.healthScore >= 60 ? '#ff8c00' : '#d13438';
+                document.getElementById('healthScore').style.color = healthColor;
+            }
+            if (document.getElementById('lastContact')) {
+                document.getElementById('lastContact').textContent = client.lastContact || 'N/A';
+            }
+            if (document.getElementById('lastContactType')) {
+                document.getElementById('lastContactType').textContent = client.lastContactType || '';
+            }
+            if (document.getElementById('contractValue')) {
+                document.getElementById('contractValue').textContent = client.contractValue || 'N/A';
+            }
+            if (document.getElementById('renewalDate')) {
+                document.getElementById('renewalDate').textContent = client.renewalDate || 'N/A';
+            }
+            if (document.getElementById('engagementLevel')) {
+                document.getElementById('engagementLevel').textContent = client.engagementLevel || 'N/A';
+                const engagementColor = client.engagementLevel === 'Very High' || client.engagementLevel === 'High' ? 'var(--chart-green)' :
+                                      client.engagementLevel === 'Medium' ? '#ff8c00' : '#d13438';
+                document.getElementById('engagementLevel').style.color = engagementColor;
+            }
+            if (document.getElementById('churnRisk')) {
+                document.getElementById('churnRisk').textContent = client.churnRisk || 'N/A';
+                const churnColor = client.churnRisk === 'Very Low' || client.churnRisk === 'Low' ? 'var(--chart-green)' :
+                                  client.churnRisk === 'Medium' ? '#ff8c00' : '#d13438';
+                document.getElementById('churnRisk').style.color = churnColor;
+            }
+            if (document.getElementById('primaryContact')) {
+                document.getElementById('primaryContact').textContent = client.primaryContact || 'N/A';
+            }
+            if (document.getElementById('accountManager')) {
+                document.getElementById('accountManager').textContent = client.accountManager || 'N/A';
+            }
+            
+            // Update 9 Box grid
+            if (client.nineBoxValue && client.nineBoxCost) {
+                renderNineBoxGrid(client.nineBoxValue, client.nineBoxCost);
+            }
+            
+            // Update performance metrics
+            if (document.getElementById('recoveryRate')) {
+                document.getElementById('recoveryRate').textContent = (client.recoveryRate || 18.4).toFixed(1) + '%';
+            }
+            if (document.getElementById('filingEfficiency')) {
+                document.getElementById('filingEfficiency').textContent = (client.filingEfficiency || 94) + '%';
+            }
+            if (document.getElementById('avgDaysToRecovery')) {
+                document.getElementById('avgDaysToRecovery').textContent = client.avgDaysToRecovery || 127;
+            }
+            if (document.getElementById('clientSatisfaction')) {
+                document.getElementById('clientSatisfaction').textContent = (client.clientSatisfaction || 4.8).toFixed(1) + '/5';
+            }
+            
+            // Update KPI cards
+            if (document.getElementById('totalRecoveriesKPI')) {
+                document.getElementById('totalRecoveriesKPI').textContent = formatCurrency(client.totalRecoveries || 8400000);
+            }
+            if (document.getElementById('claimsFiledKPI')) {
+                document.getElementById('claimsFiledKPI').textContent = client.claimsFiled || 47;
+            }
+            if (document.getElementById('eligibleCasesKPI')) {
+                document.getElementById('eligibleCasesKPI').textContent = client.eligibleCases || 32;
+            }
+            if (document.getElementById('expectedRecoveryKPI')) {
+                document.getElementById('expectedRecoveryKPI').textContent = formatCurrency(client.expectedRecovery || 12200000);
+            }
+            
+            // Populate smart recommendations
+            populateSmartRecommendations(client.recommendations || []);
+            
+            // Populate revenue opportunities
+            populateRevenueOpportunities(client.revenueOpportunities || []);
+            
+            // Populate relationship timeline
+            populateRelationshipTimeline(client.relationshipTimeline || []);
+            
+            // Populate engagement heatmap
+            populateEngagementHeatmap(client.engagementData || []);
+        }
+        
+        function populateRelationshipTimeline(events) {
+            const container = document.getElementById('relationshipTimeline');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            if (events.length === 0) {
+                container.innerHTML = '<div style="padding: 12px; text-align: center; color: var(--pbi-text-secondary); font-size: 10px;">No timeline data available</div>';
+                return;
+            }
+            
+            events.forEach((event, index) => {
+                const div = document.createElement('div');
+                const typeColor = event.type === 'milestone' ? 'var(--pbi-primary)' : 
+                                 event.type === 'success' ? 'var(--chart-green)' : 
+                                 event.type === 'upsell' ? '#ff8c00' : 'var(--pbi-text-secondary)';
+                
+                div.style.cssText = 'position: relative; padding-left: 32px; padding-bottom: 16px;';
+                if (index < events.length - 1) {
+                    div.style.borderLeft = '2px solid var(--pbi-border-light)';
+                    div.style.marginLeft = '-24px';
+                }
+                
+                div.innerHTML = `
+                    <div style="position: absolute; left: 0; top: 2px;">
+                        <div style="width: 16px; height: 16px; border-radius: 50%; background: ${typeColor}; border: 3px solid white; box-shadow: 0 0 0 2px ${typeColor};"></div>
+                    </div>
+                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-bottom: 2px;">${event.date}</div>
+                    <div style="font-size: 11px; font-weight: 600; color: var(--pbi-text-primary); display: flex; align-items: center; gap: 6px;">
+                        <i class="fas ${event.icon}" style="color: ${typeColor}; font-size: 10px;"></i>
+                        ${event.event}
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        function populateEngagementHeatmap(data) {
+            const container = document.getElementById('engagementHeatmap');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            // Use last 90 days of data
+            const last90Days = data.slice(-90);
+            
+            last90Days.forEach((count, index) => {
+                const cell = document.createElement('div');
+                const intensity = Math.min(count / 3, 1); // Normalize to 0-1
+                const bgColor = intensity === 0 ? 'var(--pbi-background)' :
+                               intensity < 0.33 ? 'rgba(0, 120, 212, 0.2)' :
+                               intensity < 0.67 ? 'rgba(0, 120, 212, 0.5)' :
+                               'var(--pbi-primary)';
+                
+                cell.style.cssText = `aspect-ratio: 1; background: ${bgColor}; border-radius: 2px; border: 1px solid var(--pbi-border-light); cursor: pointer; transition: all 0.2s;`;
+                cell.title = `${count} interaction${count !== 1 ? 's' : ''} on day ${index + 1}`;
+                cell.onmouseover = function() {
+                    this.style.transform = 'scale(1.2)';
+                    this.style.zIndex = '10';
+                };
+                cell.onmouseout = function() {
+                    this.style.transform = 'scale(1)';
+                    this.style.zIndex = '1';
+                };
+                
+                container.appendChild(cell);
+            });
+        }
+        
+        function populateSmartRecommendations(recommendations) {
+            const container = document.getElementById('smartRecommendations');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            if (recommendations.length === 0) {
+                container.innerHTML = '<div style="padding: 12px; text-align: center; color: var(--pbi-text-secondary); font-size: 10px;">No recommendations at this time</div>';
+                return;
+            }
+            
+            recommendations.forEach((rec, index) => {
+                const div = document.createElement('div');
+                const priorityColor = rec.priority === 'high' ? '#d13438' : rec.priority === 'medium' ? '#ff8c00' : '#0078d4';
+                const icon = rec.type === 'renewal' ? 'fa-calendar-check' : rec.type === 'upsell' ? 'fa-arrow-trend-up' : 'fa-handshake';
+                
+                div.style.cssText = 'padding: 10px; margin-bottom: 8px; background: white; border-left: 3px solid ' + priorityColor + '; border-radius: 3px; cursor: pointer; transition: all 0.2s;';
+                div.onmouseover = function() { this.style.transform = 'translateX(4px)'; this.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)'; };
+                div.onmouseout = function() { this.style.transform = 'translateX(0)'; this.style.boxShadow = 'none'; };
+                
+                div.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 6px;">
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                                <i class="fas ${icon}" style="color: ${priorityColor}; font-size: 12px;"></i>
+                                <span style="font-weight: 600; font-size: 11px; color: var(--pbi-text-primary);">${rec.title}</span>
+                                ${rec.value ? '<span style="font-size: 9px; color: var(--chart-green); font-weight: 600;">' + rec.value + '</span>' : ''}
+                            </div>
+                            <div style="font-size: 9px; color: var(--pbi-text-secondary); line-height: 1.4; margin-bottom: 6px;">${rec.desc}</div>
+                        </div>
+                        <span style="background: ${priorityColor}; color: white; padding: 2px 6px; border-radius: 10px; font-size: 8px; font-weight: 600; text-transform: uppercase; margin-left: 8px;">${rec.priority}</span>
+                    </div>
+                    <button style="background: ${priorityColor}; color: white; border: none; padding: 4px 12px; border-radius: 3px; font-size: 9px; font-weight: 600; cursor: pointer; transition: all 0.2s;" 
+                            onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                        <i class="fas fa-bolt" style="margin-right: 4px;"></i>${rec.action}
+                    </button>
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        function populateRevenueOpportunities(opportunities) {
+            const container = document.getElementById('revenueOpportunities');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            if (opportunities.length === 0) {
+                container.innerHTML = '<div style="padding: 12px; text-align: center; color: var(--pbi-text-secondary); font-size: 10px;">No opportunities identified</div>';
+                return;
+            }
+            
+            let totalValue = 0;
+            opportunities.forEach(opp => {
+                const div = document.createElement('div');
+                const urgencyColor = opp.urgency === 'high' ? '#d13438' : '#ff8c00';
+                
+                div.style.cssText = 'padding: 10px; margin-bottom: 8px; background: white; border-left: 3px solid ' + urgencyColor + '; border-radius: 3px;';
+                
+                div.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 4px;">
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600; font-size: 11px; color: var(--pbi-text-primary); margin-bottom: 4px;">${opp.title}</div>
+                            <div style="font-size: 9px; color: var(--pbi-text-secondary); line-height: 1.4;">${opp.desc}</div>
+                        </div>
+                        <div style="text-align: right; margin-left: 12px;">
+                            <div style="font-size: 14px; font-weight: 700; color: var(--chart-green);">${opp.value}</div>
+                            <span style="background: ${urgencyColor}; color: white; padding: 2px 6px; border-radius: 10px; font-size: 8px; font-weight: 600; text-transform: uppercase; margin-top: 4px; display: inline-block;">${opp.urgency}</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(div);
+                
+                // Extract numeric value for total
+                const valueMatch = opp.value.match(/[\d.]+/);
+                if (valueMatch) {
+                    const num = parseFloat(valueMatch[0]);
+                    if (opp.value.includes('M')) totalValue += num * 1000000;
+                    else if (opp.value.includes('K')) totalValue += num * 1000;
+                    else totalValue += num;
+                }
+            });
+            
+            // Update opportunity value badge
+            const badge = document.getElementById('opportunityValue');
+            if (badge && totalValue > 0) {
+                badge.textContent = formatCurrency(totalValue) + ' Potential';
+            }
+        }
+
         function populateClientHierarchy() {
             const client = clientData.wellington;
             document.getElementById('parentClientName').textContent = client.parent;
@@ -831,6 +1450,9 @@
                 badge.onclick = () => selectChildClient(child.id);
                 childContainer.appendChild(badge);
             });
+            
+            // Update all client data
+            updateClientData('wellington');
         }
 
         function selectChildClient(childId) {
@@ -1446,6 +2068,28 @@
         }
 
         // Initialize
+        // Client selector change handler
+        document.getElementById('clientSelect').addEventListener('change', function(e) {
+            const clientKey = e.target.value;
+            updateClientData(clientKey);
+            // Update hierarchy for selected client
+            const client = clientData[clientKey];
+            if (client) {
+                document.getElementById('parentClientName').textContent = client.parent;
+                const childContainer = document.getElementById('childClients');
+                childContainer.innerHTML = '';
+                if (client.children && client.children.length > 0) {
+                    client.children.forEach(child => {
+                        const badge = document.createElement('div');
+                        badge.className = `child-client-badge ${child.active ? 'active' : ''}`;
+                        badge.textContent = child.name;
+                        badge.onclick = () => selectChildClient(child.id);
+                        childContainer.appendChild(badge);
+                    });
+                }
+            }
+        });
+
         window.addEventListener('DOMContentLoaded', () => {
             populateClientHierarchy();
             populateQuickOpenItems();
