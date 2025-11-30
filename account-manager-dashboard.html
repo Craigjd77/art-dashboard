@@ -397,6 +397,10 @@
             <i class="fas fa-user-tie"></i>
             Account Manager Dashboard
         </button>
+        <button class="nav-tab">
+            <i class="fas fa-users"></i>
+            My Portfolio
+        </button>
         <button class="nav-tab">+</button>
     </div>
 
@@ -2071,6 +2075,9 @@
         // Client selector change handler
         document.getElementById('clientSelect').addEventListener('change', function(e) {
             const clientKey = e.target.value;
+            // Update URL without page reload
+            const newURL = window.location.pathname + '?client=' + clientKey;
+            window.history.pushState({ client: clientKey }, '', newURL);
             updateClientData(clientKey);
             // Update hierarchy for selected client
             const client = clientData[clientKey];
@@ -2089,8 +2096,39 @@
                 }
             }
         });
+        
+        // Navigation handlers
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const text = this.textContent.trim();
+                if (text.includes('ELIGIBILITY')) {
+                    window.location.href = 'eligibility-filings.html';
+                } else if (text.includes('STATUS REPORTS')) {
+                    window.location.href = 'client-status-reports.html';
+                } else if (text.includes('OPT-IN')) {
+                    window.location.href = 'opt-in-monitoring.html';
+                } else if (text.includes('REMITTANCE')) {
+                    window.location.href = 'client-remittance.html';
+                } else if (text.includes('My Portfolio')) {
+                    window.location.href = 'account-manager-portfolio.html';
+                }
+            });
+        });
+
+        // Check for URL parameter to load specific client
+        function getClientFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('client') || 'wellington';
+        }
 
         window.addEventListener('DOMContentLoaded', () => {
+            // Load client from URL parameter if present
+            const clientKey = getClientFromURL();
+            if (clientData[clientKey]) {
+                document.getElementById('clientSelect').value = clientKey;
+                updateClientData(clientKey);
+            }
+            
             populateClientHierarchy();
             populateQuickOpenItems();
             populateOpenItems();

@@ -824,6 +824,10 @@
             <i class="fas fa-user-tie"></i>
             Account Manager Dashboard
         </button>
+        <button class="nav-tab">
+            <i class="fas fa-users"></i>
+            My Portfolio
+        </button>
         <button class="nav-tab">+</button>
     </div>
 
@@ -1308,6 +1312,17 @@
             return clientScenarios[currentMonthKey] || clientScenarios['2024-10'];
         }
 
+        // Check for URL parameters
+        function getClientFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('client') || null;
+        }
+        
+        function getPeriodFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('period') || null;
+        }
+
         function updateRemittanceView() {
             const scenario = getCurrentScenario();
             if (!scenario) return;
@@ -1339,6 +1354,10 @@
             const returnedTextEl = document.querySelector('.status-card.returned .status-card-count');
 
             if (payableValueEl) payableValueEl.textContent = statusCards.payableAmount;
+            
+            // Update tables with scenario data
+            populateRecentRemittancesTable();
+            populatePendingRemittancesTable();
             if (payableTextEl) payableTextEl.textContent = statusCards.payableText;
             if (paidValueEl) paidValueEl.textContent = statusCards.paidAmount;
             if (paidTextEl) paidTextEl.textContent = statusCards.paidText;
@@ -1426,11 +1445,30 @@
         }
         
         // Populate Recent Remittances Table
+        // Get current client and period from selectors
+        function getCurrentClientKey() {
+            const clientSelect = document.getElementById('clientSelect');
+            return clientSelect ? clientSelect.value : 'demo';
+        }
+        
+        function getCurrentPeriodKey() {
+            const monthSelect = document.getElementById('monthSelect');
+            return monthSelect ? monthSelect.value : '2024-10';
+        }
+        
         function populateRecentRemittancesTable() {
             const tbody = document.getElementById('recentRemittancesTableBody');
+            if (!tbody) return;
             tbody.innerHTML = '';
             
-            recentRemittancesData.forEach(row => {
+            const clientKey = getCurrentClientKey();
+            const periodKey = getCurrentPeriodKey();
+            const scenario = remittanceScenarios[clientKey] && remittanceScenarios[clientKey][periodKey];
+            
+            // Use scenario data if available, otherwise fall back to static data
+            const dataToUse = scenario && scenario.recentRemittances ? scenario.recentRemittances : recentRemittancesData;
+            
+            dataToUse.forEach(row => {
                 const tr = document.createElement('tr');
                 const statusClass = row.status.toLowerCase().replace(' ', '-');
                 const reconClass = row.reconciliation.toLowerCase();
@@ -1455,9 +1493,17 @@
         // Populate Pending Remittances Table
         function populatePendingRemittancesTable() {
             const tbody = document.getElementById('pendingRemittancesTableBody');
+            if (!tbody) return;
             tbody.innerHTML = '';
             
-            pendingRemittancesData.forEach(row => {
+            const clientKey = getCurrentClientKey();
+            const periodKey = getCurrentPeriodKey();
+            const scenario = remittanceScenarios[clientKey] && remittanceScenarios[clientKey][periodKey];
+            
+            // Use scenario data if available, otherwise fall back to static data
+            const dataToUse = scenario && scenario.pendingRemittances ? scenario.pendingRemittances : pendingRemittancesData;
+            
+            dataToUse.forEach(row => {
                 const tr = document.createElement('tr');
                 let daysClass = 'days-normal';
                 let daysText = `${row.daysUntil} days`;
@@ -1837,6 +1883,8 @@
                     window.location.href = 'opt-in-monitoring.html';
                 } else if (this.textContent.includes('Account Manager Dashboard')) {
                     window.location.href = 'account-manager-dashboard.html';
+                } else if (this.textContent.includes('My Portfolio')) {
+                    window.location.href = 'account-manager-portfolio.html';
                 } else {
                     document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
                     this.classList.add('active');
@@ -1853,6 +1901,9 @@
             if (clientSelect) {
                 clientSelect.addEventListener('change', () => {
                     currentClientKey = clientSelect.value || 'demo';
+                    // Update URL without reload
+                    const newURL = window.location.pathname + '?client=' + currentClientKey + (currentMonthKey ? '&period=' + currentMonthKey : '');
+                    window.history.pushState({ client: currentClientKey, period: currentMonthKey }, '', newURL);
                     updateRemittanceView();
                 });
             }
@@ -1860,6 +1911,10 @@
             if (monthSelect) {
                 monthSelect.addEventListener('change', () => {
                     currentMonthKey = monthSelect.value || '2024-10';
+                    // Update URL without reload
+                    const currentClient = clientSelect ? clientSelect.value : 'demo';
+                    const newURL = window.location.pathname + '?client=' + currentClient + '&period=' + currentMonthKey;
+                    window.history.pushState({ client: currentClient, period: currentMonthKey }, '', newURL);
                     updateRemittanceView();
                 });
             }
@@ -1872,10 +1927,18 @@
                 });
             }
 
+            // Check for URL parameters and set selectors
+            const urlClient = getClientFromURL();
+            const urlPeriod = getPeriodFromURL();
+            if (urlClient && clientSelect) {
+                clientSelect.value = urlClient;
+            }
+            if (urlPeriod && monthSelect) {
+                monthSelect.value = urlPeriod;
+            }
+            
             // Initial data bind
             updateRemittanceView();
-            populateRecentRemittancesTable();
-            populatePendingRemittancesTable();
             populateUnmatchedTable();
             populateMissingTable();
             populateHistoryTable();

@@ -389,6 +389,10 @@
             <i class="fas fa-user-tie"></i>
             Account Manager Dashboard
         </button>
+        <button class="nav-tab">
+            <i class="fas fa-users"></i>
+            My Portfolio
+        </button>
         <button class="nav-tab">+</button>
     </div>
 
@@ -1106,6 +1110,8 @@
                     window.location.href = 'client-remittance.html';
                 } else if (this.textContent.includes('Account Manager Dashboard')) {
                     window.location.href = 'account-manager-dashboard.html';
+                } else if (this.textContent.includes('My Portfolio')) {
+                    window.location.href = 'account-manager-portfolio.html';
                 } else {
                     document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
                     this.classList.add('active');

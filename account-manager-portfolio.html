@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Manager Portfolio | FRT Work Tools</title>
+    
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Shared Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style-switcher.css">
+    
+    <style>
+        .portfolio-header {
+            background: linear-gradient(135deg, var(--pbi-primary) 0%, var(--pbi-primary-dark) 100%);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+        
+        .portfolio-header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .portfolio-header .subtitle {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .manager-selector {
+            background: var(--pbi-card-bg);
+            border: 1px solid var(--pbi-border);
+            border-radius: 4px;
+            padding: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .manager-selector label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--pbi-text-primary);
+        }
+        
+        .manager-selector select {
+            padding: 6px 12px;
+            border: 1px solid var(--pbi-border);
+            border-radius: 3px;
+            font-size: 11px;
+            min-width: 200px;
+        }
+        
+        .client-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .client-card {
+            background: var(--pbi-card-bg);
+            border: 1px solid var(--pbi-border);
+            border-radius: 4px;
+            padding: 14px;
+            box-shadow: var(--pbi-shadow);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .client-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--pbi-shadow-hover);
+            border-color: var(--pbi-primary);
+        }
+        
+        .client-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+        
+        .client-card-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--pbi-primary);
+            margin-bottom: 4px;
+        }
+        
+        .client-card-subtitle {
+            font-size: 10px;
+            color: var(--pbi-text-secondary);
+        }
+        
+        .client-card-health {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 9px;
+            font-weight: 600;
+        }
+        
+        .health-excellent {
+            background: rgba(16, 124, 16, 0.1);
+            color: var(--chart-green);
+        }
+        
+        .health-good {
+            background: rgba(0, 120, 212, 0.1);
+            color: var(--pbi-primary);
+        }
+        
+        .health-warning {
+            background: rgba(255, 140, 0, 0.1);
+            color: #ff8c00;
+        }
+        
+        .health-critical {
+            background: rgba(209, 52, 56, 0.1);
+            color: #d13438;
+        }
+        
+        .client-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .client-metric {
+            text-align: center;
+            padding: 8px;
+            background: var(--pbi-background);
+            border-radius: 3px;
+        }
+        
+        .client-metric-label {
+            font-size: 9px;
+            color: var(--pbi-text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        
+        .client-metric-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--pbi-text-primary);
+        }
+        
+        .client-metric-value.green {
+            color: var(--chart-green);
+        }
+        
+        .client-actions {
+            display: flex;
+            gap: 6px;
+            padding-top: 12px;
+            border-top: 1px solid var(--pbi-border-light);
+        }
+        
+        .client-action-btn {
+            flex: 1;
+            padding: 6px 10px;
+            border: 1px solid var(--pbi-border);
+            background: var(--pbi-card-bg);
+            border-radius: 3px;
+            font-size: 9px;
+            font-weight: 600;
+            color: var(--pbi-text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        
+        .client-action-btn:hover {
+            background: var(--pbi-primary);
+            color: white;
+            border-color: var(--pbi-primary);
+        }
+        
+        .client-action-btn.primary {
+            background: var(--pbi-primary);
+            color: white;
+            border-color: var(--pbi-primary);
+        }
+        
+        .portfolio-summary {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        
+        .summary-card {
+            background: var(--pbi-card-bg);
+            border: 1px solid var(--pbi-border);
+            border-left: 3px solid;
+            border-radius: 4px;
+            padding: 12px;
+            text-align: center;
+        }
+        
+        .summary-card.primary {
+            border-left-color: var(--pbi-primary);
+        }
+        
+        .summary-card.green {
+            border-left-color: var(--chart-green);
+        }
+        
+        .summary-card.orange {
+            border-left-color: #ff8c00;
+        }
+        
+        .summary-card.purple {
+            border-left-color: #8764b8;
+        }
+        
+        .summary-card.red {
+            border-left-color: #d13438;
+        }
+        
+        .summary-label {
+            font-size: 9px;
+            color: var(--pbi-text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        
+        .summary-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--pbi-text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .summary-value.green {
+            color: var(--chart-green);
+        }
+        
+        .summary-change {
+            font-size: 8px;
+            color: var(--pbi-text-secondary);
+        }
+        
+        .filter-badges {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+        
+        .filter-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 9px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid var(--pbi-border);
+            background: var(--pbi-background);
+            color: var(--pbi-text-secondary);
+        }
+        
+        .filter-badge.active {
+            background: var(--pbi-primary);
+            color: white;
+            border-color: var(--pbi-primary);
+        }
+        
+        .filter-badge:hover {
+            background: var(--pbi-hover);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <div class="logo">FRT Work Tools</div>
+            <div class="header-title">Account Manager Portfolio</div>
+        </div>
+        <div class="header-right">
+            <div class="user-info">Craig D'Alessio</div>
+            <button>Share</button>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+        <button class="nav-tab">
+            <i class="fas fa-file-check"></i>
+            ELIGIBILITY & FILINGS
+        </button>
+        <button class="nav-tab">
+            <i class="fas fa-chart-line"></i>
+            STATUS REPORTS
+        </button>
+        <button class="nav-tab">
+            <i class="fas fa-bell"></i>
+            OPT-IN MONITORING
+        </button>
+        <button class="nav-tab">
+            <i class="fas fa-money-bill-wave"></i>
+            REMITTANCE
+        </button>
+        <button class="nav-tab">
+            <i class="fas fa-user-tie"></i>
+            Account Manager Dashboard
+        </button>
+        <button class="nav-tab active">
+            <i class="fas fa-users"></i>
+            My Portfolio
+        </button>
+        <button class="nav-tab">+</button>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <div class="content-area" style="grid-column: 1 / -1;">
+            <!-- Portfolio Header -->
+            <div class="portfolio-header">
+                <h1>My Client Portfolio</h1>
+                <div class="subtitle">Overview of all clients assigned to selected account managers</div>
+            </div>
+
+            <!-- Account Manager Selector -->
+            <div class="manager-selector">
+                <label>Account Manager:</label>
+                <select id="managerSelect" multiple style="min-height: 80px;">
+                    <option value="craig" selected>Craig D'Alessio</option>
+                    <option value="sarah">Sarah Johnson</option>
+                    <option value="mike">Mike Chen</option>
+                    <option value="jennifer">Jennifer Williams</option>
+                </select>
+                <div style="font-size: 10px; color: var(--pbi-text-secondary);">
+                    <i class="fas fa-info-circle"></i> Hold Cmd/Ctrl to select multiple
+                </div>
+            </div>
+
+            <!-- Portfolio Summary KPIs -->
+            <div class="portfolio-summary">
+                <div class="summary-card primary">
+                    <div class="summary-label">Total Clients</div>
+                    <div class="summary-value" id="totalClients">12</div>
+                    <div class="summary-change">Across all managers</div>
+                </div>
+                <div class="summary-card green">
+                    <div class="summary-label">Total Recoveries</div>
+                    <div class="summary-value green" id="totalRecoveries">$45.2M</div>
+                    <div class="summary-change">YTD</div>
+                </div>
+                <div class="summary-card orange">
+                    <div class="summary-label">Active Claims</div>
+                    <div class="summary-value" id="activeClaims">342</div>
+                    <div class="summary-change">In process</div>
+                </div>
+                <div class="summary-card purple">
+                    <div class="summary-label">Expected Recovery</div>
+                    <div class="summary-value" id="expectedRecovery">$78.5M</div>
+                    <div class="summary-change">Pipeline</div>
+                </div>
+                <div class="summary-card red">
+                    <div class="summary-label">Action Required</div>
+                    <div class="summary-value" id="actionRequired">18</div>
+                    <div class="summary-change">Urgent items</div>
+                </div>
+            </div>
+
+            <!-- Filter Badges -->
+            <div class="filter-badges">
+                <div class="filter-badge active" data-filter="all">All Clients</div>
+                <div class="filter-badge" data-filter="high-value">High Value</div>
+                <div class="filter-badge" data-filter="renewal-soon">Renewal Soon</div>
+                <div class="filter-badge" data-filter="action-needed">Action Needed</div>
+                <div class="filter-badge" data-filter="at-risk">At Risk</div>
+                <div class="filter-badge" data-filter="new">New Clients</div>
+            </div>
+
+            <!-- Client Cards Grid -->
+            <div class="client-grid" id="clientGrid">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="page-info">
+            <span>Account Manager Portfolio</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <span>Zoom: 100%</span>
+        </div>
+    </div>
+
+    <!-- Style Switcher -->
+    <script src="style-switcher.js"></script>
+
+    <script>
+        // Portfolio data structure
+        const portfolioData = {
+            craig: [
+                {
+                    id: 'wellington',
+                    name: 'Wellington Management',
+                    subtitle: 'Since 2020 • Strategic Partner',
+                    health: 'excellent',
+                    healthScore: 85,
+                    totalRecoveries: 8400000,
+                    activeClaims: 47,
+                    expectedRecovery: 12200000,
+                    actionItems: 5,
+                    renewalDate: '3/15/2025',
+                    churnRisk: 'Low',
+                    nineBox: { value: 'high', cost: 'low' },
+                    lastContact: '2 days ago'
+                },
+                {
+                    id: 'blackrock',
+                    name: 'BlackRock',
+                    subtitle: 'Since 2019 • Premium Client',
+                    health: 'excellent',
+                    healthScore: 92,
+                    totalRecoveries: 24500000,
+                    activeClaims: 89,
+                    expectedRecovery: 35000000,
+                    actionItems: 3,
+                    renewalDate: '1/10/2025',
+                    churnRisk: 'Very Low',
+                    nineBox: { value: 'high', cost: 'medium' },
+                    lastContact: '1 day ago'
+                },
+                {
+                    id: 'schwab',
+                    name: 'Charles Schwab Investment Management',
+                    subtitle: 'Since 2021 • Growth Client',
+                    health: 'good',
+                    healthScore: 78,
+                    totalRecoveries: 4200000,
+                    activeClaims: 34,
+                    expectedRecovery: 8500000,
+                    actionItems: 8,
+                    renewalDate: '6/5/2025',
+                    churnRisk: 'Medium',
+                    nineBox: { value: 'medium', cost: 'low' },
+                    lastContact: '5 days ago'
+                }
+            ],
+            sarah: [
+                {
+                    id: 'calstrs',
+                    name: 'CalSTRS',
+                    subtitle: 'Since 2018 • Enterprise Client',
+                    health: 'excellent',
+                    healthScore: 88,
+                    totalRecoveries: 125000000,
+                    activeClaims: 234,
+                    expectedRecovery: 180000000,
+                    actionItems: 12,
+                    renewalDate: '12/31/2024',
+                    churnRisk: 'Very Low',
+                    nineBox: { value: 'high', cost: 'high' },
+                    lastContact: '3 days ago'
+                },
+                {
+                    id: 'massprim',
+                    name: 'Mass PRIM',
+                    subtitle: 'Since 2019 • Strategic Partner',
+                    health: 'excellent',
+                    healthScore: 90,
+                    totalRecoveries: 98000000,
+                    activeClaims: 187,
+                    expectedRecovery: 145000000,
+                    actionItems: 7,
+                    renewalDate: '2/28/2025',
+                    churnRisk: 'Low',
+                    nineBox: { value: 'high', cost: 'medium' },
+                    lastContact: '1 day ago'
+                }
+            ],
+            mike: [
+                {
+                    id: 'sbaf',
+                    name: 'State Board of Administration of Florida',
+                    subtitle: 'Since 2020 • Premium Client',
+                    health: 'good',
+                    healthScore: 82,
+                    totalRecoveries: 67000000,
+                    activeClaims: 156,
+                    expectedRecovery: 95000000,
+                    actionItems: 6,
+                    renewalDate: '4/15/2025',
+                    churnRisk: 'Low',
+                    nineBox: { value: 'high', cost: 'medium' },
+                    lastContact: '4 days ago'
+                }
+            ],
+            jennifer: [
+                {
+                    id: 'vanguard',
+                    name: 'Vanguard Group',
+                    subtitle: 'Since 2022 • Growth Client',
+                    health: 'good',
+                    healthScore: 75,
+                    totalRecoveries: 32000000,
+                    activeClaims: 98,
+                    expectedRecovery: 55000000,
+                    actionItems: 15,
+                    renewalDate: '8/20/2025',
+                    churnRisk: 'Medium',
+                    nineBox: { value: 'medium', cost: 'low' },
+                    lastContact: '7 days ago'
+                }
+            ]
+        };
+
+        function formatCurrency(amount) {
+            if (amount >= 1000000) {
+                return '$' + (amount / 1000000).toFixed(1) + 'M';
+            } else if (amount >= 1000) {
+                return '$' + (amount / 1000).toFixed(0) + 'K';
+            }
+            return '$' + amount.toLocaleString();
+        }
+
+        function getHealthClass(health) {
+            const map = {
+                'excellent': 'health-excellent',
+                'good': 'health-good',
+                'warning': 'health-warning',
+                'critical': 'health-critical'
+            };
+            return map[health] || 'health-good';
+        }
+
+        function getHealthLabel(health) {
+            const map = {
+                'excellent': 'Excellent',
+                'good': 'Good',
+                'warning': 'Warning',
+                'critical': 'Critical'
+            };
+            return map[health] || 'Good';
+        }
+
+        function renderClientCards(selectedManagers, filter = 'all') {
+            const grid = document.getElementById('clientGrid');
+            if (!grid) return;
+            
+            // Get all clients for selected managers
+            let allClients = [];
+            selectedManagers.forEach(manager => {
+                if (portfolioData[manager]) {
+                    allClients = allClients.concat(portfolioData[manager].map(client => ({
+                        ...client,
+                        manager: manager
+                    })));
+                }
+            });
+            
+            // Apply filter
+            if (filter !== 'all') {
+                allClients = allClients.filter(client => {
+                    if (filter === 'high-value') return client.nineBox.value === 'high';
+                    if (filter === 'renewal-soon') {
+                        const renewalDate = new Date(client.renewalDate);
+                        const daysUntil = Math.ceil((renewalDate - new Date()) / (1000 * 60 * 60 * 24));
+                        return daysUntil <= 90 && daysUntil > 0;
+                    }
+                    if (filter === 'action-needed') return client.actionItems > 0;
+                    if (filter === 'at-risk') return client.churnRisk === 'Medium' || client.churnRisk === 'High';
+                    if (filter === 'new') {
+                        const contractYear = parseInt(client.subtitle.match(/Since (\d{4})/)?.[1] || '2020');
+                        return contractYear >= 2023;
+                    }
+                    return true;
+                });
+            }
+            
+            grid.innerHTML = '';
+            
+            if (allClients.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--pbi-text-secondary);">No clients found matching selected criteria</div>';
+                return;
+            }
+            
+            allClients.forEach(client => {
+                const card = document.createElement('div');
+                card.className = 'client-card';
+                card.onclick = () => {
+                    window.location.href = `account-manager-dashboard.html?client=${client.id}`;
+                };
+                
+                card.innerHTML = `
+                    <div class="client-card-header">
+                        <div>
+                            <div class="client-card-name">${client.name}</div>
+                            <div class="client-card-subtitle">${client.subtitle}</div>
+                        </div>
+                        <div class="client-card-health ${getHealthClass(client.health)}">
+                            <i class="fas fa-heartbeat"></i>
+                            ${getHealthLabel(client.health)}
+                        </div>
+                    </div>
+                    <div class="client-metrics">
+                        <div class="client-metric">
+                            <div class="client-metric-label">Recoveries</div>
+                            <div class="client-metric-value green">${formatCurrency(client.totalRecoveries)}</div>
+                        </div>
+                        <div class="client-metric">
+                            <div class="client-metric-label">Active Claims</div>
+                            <div class="client-metric-value">${client.activeClaims}</div>
+                        </div>
+                        <div class="client-metric">
+                            <div class="client-metric-label">Expected</div>
+                            <div class="client-metric-value">${formatCurrency(client.expectedRecovery)}</div>
+                        </div>
+                        <div class="client-metric">
+                            <div class="client-metric-label">Action Items</div>
+                            <div class="client-metric-value" style="color: ${client.actionItems > 5 ? '#d13438' : '#ff8c00'};">${client.actionItems}</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 9px; color: var(--pbi-text-secondary); margin-bottom: 8px;">
+                        <span><i class="fas fa-calendar"></i> Renewal: ${client.renewalDate}</span>
+                        <span><i class="fas fa-comments"></i> ${client.lastContact}</span>
+                    </div>
+                    <div class="client-actions">
+                        <button class="client-action-btn primary" onclick="event.stopPropagation(); window.location.href='account-manager-dashboard.html?client=${client.id}'">
+                            <i class="fas fa-chart-line"></i> Dashboard
+                        </button>
+                        <button class="client-action-btn" onclick="event.stopPropagation(); window.location.href='client-status-reports.html?client=${client.id}'">
+                            <i class="fas fa-file-alt"></i> Reports
+                        </button>
+                        <button class="client-action-btn" onclick="event.stopPropagation(); alert('Email ${client.name}')">
+                            <i class="fas fa-envelope"></i> Contact
+                        </button>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+            
+            // Update summary KPIs
+            updatePortfolioSummary(allClients);
+        }
+
+        function updatePortfolioSummary(clients) {
+            const totalRecoveries = clients.reduce((sum, c) => sum + c.totalRecoveries, 0);
+            const totalClaims = clients.reduce((sum, c) => sum + c.activeClaims, 0);
+            const totalExpected = clients.reduce((sum, c) => sum + c.expectedRecovery, 0);
+            const totalActions = clients.reduce((sum, c) => sum + c.actionItems, 0);
+            
+            document.getElementById('totalClients').textContent = clients.length;
+            document.getElementById('totalRecoveries').textContent = formatCurrency(totalRecoveries);
+            document.getElementById('activeClaims').textContent = totalClaims;
+            document.getElementById('expectedRecovery').textContent = formatCurrency(totalExpected);
+            document.getElementById('actionRequired').textContent = totalActions;
+        }
+
+        // Manager selector change handler
+        document.getElementById('managerSelect').addEventListener('change', function(e) {
+            const selected = Array.from(e.target.selectedOptions).map(opt => opt.value);
+            renderClientCards(selected);
+        });
+
+        // Filter badge handlers
+        document.querySelectorAll('.filter-badge').forEach(badge => {
+            badge.addEventListener('click', function() {
+                document.querySelectorAll('.filter-badge').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const filter = this.getAttribute('data-filter');
+                const selected = Array.from(document.getElementById('managerSelect').selectedOptions).map(opt => opt.value);
+                renderClientCards(selected, filter);
+            });
+        });
+
+        // Navigation handlers
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const text = this.textContent.trim();
+                if (text.includes('ELIGIBILITY')) {
+                    window.location.href = 'eligibility-filings.html';
+                } else if (text.includes('STATUS REPORTS')) {
+                    window.location.href = 'client-status-reports.html';
+                } else if (text.includes('OPT-IN')) {
+                    window.location.href = 'opt-in-monitoring.html';
+                } else if (text.includes('REMITTANCE')) {
+                    window.location.href = 'client-remittance.html';
+                } else if (text.includes('Account Manager Dashboard')) {
+                    window.location.href = 'account-manager-dashboard.html';
+                }
+            });
+        });
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            const selected = ['craig']; // Default to Craig
+            renderClientCards(selected);
+        });
+    </script>
+</body>
+</html>
+
