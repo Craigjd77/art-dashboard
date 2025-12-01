@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eligibility & Filings | FRT Work Tools</title>
+    <script>
+        // Authentication check - redirect to login if not authenticated
+        if (sessionStorage.getItem('frt_authenticated') !== 'true') {
+            window.location.href = 'login.html';
+        }
+    </script>
     
     <!-- Chart.js for visualizations -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
