@@ -297,8 +297,185 @@
         .status-eligible { background: #e8f5e9; color: #2e7d32; }
         .status-not-eligible { background: #ffebee; color: #c62828; }
         .status-requested { background: #fff3e0; color: #e65100; }
+        .status-participation-requested { background: #fff3e0; color: #e65100; }
         .status-confirmed { background: #e3f2fd; color: #1565c0; }
         .status-registered { background: #f3e5f5; color: #6a1b9a; }
+        
+        /* Review Modal Styles */
+        .review-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .review-modal.active {
+            display: flex;
+        }
+        
+        .review-modal-content {
+            background: var(--pbi-card-bg);
+            border-radius: 4px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 1000px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 24px;
+            position: relative;
+        }
+        
+        .review-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--pbi-border);
+        }
+        
+        .review-modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--pbi-text-primary);
+        }
+        
+        .review-modal-close {
+            background: transparent;
+            border: none;
+            font-size: 24px;
+            color: var(--pbi-text-secondary);
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        
+        .review-modal-close:hover {
+            background: var(--pbi-hover);
+            color: var(--pbi-text-primary);
+        }
+        
+        .review-section {
+            margin-bottom: 24px;
+        }
+        
+        .review-section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--pbi-text-primary);
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--pbi-border);
+        }
+        
+        .review-info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .review-info-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .review-info-label {
+            font-size: 10px;
+            color: var(--pbi-text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        
+        .review-info-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--pbi-text-primary);
+        }
+        
+        .review-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid var(--pbi-border);
+        }
+        
+        .review-action-btn {
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+        
+        .review-action-btn.primary {
+            background: var(--pbi-primary);
+            color: white;
+        }
+        
+        .review-action-btn.primary:hover {
+            background: var(--pbi-primary-dark);
+        }
+        
+        .review-action-btn.secondary {
+            background: var(--pbi-background);
+            color: var(--pbi-text-primary);
+            border: 1px solid var(--pbi-border);
+        }
+        
+        .review-action-btn.secondary:hover {
+            background: var(--pbi-hover);
+        }
+        
+        .review-action-btn.danger {
+            background: #d13438;
+            color: white;
+        }
+        
+        .review-action-btn.danger:hover {
+            background: #a4262c;
+        }
+        
+        .review-timeline {
+            margin-top: 16px;
+        }
+        
+        .review-timeline-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            background: var(--pbi-background);
+            border-left: 3px solid var(--pbi-primary);
+            margin-bottom: 8px;
+            border-radius: 2px;
+        }
+        
+        .review-timeline-date {
+            font-size: 9px;
+            color: var(--pbi-text-secondary);
+            min-width: 80px;
+        }
+        
+        .review-timeline-content {
+            flex: 1;
+            font-size: 11px;
+            color: var(--pbi-text-primary);
+        }
         
         .doc-status-grid {
             display: grid;
@@ -425,22 +602,35 @@
                 <div class="kpi-card kpi-card-featured" onclick="showKPIDetails('damages')">
                     <div class="kpi-label">Total Organizer Damages</div>
                     <div class="kpi-value" style="font-size: 24px;">$218.0M</div>
-                    <div style="font-size: 9px; opacity: 0.9; margin-top: 4px;">Across all cases</div>
+                    <div style="font-size: 9px; opacity: 0.9; margin-top: 4px;">Potential across all cases</div>
                 </div>
                 <div class="kpi-card kpi-card-warning" onclick="showKPIDetails('opportunities')">
                     <div class="kpi-label">New Opt-in Opportunities</div>
-                    <div class="kpi-value" style="font-size: 24px; color: #ff8c00;">3</div>
-                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">Require attention</div>
+                    <div class="kpi-value" style="font-size: 24px; color: #ff8c00;">4</div>
+                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">Require review & action</div>
                 </div>
-                <div class="kpi-card" onclick="showKPIDetails('recoveries')">
-                    <div class="kpi-label">Total Recoveries Received</div>
-                    <div class="kpi-value" style="font-size: 24px;">$2.4M</div>
-                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">YTD</div>
+                <div class="kpi-card kpi-card-success" onclick="showKPIDetails('pipeline')">
+                    <div class="kpi-label">Cases Awaiting Settlement</div>
+                    <div class="kpi-value" style="font-size: 24px; color: var(--chart-green);">8</div>
+                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">Registered & confirmed</div>
                 </div>
-                <div class="kpi-card kpi-card-success" onclick="showKPIDetails('disbursements')">
-                    <div class="kpi-label">Upcoming Disbursements</div>
-                    <div class="kpi-value" style="font-size: 24px; color: var(--chart-green);">$1.2M</div>
-                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-top: 4px;">Next 30 days</div>
+                <div class="kpi-card" onclick="showKPIDetails('potential')" style="opacity: 0.7; border: 1px dashed var(--pbi-border);">
+                    <div class="kpi-label" style="font-size: 10px;">Potential FRT Recovery</div>
+                    <div class="kpi-value" style="font-size: 18px; color: var(--pbi-text-secondary);">$3.6M</div>
+                    <div style="font-size: 8px; color: var(--pbi-text-secondary); margin-top: 4px;">Based on organizer damages</div>
+                </div>
+            </div>
+            
+            <!-- Review Modal -->
+            <div class="review-modal" id="reviewModal">
+                <div class="review-modal-content">
+                    <div class="review-modal-header">
+                        <div class="review-modal-title" id="reviewModalTitle">Case Review</div>
+                        <button class="review-modal-close" onclick="closeReviewModal()">&times;</button>
+                    </div>
+                    <div id="reviewModalBody">
+                        <!-- Content populated by JavaScript -->
+                    </div>
                 </div>
             </div>
             
@@ -468,7 +658,7 @@
                                 Cases requiring review or action
                             </div>
                         </div>
-                        <span class="badge" style="background: var(--pbi-primary);">3 NEW</span>
+                        <span class="badge" style="background: var(--pbi-primary);">4 NEW</span>
                     </div>
                     <div style="display: flex; gap: 8px;">
                         <button class="export-button" onclick="exportTable('opportunitiesTable', 'New_Opt-in_Opportunities')">
@@ -485,9 +675,10 @@
                 <!-- Filter Controls -->
                 <div class="filter-controls">
                     <span style="font-size: 10px; color: var(--pbi-text-secondary); font-weight: 600;">Filter:</span>
-                    <span class="filter-badge active" data-filter="all" onclick="filterOpportunities('all', this)">All (3)</span>
+                    <span class="filter-badge active" data-filter="all" onclick="filterOpportunities('all', this)">All (4)</span>
                     <span class="filter-badge" data-filter="eligible" onclick="filterOpportunities('eligible', this)">Eligible (2)</span>
-                    <span class="filter-badge" data-filter="requested" onclick="filterOpportunities('requested', this)">Requested (1)</span>
+                    <span class="filter-badge" data-filter="requested" onclick="filterOpportunities('requested', this)">Participation Requested (1)</span>
+                    <span class="filter-badge" data-filter="registered" onclick="filterOpportunities('registered', this)">Registered (1)</span>
                     <span class="filter-badge" data-filter="high-risk" onclick="filterOpportunities('high-risk', this)">High Risk (2)</span>
                     <span class="filter-badge" data-filter="high-value" onclick="filterOpportunities('high-value', this)">High Value ($1M+)</span>
                 </div>
@@ -602,10 +793,20 @@
             <div class="grid-2">
                 <!-- All Cases Overview -->
                 <div class="viz-card">
-                    <div class="viz-title">
-                        All Cases Overview
-                        <span style="font-size: 9px; font-weight: 400; color: var(--pbi-text-secondary);">Organizer Damages by Case</span>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <div class="viz-title" style="margin: 0;">
+                            All Cases Overview
+                        </div>
+                        <div style="display: flex; gap: 4px;">
+                            <button class="toggle-btn active" id="organizerDamagesBtn" onclick="toggleBarChart('organizer')" style="padding: 4px 10px; font-size: 9px; font-weight: 500; border: 1px solid var(--pbi-border); background: var(--pbi-primary); color: white; border-radius: 2px; cursor: pointer; transition: all 0.2s;">
+                                Organizer
+                            </button>
+                            <button class="toggle-btn" id="frtDamagesBtn" onclick="toggleBarChart('frt')" style="padding: 4px 10px; font-size: 9px; font-weight: 500; border: 1px solid var(--pbi-border); background: var(--pbi-card-bg); color: var(--pbi-text-secondary); border-radius: 2px; cursor: pointer; transition: all 0.2s;">
+                                FRT
+                            </button>
+                        </div>
                     </div>
+                    <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-bottom: 8px;" id="barChartSubtitle">Organizer Damages by Case</div>
                     <div class="bar-chart-container" style="height: 250px;">
                         <canvas id="barChart"></canvas>
                     </div>
@@ -613,12 +814,24 @@
 
                 <!-- FRT Damages by Country -->
                 <div class="viz-card">
-                    <div class="viz-title">FRT Damages by Country</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <div class="viz-title" style="margin: 0;">
+                            Damages by Country
+                        </div>
+                        <div style="display: flex; gap: 4px;">
+                            <button class="toggle-btn active" id="donutOrganizerBtn" onclick="toggleCharts('organizer')" style="padding: 4px 10px; font-size: 9px; font-weight: 500; border: 1px solid var(--pbi-border); background: var(--pbi-primary); color: white; border-radius: 2px; cursor: pointer; transition: all 0.2s;">
+                                Organizer
+                            </button>
+                            <button class="toggle-btn" id="donutFrtBtn" onclick="toggleCharts('frt')" style="padding: 4px 10px; font-size: 9px; font-weight: 500; border: 1px solid var(--pbi-border); background: var(--pbi-card-bg); color: var(--pbi-text-secondary); border-radius: 2px; cursor: pointer; transition: all 0.2s;">
+                                FRT
+                            </button>
+                        </div>
+                    </div>
                     <div class="donut-container" style="height: 250px;">
                         <canvas id="donutChart"></canvas>
                         <div class="donut-center">
-                            <div class="donut-total" style="font-size: 16px;">$218M</div>
-                            <div class="donut-label" style="font-size: 9px;">Total</div>
+                            <div class="donut-total" id="donutTotal" style="font-size: 16px;">$218M</div>
+                            <div class="donut-label" id="donutLabel" style="font-size: 9px;">Total Organizer</div>
                         </div>
                     </div>
                 </div>
@@ -715,6 +928,7 @@
             { case: 'British American Tobacco Plc', country: 'GB', damages: 194115, deadline: '4/14/2026', status: 'ELIGIBLE', priority: 'medium' },
             { case: 'Kingspan Group PLC', country: 'GB', damages: 105732, deadline: '10/31/2025', status: 'ELIGIBLE', priority: 'low' },
             { case: 'Atos SE', country: 'FR', damages: 3702082, deadline: '9/30/2025', status: 'REQUESTED', priority: 'high' },
+            { case: 'Barclays Plc (Staley Action)', country: 'GB', damages: 180750, deadline: '7/3/2025', status: 'REGISTERED', priority: 'medium' },
         ];
         
         function getDaysUntilDeadline(deadlineStr) {
@@ -776,11 +990,9 @@
                     <td ${daysClass}>${daysText}</td>
                     <td><span class="case-status-badge ${getStatusClass(opp.status)}">${opp.status}</span></td>
                     <td>
-                        <a href="${caseUrl}" style="text-decoration: none;">
-                            <button class="toggle-btn active" style="font-size: 9px; padding: 4px 10px; width: auto;">
-                                <i class="fas fa-eye" style="font-size: 8px; margin-right: 4px;"></i>Review
-                            </button>
-                        </a>
+                        <button class="toggle-btn active" style="font-size: 9px; padding: 4px 10px; width: auto;" onclick="openReviewModal('${opp.case}', '${opp.country}', ${opp.damages}, '${opp.deadline}', '${opp.status}', ${daysUntil}, '${priority}')">
+                            <i class="fas fa-eye" style="font-size: 8px; margin-right: 4px;"></i>Review
+                        </button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -811,6 +1023,9 @@
                         break;
                     case 'requested':
                         show = row.classList.contains('requested');
+                        break;
+                    case 'registered':
+                        show = row.classList.contains('registered');
                         break;
                     case 'high-risk':
                         show = row.classList.contains('gb');
@@ -864,24 +1079,49 @@
             { case: 'DWS Group', status: 'CONFIRMED', damages: 783416, docs: { asl: true, bot: false, poa: true, trades: true, other: false } },
         ];
 
-        const barChartData = [
-            { case: 'Bayer AG (Master Case)', amount: 81000000, country: 'GB' },
-            { case: 'Danske (Master Case)', amount: 18000000, country: 'NL' },
-            { case: 'Petrobras (Direct Action - Nethe...)', amount: 19000000, country: 'AU' },
-            { case: 'Volkswagen Bonds (Master Case)', amount: 13000000, country: 'DE' },
-            { case: 'Petrobras Dutch Foundation Liti...', amount: 11000000, country: 'AU' },
-            { case: 'Treasury Wine Estates (2020)(M...)', amount: 8000000, country: 'AU' },
-        ];
+        const barChartData = {
+            organizer: [
+                { case: 'Bayer AG (Master Case)', amount: 81000000, country: 'GB' },
+                { case: 'Danske (Master Case)', amount: 18000000, country: 'NL' },
+                { case: 'Petrobras (Direct Action - Nethe...)', amount: 19000000, country: 'AU' },
+                { case: 'Volkswagen Bonds (Master Case)', amount: 13000000, country: 'DE' },
+                { case: 'Petrobras Dutch Foundation Liti...', amount: 11000000, country: 'AU' },
+                { case: 'Treasury Wine Estates (2020)(M...)', amount: 8000000, country: 'AU' },
+            ],
+            frt: [
+                { case: 'Bayer AG (Master Case)', amount: 194115, country: 'GB' },
+                { case: 'Danske (Master Case)', amount: 45000, country: 'NL' },
+                { case: 'Petrobras (Direct Action - Nethe...)', amount: 1900000, country: 'AU' },
+                { case: 'Volkswagen Bonds (Master Case)', amount: 312000, country: 'DE' },
+                { case: 'Petrobras Dutch Foundation Liti...', amount: 264000, country: 'AU' },
+                { case: 'Treasury Wine Estates (2020)(M...)', amount: 192000, country: 'AU' },
+            ]
+        };
+        
+        let barChartInstance = null;
 
         // Donut data - Excluding CA and US
         const donutData = {
-            GB: 194000000,
-            AU: 15000000,
-            FR: 3700000,
-            DE: 6000000,
-            NL: 2000000,
-            DK: 500000
+            organizer: {
+                GB: 194000000,
+                AU: 15000000,
+                FR: 3700000,
+                DE: 6000000,
+                NL: 2000000,
+                DK: 500000
+            },
+            frt: {
+                GB: 194115,
+                AU: 2356000,
+                FR: 3702082,
+                DE: 9312000,
+                NL: 45000,
+                DK: 125000
+            }
         };
+        
+        let donutChartInstance = null;
+        let currentChartView = 'organizer'; // Default to organizer
         
         // Risk level mapping based on: Anonymity, Cost, Discovery burden
         const riskLevels = {
@@ -922,11 +1162,17 @@
             const statusMap = {
                 'ELIGIBLE': 'status-eligible',
                 'NOT ELIGIBLE': 'status-not-eligible',
-                'REQUESTED': 'status-requested',
+                'REQUESTED': 'status-participation-requested',
+                'PARTICIPATION REQUESTED': 'status-participation-requested',
                 'CONFIRMED': 'status-confirmed',
                 'REGISTERED': 'status-registered'
             };
             return statusMap[status] || 'status-eligible';
+        }
+        
+        function getStatusDisplay(status) {
+            if (status === 'REQUESTED') return 'Participation Requested';
+            return status;
         }
 
         // Helper function to get case detail page URL
@@ -1013,18 +1259,31 @@
             });
         }
 
-        function createDonutChart() {
-            const ctx = document.getElementById('donutChart').getContext('2d');
+        function createDonutChart(viewType = 'organizer') {
+            const ctx = document.getElementById('donutChart');
+            if (!ctx) return;
             
-            // Use risk-based colors
-            const chartColors = Object.keys(donutData).map(country => getRiskColor(country));
+            // Destroy existing chart if it exists
+            if (donutChartInstance) {
+                donutChartInstance.destroy();
+            }
+            
+            const data = donutData[viewType] || donutData.organizer;
+            const chartColors = Object.keys(data).map(country => getRiskColor(country));
+            const total = Object.values(data).reduce((sum, val) => sum + val, 0);
+            
+            // Update center total
+            const totalEl = document.getElementById('donutTotal');
+            const labelEl = document.getElementById('donutLabel');
+            if (totalEl) totalEl.textContent = formatCurrency(total);
+            if (labelEl) labelEl.textContent = viewType === 'organizer' ? 'Total Organizer' : 'Total FRT';
 
-            new Chart(ctx, {
+            donutChartInstance = new Chart(ctx.getContext('2d'), {
                 type: 'doughnut',
                 data: {
-                    labels: Object.keys(donutData),
+                    labels: Object.keys(data),
                     datasets: [{
-                        data: Object.values(donutData),
+                        data: Object.values(data),
                         backgroundColor: chartColors,
                         borderWidth: 0
                     }]
@@ -1047,7 +1306,8 @@
                                     const country = context.label;
                                     const risk = getRiskLevel(country);
                                     const riskLabel = risk === 'low' ? 'Low Risk' : risk === 'high' ? 'High Risk' : 'Medium Risk';
-                                    return `${context.label} (${riskLabel}): ${formatCurrency(context.parsed)}`;
+                                    const damageType = viewType === 'organizer' ? 'Organizer' : 'FRT';
+                                    return `${context.label} (${riskLabel}): ${formatCurrency(context.parsed)} ${damageType}`;
                                 }
                             }
                         }
@@ -1057,17 +1317,26 @@
             });
         }
 
-        function createBarChart() {
-            const ctx = document.getElementById('barChart').getContext('2d');
-
-            new Chart(ctx, {
+        function createBarChart(viewType = 'organizer') {
+            const ctx = document.getElementById('barChart');
+            if (!ctx) return;
+            
+            // Destroy existing chart if it exists
+            if (barChartInstance) {
+                barChartInstance.destroy();
+            }
+            
+            const data = barChartData[viewType] || barChartData.organizer;
+            const label = viewType === 'organizer' ? 'Organizer Damages' : 'FRT Damages';
+            
+            barChartInstance = new Chart(ctx.getContext('2d'), {
                 type: 'bar',
                 data: {
-                    labels: barChartData.map(d => d.case),
+                    labels: data.map(d => d.case),
                     datasets: [{
-                        label: 'Organizer Damages',
-                        data: barChartData.map(d => d.amount),
-                        backgroundColor: barChartData.map(d => getRiskColor(d.country)),
+                        label: label,
+                        data: data.map(d => d.amount),
+                        backgroundColor: data.map(d => getRiskColor(d.country)),
                         borderRadius: 2
                     }]
                 },
@@ -1080,7 +1349,7 @@
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    return 'Organizer Damages: ' + formatCurrency(context.parsed.x);
+                                    return label + ': ' + formatCurrency(context.parsed.x);
                                 }
                             }
                         }
@@ -1103,6 +1372,79 @@
                     }
                 }
             });
+            
+        }
+        
+        function toggleCharts(viewType) {
+            currentChartView = viewType;
+            
+            // Update bar chart toggle buttons
+            const barOrganizerBtn = document.getElementById('organizerDamagesBtn');
+            const barFrtBtn = document.getElementById('frtDamagesBtn');
+            const barSubtitle = document.getElementById('barChartSubtitle');
+            
+            // Update donut chart toggle buttons
+            const donutOrganizerBtn = document.getElementById('donutOrganizerBtn');
+            const donutFrtBtn = document.getElementById('donutFrtBtn');
+            
+            if (viewType === 'organizer') {
+                // Bar chart buttons
+                barOrganizerBtn.classList.add('active');
+                barOrganizerBtn.style.background = 'var(--pbi-primary)';
+                barOrganizerBtn.style.color = 'white';
+                barOrganizerBtn.style.borderColor = 'var(--pbi-primary)';
+                
+                barFrtBtn.classList.remove('active');
+                barFrtBtn.style.background = 'var(--pbi-card-bg)';
+                barFrtBtn.style.color = 'var(--pbi-text-secondary)';
+                barFrtBtn.style.borderColor = 'var(--pbi-border)';
+                
+                if (barSubtitle) barSubtitle.textContent = 'Organizer Damages by Case';
+                
+                // Donut chart buttons
+                donutOrganizerBtn.classList.add('active');
+                donutOrganizerBtn.style.background = 'var(--pbi-primary)';
+                donutOrganizerBtn.style.color = 'white';
+                donutOrganizerBtn.style.borderColor = 'var(--pbi-primary)';
+                
+                donutFrtBtn.classList.remove('active');
+                donutFrtBtn.style.background = 'var(--pbi-card-bg)';
+                donutFrtBtn.style.color = 'var(--pbi-text-secondary)';
+                donutFrtBtn.style.borderColor = 'var(--pbi-border)';
+            } else {
+                // Bar chart buttons
+                barFrtBtn.classList.add('active');
+                barFrtBtn.style.background = 'var(--pbi-primary)';
+                barFrtBtn.style.color = 'white';
+                barFrtBtn.style.borderColor = 'var(--pbi-primary)';
+                
+                barOrganizerBtn.classList.remove('active');
+                barOrganizerBtn.style.background = 'var(--pbi-card-bg)';
+                barOrganizerBtn.style.color = 'var(--pbi-text-secondary)';
+                barOrganizerBtn.style.borderColor = 'var(--pbi-border)';
+                
+                if (barSubtitle) barSubtitle.textContent = 'FRT Damages by Case';
+                
+                // Donut chart buttons
+                donutFrtBtn.classList.add('active');
+                donutFrtBtn.style.background = 'var(--pbi-primary)';
+                donutFrtBtn.style.color = 'white';
+                donutFrtBtn.style.borderColor = 'var(--pbi-primary)';
+                
+                donutOrganizerBtn.classList.remove('active');
+                donutOrganizerBtn.style.background = 'var(--pbi-card-bg)';
+                donutOrganizerBtn.style.color = 'var(--pbi-text-secondary)';
+                donutOrganizerBtn.style.borderColor = 'var(--pbi-border)';
+            }
+            
+            // Update both charts
+            createBarChart(viewType);
+            createDonutChart(viewType);
+        }
+        
+        // Keep toggleBarChart for backward compatibility, but it now calls toggleCharts
+        function toggleBarChart(viewType) {
+            toggleCharts(viewType);
         }
 
         // Tab navigation
@@ -1143,8 +1485,16 @@
                     titleText = 'New Opt-in Opportunities - Detailed View';
                     content = getOpportunitiesDetails();
                     break;
+                case 'pipeline':
+                    titleText = 'Cases Awaiting Settlement - Pipeline';
+                    content = getPipelineDetails();
+                    break;
+                case 'potential':
+                    titleText = 'Potential FRT Recovery - Risk-Adjusted Estimate';
+                    content = getPotentialRecoveryDetails();
+                    break;
                 case 'recoveries':
-                    titleText = 'Total Recoveries Received - Breakdown';
+                    titleText = 'Total Recoveries Received - Historical';
                     content = getRecoveriesDetails();
                     break;
                 case 'disbursements':
@@ -1337,6 +1687,166 @@
             `;
         }
         
+        function getPipelineDetails() {
+            // Cases that are registered or confirmed - awaiting settlement
+            const pipelineCases = casesData.filter(c => c.status === 'REGISTERED' || c.status === 'CONFIRMED');
+            const totalDamages = pipelineCases.reduce((sum, c) => sum + c.damages, 0);
+            const registeredCount = pipelineCases.filter(c => c.status === 'REGISTERED').length;
+            const confirmedCount = pipelineCases.filter(c => c.status === 'CONFIRMED').length;
+            
+            return `
+                <div class="kpi-detail-summary">
+                    <div class="kpi-detail-stat">
+                        <div class="kpi-detail-stat-label">Total Cases in Pipeline</div>
+                        <div class="kpi-detail-stat-value">${pipelineCases.length}</div>
+                    </div>
+                    <div class="kpi-detail-stat">
+                        <div class="kpi-detail-stat-label">Registered Cases</div>
+                        <div class="kpi-detail-stat-value">${registeredCount}</div>
+                    </div>
+                    <div class="kpi-detail-stat">
+                        <div class="kpi-detail-stat-label">Confirmed Cases</div>
+                        <div class="kpi-detail-stat-value">${confirmedCount}</div>
+                    </div>
+                    <div class="kpi-detail-stat">
+                        <div class="kpi-detail-stat-label">Total Organizer Damages</div>
+                        <div class="kpi-detail-stat-value">${formatCurrency(totalDamages)}</div>
+                    </div>
+                </div>
+                
+                <div class="viz-title" style="margin-bottom: 12px;">Cases Awaiting Settlement</div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Case Name</th>
+                                <th>Country</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Organizer Damages</th>
+                                <th>Deadline</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${pipelineCases.map(caseItem => {
+                                const riskColor = getRiskColor(caseItem.country);
+                                const riskBg = getRiskBackgroundColor(caseItem.country);
+                                const caseId = encodeURIComponent(caseItem.caseName);
+                                return `
+                                    <tr style="border-left: 4px solid ${riskColor};">
+                                        <td>
+                                            <a href="case-details.html?case=${caseId}" style="color: var(--pbi-primary); text-decoration: none; font-weight: 600;">
+                                                ${caseItem.caseName}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <span style="background: ${riskBg}; color: ${riskColor}; padding: 2px 8px; border-radius: 2px; font-weight: 600; font-size: 9px;">
+                                                ${caseItem.country}
+                                            </span>
+                                        </td>
+                                        <td><span class="case-status-badge ${getStatusClass(caseItem.status)}">${caseItem.status}</span></td>
+                                        <td class="currency" style="text-align: right; font-weight: 600;">${formatCurrency(caseItem.damages)}</td>
+                                        <td class="date-cell">${caseItem.deadline}</td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+        
+        function getPotentialRecoveryDetails() {
+            // Calculate potential FRT recovery based on organizer damages
+            // Using a conservative estimate (typically 1-2% of organizer damages)
+            const totalOrganizerDamages = casesData.reduce((sum, c) => sum + c.damages, 0);
+            const estimatedRecoveryRate = 0.0165; // 1.65% average
+            const potentialRecovery = totalOrganizerDamages * estimatedRecoveryRate;
+            
+            // Break down by status
+            const eligiblePotential = casesData.filter(c => c.status === 'ELIGIBLE').reduce((sum, c) => sum + (c.damages * estimatedRecoveryRate), 0);
+            const requestedPotential = casesData.filter(c => c.status === 'REQUESTED').reduce((sum, c) => sum + (c.damages * estimatedRecoveryRate), 0);
+            const confirmedPotential = casesData.filter(c => c.status === 'CONFIRMED').reduce((sum, c) => sum + (c.damages * estimatedRecoveryRate), 0);
+            const registeredPotential = casesData.filter(c => c.status === 'REGISTERED').reduce((sum, c) => sum + (c.damages * estimatedRecoveryRate), 0);
+            
+            return `
+                <div class="kpi-detail-summary">
+                    <div class="kpi-detail-stat">
+                        <div class="kpi-detail-stat-label">Total Potential Recovery</div>
+                        <div class="kpi-detail-stat-value">${formatCurrency(potentialRecovery)}</div>
+                    </div>
+                    <div class="kpi-detail-stat">
+                        <div class="kpi-detail-stat-label">Based on Organizer Damages</div>
+                        <div class="kpi-detail-stat-value">${formatCurrency(totalOrganizerDamages)}</div>
+                    </div>
+                    <div class="kpi-detail-stat">
+                        <div class="kpi-detail-stat-label">Estimated Recovery Rate</div>
+                        <div class="kpi-detail-stat-value">${(estimatedRecoveryRate * 100).toFixed(2)}%</div>
+                    </div>
+                    <div class="kpi-detail-stat">
+                        <div class="kpi-detail-stat-label">Note</div>
+                        <div class="kpi-detail-stat-value" style="font-size: 10px;">Conservative estimate</div>
+                    </div>
+                </div>
+                
+                <div style="background: #fff4e5; border-left: 4px solid #ff8c00; padding: 12px; margin-bottom: 16px; border-radius: 2px;">
+                    <div style="font-size: 11px; font-weight: 600; color: #e65100; margin-bottom: 4px;">
+                        <i class="fas fa-info-circle"></i> Important Note
+                    </div>
+                    <div style="font-size: 10px; color: var(--pbi-text-secondary);">
+                        This is a conservative estimate based on historical recovery rates. Actual recoveries depend on case outcomes, settlement amounts, and pro-rata distributions. Very few opt-in cases result in successful recoveries.
+                    </div>
+                </div>
+                
+                <div class="viz-title" style="margin-bottom: 12px;">Potential Recovery by Case Status</div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th style="text-align: right;">Organizer Damages</th>
+                                <th style="text-align: right;">Estimated Potential</th>
+                                <th>Cases</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="case-status-badge status-eligible">ELIGIBLE</span></td>
+                                <td class="currency" style="text-align: right;">${formatCurrency(casesData.filter(c => c.status === 'ELIGIBLE').reduce((sum, c) => sum + c.damages, 0))}</td>
+                                <td class="currency" style="text-align: right; font-weight: 600;">${formatCurrency(eligiblePotential)}</td>
+                                <td>${casesData.filter(c => c.status === 'ELIGIBLE').length}</td>
+                            </tr>
+                            <tr>
+                                <td><span class="case-status-badge status-participation-requested">PARTICIPATION REQUESTED</span></td>
+                                <td class="currency" style="text-align: right;">${formatCurrency(casesData.filter(c => c.status === 'REQUESTED').reduce((sum, c) => sum + c.damages, 0))}</td>
+                                <td class="currency" style="text-align: right; font-weight: 600;">${formatCurrency(requestedPotential)}</td>
+                                <td>${casesData.filter(c => c.status === 'REQUESTED').length}</td>
+                            </tr>
+                            <tr>
+                                <td><span class="case-status-badge status-confirmed">CONFIRMED</span></td>
+                                <td class="currency" style="text-align: right;">${formatCurrency(casesData.filter(c => c.status === 'CONFIRMED').reduce((sum, c) => sum + c.damages, 0))}</td>
+                                <td class="currency" style="text-align: right; font-weight: 600;">${formatCurrency(confirmedPotential)}</td>
+                                <td>${casesData.filter(c => c.status === 'CONFIRMED').length}</td>
+                            </tr>
+                            <tr>
+                                <td><span class="case-status-badge status-registered">REGISTERED</span></td>
+                                <td class="currency" style="text-align: right;">${formatCurrency(casesData.filter(c => c.status === 'REGISTERED').reduce((sum, c) => sum + c.damages, 0))}</td>
+                                <td class="currency" style="text-align: right; font-weight: 600;">${formatCurrency(registeredPotential)}</td>
+                                <td>${casesData.filter(c => c.status === 'REGISTERED').length}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr style="background: var(--pbi-background); font-weight: 600;">
+                                <td>Total</td>
+                                <td class="currency" style="text-align: right;">${formatCurrency(totalOrganizerDamages)}</td>
+                                <td class="currency" style="text-align: right;">${formatCurrency(potentialRecovery)}</td>
+                                <td>${casesData.length}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            `;
+        }
+        
         function getRecoveriesDetails() {
             // Sample recovery data
             const recoveries = [
@@ -1474,13 +1984,230 @@
             `;
         }
         
+        // Review Modal Functions
+        function openReviewModal(caseName, country, damages, deadline, status, daysUntil, priority) {
+            const modal = document.getElementById('reviewModal');
+            const title = document.getElementById('reviewModalTitle');
+            const body = document.getElementById('reviewModalBody');
+            
+            const riskColor = getRiskColor(country);
+            const riskBg = getRiskBackgroundColor(country);
+            const riskLevel = getRiskLevel(country);
+            const riskLabel = riskLevel === 'low' ? 'Low Risk' : riskLevel === 'high' ? 'High Risk' : 'Medium Risk';
+            const caseUrl = getCaseDetailUrl(caseName);
+            
+            let daysClass = '';
+            let daysText = `${daysUntil} days remaining`;
+            if (daysUntil < 0) {
+                daysClass = 'style="color: #d13438; font-weight: 600;"';
+                daysText = `OVERDUE (${Math.abs(daysUntil)} days)`;
+            } else if (daysUntil < 30) {
+                daysClass = 'style="color: #ff8c00; font-weight: 600;"';
+                daysText = `${daysUntil} days remaining (Urgent)`;
+            }
+            
+            // Get document status for this case
+            const docData = docTrackingData.find(d => d.case === caseName || d.case.includes(caseName.split(' ')[0]));
+            const hasDocs = docData ? Object.values(docData.docs).some(v => v) : false;
+            
+            title.textContent = `Review: ${caseName}`;
+            
+            body.innerHTML = `
+                <div class="review-section">
+                    <div class="review-section-title">Case Overview</div>
+                    <div class="review-info-grid">
+                        <div class="review-info-item">
+                            <div class="review-info-label">Case Name</div>
+                            <div class="review-info-value">${caseName}</div>
+                        </div>
+                        <div class="review-info-item">
+                            <div class="review-info-label">Country / Jurisdiction</div>
+                            <div class="review-info-value">
+                                <span style="background: ${riskBg}; color: ${riskColor}; padding: 4px 10px; border-radius: 3px; font-weight: 600; font-size: 11px;">
+                                    ${country} (${riskLabel})
+                                </span>
+                            </div>
+                        </div>
+                        <div class="review-info-item">
+                            <div class="review-info-label">Current Status</div>
+                            <div class="review-info-value">
+                                <span class="case-status-badge ${getStatusClass(status)}">${getStatusDisplay(status)}</span>
+                            </div>
+                        </div>
+                        <div class="review-info-item">
+                            <div class="review-info-label">Organizer Damages</div>
+                            <div class="review-info-value" style="color: var(--pbi-primary);">${formatCurrency(damages)}</div>
+                        </div>
+                        <div class="review-info-item">
+                            <div class="review-info-label">Deadline</div>
+                            <div class="review-info-value">${deadline}</div>
+                        </div>
+                        <div class="review-info-item">
+                            <div class="review-info-label">Time Remaining</div>
+                            <div class="review-info-value" ${daysClass}>${daysText}</div>
+                        </div>
+                        <div class="review-info-item">
+                            <div class="review-info-label">Priority Level</div>
+                            <div class="review-info-value">
+                                <span class="priority-indicator priority-${priority}" style="width: 12px; height: 12px; margin-right: 6px;"></span>
+                                ${priority.toUpperCase()}
+                            </div>
+                        </div>
+                        <div class="review-info-item">
+                            <div class="review-info-label">Documents Status</div>
+                            <div class="review-info-value">
+                                ${hasDocs ? '<span style="color: var(--chart-green);"><i class="fas fa-check-circle"></i> Received</span>' : '<span style="color: #ff8c00;"><i class="fas fa-exclamation-circle"></i> Pending</span>'}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                ${docData ? `
+                <div class="review-section">
+                    <div class="review-section-title">Required Documents</div>
+                    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;">
+                        <div style="text-align: center; padding: 8px; background: ${docData.docs.asl ? '#e8f5e9' : '#fff3e0'}; border-radius: 3px;">
+                            <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-bottom: 4px;">ASL</div>
+                            <div style="font-size: 16px;">${docData.docs.asl ? '<i class="fas fa-check" style="color: var(--chart-green);"></i>' : '<i class="fas fa-clock" style="color: #ff8c00;"></i>'}</div>
+                        </div>
+                        <div style="text-align: center; padding: 8px; background: ${docData.docs.bot ? '#e8f5e9' : '#fff3e0'}; border-radius: 3px;">
+                            <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-bottom: 4px;">BOT</div>
+                            <div style="font-size: 16px;">${docData.docs.bot ? '<i class="fas fa-check" style="color: var(--chart-green);"></i>' : '<i class="fas fa-clock" style="color: #ff8c00;"></i>'}</div>
+                        </div>
+                        <div style="text-align: center; padding: 8px; background: ${docData.docs.poa ? '#e8f5e9' : '#fff3e0'}; border-radius: 3px;">
+                            <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-bottom: 4px;">POA</div>
+                            <div style="font-size: 16px;">${docData.docs.poa ? '<i class="fas fa-check" style="color: var(--chart-green);"></i>' : '<i class="fas fa-clock" style="color: #ff8c00;"></i>'}</div>
+                        </div>
+                        <div style="text-align: center; padding: 8px; background: ${docData.docs.trades ? '#e8f5e9' : '#fff3e0'}; border-radius: 3px;">
+                            <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-bottom: 4px;">Trades</div>
+                            <div style="font-size: 16px;">${docData.docs.trades ? '<i class="fas fa-check" style="color: var(--chart-green);"></i>' : '<i class="fas fa-clock" style="color: #ff8c00;"></i>'}</div>
+                        </div>
+                        <div style="text-align: center; padding: 8px; background: ${docData.docs.other ? '#e8f5e9' : '#fff3e0'}; border-radius: 3px;">
+                            <div style="font-size: 9px; color: var(--pbi-text-secondary); margin-bottom: 4px;">Other</div>
+                            <div style="font-size: 16px;">${docData.docs.other ? '<i class="fas fa-check" style="color: var(--chart-green);"></i>' : '<i class="fas fa-clock" style="color: #ff8c00;"></i>'}</div>
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+                
+                <div class="review-section">
+                    <div class="review-section-title">Case Timeline</div>
+                    <div class="review-timeline">
+                        <div class="review-timeline-item">
+                            <div class="review-timeline-date">Today</div>
+                            <div class="review-timeline-content">Case review initiated</div>
+                        </div>
+                        ${status === 'ELIGIBLE' ? `
+                        <div class="review-timeline-item">
+                            <div class="review-timeline-date">Recent</div>
+                            <div class="review-timeline-content">Case determined to be eligible for participation</div>
+                        </div>
+                        ` : ''}
+                        ${status === 'REQUESTED' ? `
+                        <div class="review-timeline-item">
+                            <div class="review-timeline-date">Recent</div>
+                            <div class="review-timeline-content">Participation requested from organizer</div>
+                        </div>
+                        ` : ''}
+                        ${status === 'REGISTERED' ? `
+                        <div class="review-timeline-item">
+                            <div class="review-timeline-date">Recent</div>
+                            <div class="review-timeline-content">Case registered with organizer</div>
+                        </div>
+                        ` : ''}
+                        <div class="review-timeline-item">
+                            <div class="review-timeline-date">${deadline}</div>
+                            <div class="review-timeline-content">Participation deadline</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="review-actions">
+                    <button class="review-action-btn primary" onclick="handleReviewAction('${caseName}', 'view-details')">
+                        <i class="fas fa-external-link-alt"></i> View Full Case Details
+                    </button>
+                    ${status === 'ELIGIBLE' ? `
+                    <button class="review-action-btn primary" onclick="handleReviewAction('${caseName}', 'request-participation')">
+                        <i class="fas fa-paper-plane"></i> Request Participation
+                    </button>
+                    ` : ''}
+                    ${status === 'REQUESTED' ? `
+                    <button class="review-action-btn secondary" onclick="handleReviewAction('${caseName}', 'check-status')">
+                        <i class="fas fa-sync"></i> Check Status
+                    </button>
+                    ` : ''}
+                    ${!hasDocs ? `
+                    <button class="review-action-btn secondary" onclick="handleReviewAction('${caseName}', 'upload-docs')">
+                        <i class="fas fa-upload"></i> Upload Documents
+                    </button>
+                    ` : ''}
+                    <button class="review-action-btn secondary" onclick="handleReviewAction('${caseName}', 'email-team')">
+                        <i class="fas fa-envelope"></i> Email FRT Team
+                    </button>
+                    <button class="review-action-btn secondary" onclick="closeReviewModal()">
+                        Close
+                    </button>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeReviewModal() {
+            const modal = document.getElementById('reviewModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        function handleReviewAction(caseName, action) {
+            switch(action) {
+                case 'view-details':
+                    const caseUrl = getCaseDetailUrl(caseName);
+                    window.open(caseUrl, '_blank');
+                    break;
+                case 'request-participation':
+                    alert(`Requesting participation for ${caseName}...\n\nThis action will notify the FRT team to proceed with participation request.`);
+                    // In real implementation, this would make an API call
+                    break;
+                case 'check-status':
+                    alert(`Checking status for ${caseName}...\n\nThis will refresh the case status from the organizer.`);
+                    // In real implementation, this would make an API call
+                    break;
+                case 'upload-docs':
+                    alert(`Opening document upload for ${caseName}...\n\nYou will be able to upload required documents.`);
+                    // In real implementation, this would open a file upload dialog
+                    break;
+                case 'email-team':
+                    const subject = encodeURIComponent(`Question about ${caseName}`);
+                    const body = encodeURIComponent(`I have a question regarding the case: ${caseName}\n\n`);
+                    window.location.href = `mailto:info@frtservices.com?subject=${subject}&body=${body}`;
+                    break;
+            }
+        }
+        
+        // Close review modal when clicking outside
+        document.addEventListener('click', function(event) {
+            const modal = document.getElementById('reviewModal');
+            if (event.target === modal) {
+                closeReviewModal();
+            }
+        });
+        
+        // Close review modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeReviewModal();
+            }
+        });
+        
         // Initialize
         window.addEventListener('DOMContentLoaded', () => {
             populateCasesTable();
             populateDocTracking();
             populateOpportunitiesTable();
-            createDonutChart();
-            createBarChart();
+            createDonutChart('organizer'); // Default to organizer damages
+            createBarChart('organizer'); // Default to organizer damages
         });
     </script>
 </body>
