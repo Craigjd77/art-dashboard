@@ -4,12 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eligibility & Filings | FRT Work Tools</title>
-    <script>
-        // Authentication check - redirect to login if not authenticated
-        if (sessionStorage.getItem('frt_authenticated') !== 'true') {
-            window.location.href = 'login.html';
-        }
-    </script>
     
     <!-- Chart.js for visualizations -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -80,41 +74,6 @@
         .toggle-btn:hover:not(.active) {
             background: var(--pbi-hover);
             border-color: var(--pbi-primary);
-        }
-        
-        /* Toggle Container - 25% width, more prominent */
-        .toggle-container {
-            width: 25%;
-            max-width: 300px;
-            margin-bottom: 12px;
-            margin-left: auto;
-        }
-        
-        .toggle-container .toggle-btn {
-            flex: 1;
-            padding: 10px 16px !important;
-            font-size: 13px !important;
-            font-weight: 600 !important;
-            border: 2px solid var(--pbi-border) !important;
-            border-radius: 4px !important;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .toggle-container .toggle-btn.active {
-            background: var(--pbi-primary) !important;
-            color: white !important;
-            border-color: var(--pbi-primary) !important;
-            box-shadow: 0 2px 8px rgba(0, 120, 212, 0.3);
-        }
-        
-        .toggle-container .toggle-btn:hover:not(.active) {
-            background: var(--pbi-hover) !important;
-            border-color: var(--pbi-primary) !important;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
         }
         
         /* Professional Institutional Styling */
@@ -345,6 +304,14 @@
             color: #0078d4;
         }
         
+        .alert-damages {
+            font-size: 9px;
+            color: var(--pbi-text-primary);
+            font-weight: 600;
+            min-width: 80px;
+            text-align: right;
+        }
+        
         .data-table th {
             padding: 6px 8px !important;
             font-size: 10px !important;
@@ -418,12 +385,12 @@
                 </select>
             </div>
 
-            <!-- Toggle Buttons - View Type (More Prominent, 25% width) -->
-            <div class="toggle-container" style="display: flex; gap: 8px;">
-                <button class="toggle-btn active" id="eligibleBtn">
+            <!-- Toggle Buttons - View Type (Less Prominent) -->
+            <div style="display: flex; gap: 4px; margin-bottom: 8px; justify-content: flex-end;">
+                <button class="toggle-btn active" id="eligibleBtn" style="padding: 4px 10px; font-size: 9px; font-weight: 500; border: 1px solid var(--pbi-border); background: var(--pbi-primary); color: white; border-radius: 2px; cursor: pointer; transition: all 0.2s;">
                     Eligible
                 </button>
-                <button class="toggle-btn" id="filedBtn">
+                <button class="toggle-btn" id="filedBtn" style="padding: 4px 10px; font-size: 9px; font-weight: 500; border: 1px solid var(--pbi-border); background: var(--pbi-card-bg); color: var(--pbi-text-secondary); border-radius: 2px; cursor: pointer; transition: all 0.2s;">
                     Filed
                 </button>
             </div>
@@ -491,18 +458,21 @@
                     <div class="alert-item">
                         <div class="alert-priority critical"></div>
                         <div class="alert-case"><a href="case-foreign-exchange-antitrust.html" style="color: var(--pbi-primary); text-decoration: none; font-weight: 500;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Foreign Exchange Antitrust - Stock (Lending) IFER</a></div>
+                        <div class="alert-damages">$125.0M</div>
                         <div class="alert-deadline">07-08-2024</div>
                         <div class="alert-days critical">7 days</div>
                     </div>
                     <div class="alert-item">
                         <div class="alert-priority warning"></div>
                         <div class="alert-case">BHP Billiton - Non-US Group Actions</div>
+                        <div class="alert-damages">$18.5M</div>
                         <div class="alert-deadline">11-30-2024</div>
                         <div class="alert-days warning">40 days</div>
                     </div>
                     <div class="alert-item">
                         <div class="alert-priority info"></div>
                         <div class="alert-case">Medibank Private Ltd - Non-US Group Actions</div>
+                        <div class="alert-damages">$12.2M</div>
                         <div class="alert-deadline">12-15-2024</div>
                         <div class="alert-days info">55 days</div>
                     </div>
@@ -709,27 +679,38 @@
 
     <script>
         // Data for Eligible vs Filed views
+        // Recovery rates: US CA Settled 4-6% (using 5%), Fair Fund 20-40% (using 30%), Non-US Group varies
         const eligibleData = {
             recognizedLoss: 393600000,
-            totalPotential: 393600000,
+            // Breakdown by case type for recovery calculation
+            caseTypeBreakdown: {
+                usCASettled: 243590000,  // 5% recovery rate = $12.18M
+                fairFund: 24000000,      // 30% recovery rate = $7.2M
+                nonUSGroup: 126010000    // Conservative 3% for opt-in = $3.78M
+            },
+            // Calculate expected recovery: US CA (5%) + Fair Fund (30%) + Non-US (3%)
+            totalPotential: Math.round(243590000 * 0.05 + 24000000 * 0.30 + 126010000 * 0.03),
             casesCount: 145,
             accountDetails: [
-                { account: 'Broker CLIENT A', amount: 231000000 },
-                { account: 'Broker CLIENT B', amount: 105000000 },
-                { account: 'Private Wealth Client #1', amount: 46000000 },
-                { account: 'Demo Account 1442781', amount: 9000000 },
-                { account: 'Private Wealth Client #2', amount: 2000000 },
+                // Expected recovery amounts (recognized loss * recovery rate)
+                { account: 'Broker CLIENT A', amount: Math.round(231000000 * 0.05) }, // US CA: 5%
+                { account: 'Broker CLIENT B', amount: Math.round(105000000 * 0.05) }, // US CA: 5%
+                { account: 'Private Wealth Client #1', amount: Math.round(46000000 * 0.05) }, // US CA: 5%
+                { account: 'Demo Account 1442781', amount: Math.round(9000000 * 0.05) }, // US CA: 5%
+                { account: 'Private Wealth Client #2', amount: Math.round(2000000 * 0.05) }, // US CA: 5%
             ],
             topCases: [
-                { case: 'Emergent Biosolutions Inc', amount: 53000000 },
-                { case: 'Cerence Inc', amount: 42000000 },
-                { case: 'Grab Holdings Limited', amount: 37000000 },
-                { case: 'Foreign Exchange Antitrust', amount: 125000000 },
-                { case: 'Eagle Bancorp Inc Fair Fund', amount: 24000000 },
+                // Expected recovery: US CA (5%), Fair Fund (30%), Non-US (3%)
+                { case: 'Emergent Biosolutions Inc', amount: Math.round(53000000 * 0.05) }, // US CA: $2.65M
+                { case: 'Cerence Inc', amount: Math.round(42000000 * 0.05) }, // US CA: $2.1M
+                { case: 'Grab Holdings Limited', amount: Math.round(37000000 * 0.03) }, // Non-US: $1.11M
+                { case: 'Foreign Exchange Antitrust', amount: Math.round(125000000 * 0.05) }, // US CA: $6.25M
+                { case: 'Eagle Bancorp Inc Fair Fund', amount: Math.round(24000000 * 0.30) }, // Fair Fund: $7.2M
             ],
             donutData: {
-                'Non-US Group': 150000000,
-                'US/CA Settled': 243590000
+                // Expected recovery amounts
+                'Non-US Group': Math.round(150000000 * 0.03), // 3% for opt-in
+                'US/CA Settled': Math.round(243590000 * 0.05) // 5% for US CA
             },
             timelineData: [
                 { month: 'Oct 2024', filed: 8, upcoming: 3 },
@@ -742,24 +723,34 @@
 
         const filedData = {
             recognizedLoss: 287500000,
-            totalPotential: 287500000,
+            // Breakdown by case type for recovery calculation
+            caseTypeBreakdown: {
+                usCASettled: 167500000,  // 5% recovery rate = $8.38M
+                fairFund: 24000000,      // 30% recovery rate = $7.2M
+                nonUSGroup: 96000000     // Conservative 3% for opt-in = $2.88M
+            },
+            // Calculate expected recovery: US CA (5%) + Fair Fund (30%) + Non-US (3%)
+            totalPotential: Math.round(167500000 * 0.05 + 24000000 * 0.30 + 96000000 * 0.03),
             casesCount: 127,
             accountDetails: [
-                { account: 'Broker CLIENT A', amount: 180000000 },
-                { account: 'Broker CLIENT B', amount: 75000000 },
-                { account: 'Private Wealth Client #1', amount: 25000000 },
-                { account: 'Demo Account 1442781', amount: 7500000 },
+                // Expected recovery amounts (recognized loss * recovery rate)
+                { account: 'Broker CLIENT A', amount: Math.round(180000000 * 0.05) }, // US CA: 5%
+                { account: 'Broker CLIENT B', amount: Math.round(75000000 * 0.05) }, // US CA: 5%
+                { account: 'Private Wealth Client #1', amount: Math.round(25000000 * 0.05) }, // US CA: 5%
+                { account: 'Demo Account 1442781', amount: Math.round(7500000 * 0.05) }, // US CA: 5%
             ],
             topCases: [
-                { case: 'Foreign Exchange Antitrust', amount: 125000000 },
-                { case: 'Apple Inc Securities', amount: 45000000 },
-                { case: 'Alphabet Inc', amount: 38000000 },
-                { case: 'JPMorgan Chase', amount: 32000000 },
-                { case: 'Microsoft Corp', amount: 28000000 },
+                // Expected recovery: US CA (5%), Fair Fund (30%)
+                { case: 'Foreign Exchange Antitrust', amount: Math.round(125000000 * 0.05) }, // US CA: $6.25M
+                { case: 'Apple Inc Securities', amount: Math.round(45000000 * 0.05) }, // US CA: $2.25M
+                { case: 'Alphabet Inc', amount: Math.round(38000000 * 0.05) }, // US CA: $1.9M
+                { case: 'JPMorgan Chase', amount: Math.round(32000000 * 0.05) }, // US CA: $1.6M
+                { case: 'Microsoft Corp', amount: Math.round(28000000 * 0.05) }, // US CA: $1.4M
             ],
             donutData: {
-                'Non-US Group': 120000000,
-                'US/CA Settled': 167500000
+                // Expected recovery amounts
+                'Non-US Group': Math.round(120000000 * 0.03), // 3% for opt-in
+                'US/CA Settled': Math.round(167500000 * 0.05) // 5% for US CA
             },
             timelineData: [
                 { month: 'Oct 2024', filed: 5, upcoming: 2 },

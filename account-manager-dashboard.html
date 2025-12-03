@@ -4,12 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Manager Dashboard | FRT Work Tools</title>
-    <script>
-        // Authentication check - redirect to login if not authenticated
-        if (sessionStorage.getItem('frt_authenticated') !== 'true') {
-            window.location.href = 'login.html';
-        }
-    </script>
     
     <!-- Chart.js for visualizations -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -341,21 +335,33 @@
         }
 
         .dashboard-page.active {
-            display: block;
-        }
-        
-        /* Ensure Page 3 content is visible when active */
-        #page3.active {
             display: block !important;
         }
         
-        #page3.active .viz-card {
-            display: block;
+        /* Ensure chart containers are properly sized */
+        .bar-chart-container {
+            height: 280px !important;
+            position: relative !important;
+            width: 100% !important;
         }
         
-        #page3.active canvas {
-            display: block !important;
-            visibility: visible !important;
+        .bar-chart-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+        
+        .donut-container {
+            height: 280px !important;
+            position: relative !important;
+            width: 100% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+        
+        .donut-container canvas {
+            max-width: 100% !important;
+            max-height: 100% !important;
         }
         
         .page-indicator {
@@ -365,6 +371,15 @@
             gap: 8px;
             font-size: 10px;
             color: var(--pbi-text-secondary);
+        }
+        
+        .recovery-trend-period-btn {
+            transition: all 0.2s ease;
+        }
+        
+        .recovery-trend-period-btn:hover:not(.active) {
+            background: var(--pbi-hover) !important;
+            border-color: var(--pbi-primary) !important;
         }
     </style>
 </head>
@@ -430,9 +445,8 @@
             <div class="page-nav">
                 <button class="page-nav-btn active" onclick="showPage(1, this)">Page 1: Overview</button>
                 <button class="page-nav-btn" onclick="showPage(2, this)">Page 2: Details</button>
-                <button class="page-nav-btn" onclick="showPage(3, this)">Page 3: Analysis</button>
                 <div class="page-indicator">
-                    <span id="currentPageIndicator">Page 1 of 3</span>
+                    <span id="currentPageIndicator">Page 1 of 2</span>
                 </div>
             </div>
 
@@ -466,31 +480,6 @@
                                 onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
                             <i class="fas fa-calendar-plus" style="margin-right: 6px;"></i>Schedule
                         </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Smart Action Center - AI-Powered Insights -->
-            <div class="grid-2" style="margin-bottom: 12px; gap: 12px;">
-                <!-- Predictive Insights & Recommendations -->
-                <div class="viz-card" style="border-left: 4px solid #8764b8; background: linear-gradient(135deg, rgba(135, 100, 184, 0.05) 0%, rgba(135, 100, 184, 0.02) 100%);">
-                    <div class="viz-title" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                        <span><i class="fas fa-brain" style="color: #8764b8; margin-right: 6px;"></i>Smart Recommendations</span>
-                        <span class="badge" style="background: #8764b8; font-size: 9px;">AI-Powered</span>
-                    </div>
-                    <div id="smartRecommendations">
-                        <!-- Populated by JavaScript -->
-                    </div>
-                </div>
-
-                <!-- Revenue Opportunities & Upsell -->
-                <div class="viz-card" style="border-left: 4px solid var(--chart-green); background: linear-gradient(135deg, rgba(16, 124, 16, 0.05) 0%, rgba(16, 124, 16, 0.02) 100%);">
-                    <div class="viz-title" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                        <span><i class="fas fa-chart-line" style="color: var(--chart-green); margin-right: 6px;"></i>Revenue Opportunities</span>
-                        <span class="badge" style="background: var(--chart-green); font-size: 9px;" id="opportunityValue">$1.2M Potential</span>
-                    </div>
-                    <div id="revenueOpportunities">
-                        <!-- Populated by JavaScript -->
                     </div>
                 </div>
             </div>
@@ -733,7 +722,15 @@
             <div class="grid-2" style="margin-bottom: 12px;">
                 <!-- Recovery Trend Chart -->
                 <div class="viz-card">
-                    <div class="viz-title">Recovery Trend Over Time</div>
+                    <div class="viz-title" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span>Recovery Trend Over Time</span>
+                        <div style="display: flex; gap: 4px; align-items: center;">
+                            <button class="recovery-trend-period-btn active" data-period="1" style="padding: 4px 10px; font-size: 9px; border: 1px solid var(--pbi-border); background: var(--pbi-primary); color: white; border-radius: 2px; cursor: pointer; font-weight: 500;">1 Year</button>
+                            <button class="recovery-trend-period-btn" data-period="2" style="padding: 4px 10px; font-size: 9px; border: 1px solid var(--pbi-border); background: var(--pbi-card-bg); color: var(--pbi-text-primary); border-radius: 2px; cursor: pointer; font-weight: 500;">2 Years</button>
+                            <button class="recovery-trend-period-btn" data-period="3" style="padding: 4px 10px; font-size: 9px; border: 1px solid var(--pbi-border); background: var(--pbi-card-bg); color: var(--pbi-text-primary); border-radius: 2px; cursor: pointer; font-weight: 500;">3 Years</button>
+                            <button class="recovery-trend-period-btn" data-period="all" style="padding: 4px 10px; font-size: 9px; border: 1px solid var(--pbi-border); background: var(--pbi-card-bg); color: var(--pbi-text-primary); border-radius: 2px; cursor: pointer; font-weight: 500;">All Time</button>
+                        </div>
+                    </div>
                     <div class="bar-chart-container" style="height: 280px;">
                         <canvas id="recoveryTrendChart"></canvas>
                     </div>
@@ -757,6 +754,31 @@
                 <div class="viz-title">Recovery by Child Account</div>
                 <div class="bar-chart-container" style="height: 250px;">
                     <canvas id="recoveryByAccountChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Smart Action Center - AI-Powered Insights (Moved to Bottom) -->
+            <div class="grid-2" style="margin-bottom: 12px; gap: 12px; margin-top: 20px;">
+                <!-- Predictive Insights & Recommendations -->
+                <div class="viz-card" style="border-left: 4px solid #8764b8; background: linear-gradient(135deg, rgba(135, 100, 184, 0.05) 0%, rgba(135, 100, 184, 0.02) 100%);">
+                    <div class="viz-title" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <span><i class="fas fa-brain" style="color: #8764b8; margin-right: 6px;"></i>Smart Recommendations</span>
+                        <span class="badge" style="background: #8764b8; font-size: 9px;">AI-Powered</span>
+                    </div>
+                    <div id="smartRecommendations">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Revenue Opportunities & Upsell -->
+                <div class="viz-card" style="border-left: 4px solid var(--chart-green); background: linear-gradient(135deg, rgba(16, 124, 16, 0.05) 0%, rgba(16, 124, 16, 0.02) 100%);">
+                    <div class="viz-title" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <span><i class="fas fa-chart-line" style="color: var(--chart-green); margin-right: 6px;"></i>Revenue Opportunities</span>
+                        <span class="badge" style="background: var(--chart-green); font-size: 9px;" id="opportunityValue">$1.2M Potential</span>
+                    </div>
+                    <div id="revenueOpportunities">
+                        <!-- Populated by JavaScript -->
+                    </div>
                 </div>
             </div>
             </div>
@@ -880,33 +902,6 @@
                 </div>
             </div>
 
-            <!-- Page 3: Analysis -->
-            <div class="dashboard-page" id="page3">
-                <div class="viz-card" style="margin-bottom: 12px;">
-                    <div class="viz-title">Analysis & Trends</div>
-                    <div style="font-size: 10px; color: var(--pbi-text-secondary); margin-bottom: 12px;">
-                        Deep dive analysis, trends, and comparative views
-                    </div>
-                </div>
-
-                <!-- Non-US Opt-in Cases Eligibility Snapshot -->
-                <div class="viz-card">
-                    <div class="viz-title">Non-US Opt-in Cases Eligibility Snapshot</div>
-                    <div class="eligibility-snapshot" id="eligibilitySnapshot">
-                        <!-- Populated by JavaScript -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <div class="footer">
-        <div class="page-info">
-            <span>Account Manager Dashboard</span>
-        </div>
-        <div style="display: flex; align-items: center; gap: 16px;">
-            <span>Zoom: 100%</span>
         </div>
     </div>
 
@@ -1696,6 +1691,10 @@
 
         function populateEligibilitySnapshot() {
             const container = document.getElementById('eligibilitySnapshot');
+            if (!container) {
+                // Element doesn't exist (was on Page 3 which was removed)
+                return;
+            }
             container.innerHTML = '';
             
             eligibilitySnapshot.forEach(item => {
@@ -1711,15 +1710,23 @@
 
         // Page Navigation Functions
         function showPage(pageNumber, buttonElement) {
+            console.log('showPage called with:', pageNumber);
+            
             // Hide all pages
             document.querySelectorAll('.dashboard-page').forEach(page => {
                 page.classList.remove('active');
+                page.style.display = 'none';
             });
             
             // Show selected page
             const targetPage = document.getElementById(`page${pageNumber}`);
             if (targetPage) {
                 targetPage.classList.add('active');
+                targetPage.style.display = 'block';
+                targetPage.style.visibility = 'visible';
+            } else {
+                console.error('Page not found:', `page${pageNumber}`);
+                return;
             }
             
             // Update navigation buttons
@@ -1738,10 +1745,10 @@
             // Update page indicator
             const indicator = document.getElementById('currentPageIndicator');
             if (indicator) {
-                indicator.textContent = `Page ${pageNumber} of 3`;
+                indicator.textContent = `Page ${pageNumber} of 2`;
             }
             
-            // Resize charts when switching pages to ensure they render correctly
+            // Resize Page 1 charts when switching back
             if (pageNumber === 1) {
                 setTimeout(() => {
                     const trendCanvas = document.getElementById('recoveryTrendChart');
@@ -1816,6 +1823,37 @@
             });
         });
 
+        // Recovery trend data with dates (extended for multiple years)
+        const recoveryTrendData = [
+            // 2022
+            { date: '2022-01-15', amount: 450000 },
+            { date: '2022-03-20', amount: 320000 },
+            { date: '2022-06-10', amount: 890000 },
+            { date: '2022-09-15', amount: 210000 },
+            { date: '2022-11-30', amount: 560000 },
+            // 2023
+            { date: '2023-02-10', amount: 780000 },
+            { date: '2023-04-25', amount: 420000 },
+            { date: '2023-07-18', amount: 950000 },
+            { date: '2023-10-05', amount: 340000 },
+            { date: '2023-12-20', amount: 680000 },
+            // 2024
+            { date: '2024-01-15', amount: 0 },
+            { date: '2024-02-20', amount: 0 },
+            { date: '2024-03-10', amount: 1450000 },
+            { date: '2024-04-05', amount: 0 },
+            { date: '2024-05-12', amount: 0 },
+            { date: '2024-06-15', amount: 783416 },
+            { date: '2024-07-22', amount: 0 },
+            { date: '2024-08-20', amount: 180750 },
+            { date: '2024-09-18', amount: 0 },
+            { date: '2024-10-25', amount: 0 },
+            { date: '2024-11-30', amount: 0 },
+            { date: '2024-12-15', amount: 0 }
+        ];
+        
+        let currentRecoveryTrendPeriod = 1; // Default to 1 year
+
         // Chart creation functions
         function createRecoveryTrendChart() {
             const canvas = document.getElementById('recoveryTrendChart');
@@ -1838,12 +1876,77 @@
             
             const ctx = canvas.getContext('2d');
             
-            // Sample recovery data over time
+            // Calculate date range based on period selection
+            const today = new Date();
+            let startDate = new Date();
+            let useQuarters = false;
+            
+            if (currentRecoveryTrendPeriod === 1) {
+                startDate.setFullYear(today.getFullYear() - 1);
+                useQuarters = false; // Show months
+            } else if (currentRecoveryTrendPeriod === 2) {
+                startDate.setFullYear(today.getFullYear() - 2);
+                useQuarters = false; // Show months
+            } else if (currentRecoveryTrendPeriod === 3) {
+                startDate.setFullYear(today.getFullYear() - 3);
+                useQuarters = true; // Show quarters
+            } else {
+                // All time
+                startDate = new Date('2022-01-01');
+                useQuarters = true; // Show quarters
+            }
+            
+            // Filter data based on date range
+            const filteredData = recoveryTrendData.filter(item => {
+                const itemDate = new Date(item.date);
+                return itemDate >= startDate && itemDate <= today;
+            });
+            
+            // Group data by month or quarter
+            const groupedData = {};
+            filteredData.forEach(item => {
+                const date = new Date(item.date);
+                let key;
+                
+                if (useQuarters) {
+                    const quarter = Math.floor(date.getMonth() / 3) + 1;
+                    const year = date.getFullYear();
+                    key = `Q${quarter} ${year}`;
+                } else {
+                    key = date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+                }
+                
+                if (!groupedData[key]) {
+                    groupedData[key] = 0;
+                }
+                groupedData[key] += item.amount;
+            });
+            
+            // Convert to arrays for chart, sorted by date
+            const labels = Object.keys(groupedData).sort((a, b) => {
+                if (useQuarters) {
+                    // Parse quarters: "Q1 2022" -> Date
+                    const matchA = a.match(/Q(\d) (\d{4})/);
+                    const matchB = b.match(/Q(\d) (\d{4})/);
+                    if (matchA && matchB) {
+                        const yearA = parseInt(matchA[2]);
+                        const quarterA = parseInt(matchA[1]);
+                        const yearB = parseInt(matchB[2]);
+                        const quarterB = parseInt(matchB[1]);
+                        if (yearA !== yearB) return yearA - yearB;
+                        return quarterA - quarterB;
+                    }
+                }
+                // For months, parse as date
+                return new Date(a) - new Date(b);
+            });
+            const data = labels.map(label => groupedData[label]);
+            
             const recoveryData = {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                labels: labels,
                 datasets: [{
                     label: 'Recoveries',
-                    data: [0, 0, 1450000, 0, 0, 783416, 0, 180750, 0, 0, 0, 0],
+                    data: data,
                     backgroundColor: 'rgba(16, 124, 16, 0.8)',
                     borderColor: '#107c10',
                     borderWidth: 2,
@@ -1903,6 +2006,38 @@
             
             // Store chart reference
             canvas.chart = chart;
+        }
+        
+        // Initialize period selector buttons
+        function initRecoveryTrendDateSlicer() {
+            const periodButtons = document.querySelectorAll('.recovery-trend-period-btn');
+            
+            if (!periodButtons.length) return;
+            
+            // Add event listeners to period buttons
+            periodButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Update active state
+                    periodButtons.forEach(btn => {
+                        btn.classList.remove('active');
+                        btn.style.background = 'var(--pbi-card-bg)';
+                        btn.style.color = 'var(--pbi-text-primary)';
+                        btn.style.borderColor = 'var(--pbi-border)';
+                    });
+                    
+                    this.classList.add('active');
+                    this.style.background = 'var(--pbi-primary)';
+                    this.style.color = 'white';
+                    this.style.borderColor = 'var(--pbi-primary)';
+                    
+                    // Update period
+                    const period = this.getAttribute('data-period');
+                    currentRecoveryTrendPeriod = period === 'all' ? 'all' : parseInt(period);
+                    
+                    // Update chart
+                    createRecoveryTrendChart();
+                });
+            });
         }
 
         function createCaseStatusChart() {
@@ -2077,6 +2212,9 @@
             canvas.chart = chart;
         }
 
+        // ============================================
+        // Page 3 removed - charts were not working properly
+
         // Initialize
         // Client selector change handler
         document.getElementById('clientSelect').addEventListener('change', function(e) {
@@ -2148,19 +2286,49 @@
             populateNotificationSignups();
             populateEligibilitySnapshot();
             
-            // Create all charts on page load - Chart.js can handle hidden elements
-            // We'll update them when Page 3 is shown
+            // Initialize date slicer
+            initRecoveryTrendDateSlicer();
+            
+            // Create all charts on page load
             function initCharts() {
                 if (typeof Chart !== 'undefined') {
                     console.log('Chart.js loaded, creating charts...');
-                    try {
-                        createRecoveryTrendChart();
-                        createCaseStatusChart();
-                        createRecoveryByAccountChart();
-                        console.log('All charts created successfully');
-                    } catch (e) {
-                        console.error('Error creating charts:', e);
+                    
+                    // Ensure Page 1 is visible
+                    const page1 = document.getElementById('page1');
+                    if (page1) {
+                        page1.classList.add('active');
+                        page1.style.display = 'block';
                     }
+                    
+                    // Wait a moment for DOM to be ready, then create charts
+                    setTimeout(() => {
+                        try {
+                            createRecoveryTrendChart();
+                            createCaseStatusChart();
+                            createRecoveryByAccountChart();
+                            console.log('All charts created successfully');
+                            
+                            // Force resize after creation
+                            setTimeout(() => {
+                                const trendCanvas = document.getElementById('recoveryTrendChart');
+                                const statusCanvas = document.getElementById('caseStatusChart');
+                                const accountCanvas = document.getElementById('recoveryByAccountChart');
+                                
+                                if (trendCanvas && trendCanvas.chart) {
+                                    trendCanvas.chart.resize();
+                                }
+                                if (statusCanvas && statusCanvas.chart) {
+                                    statusCanvas.chart.resize();
+                                }
+                                if (accountCanvas && accountCanvas.chart) {
+                                    accountCanvas.chart.resize();
+                                }
+                            }, 200);
+                        } catch (e) {
+                            console.error('Error creating charts:', e);
+                        }
+                    }, 100);
                 } else {
                     console.log('Chart.js not loaded yet, waiting...');
                     setTimeout(initCharts, 200);
