@@ -454,8 +454,8 @@
             <div class="dashboard-page active" id="page1">
                 <!-- Client Header with Quick Actions -->
             <div class="viz-card" style="margin-bottom: 12px; background: linear-gradient(135deg, var(--pbi-primary) 0%, var(--pbi-primary-dark) 100%); color: white; padding: 16px;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div style="flex: 1;">
                         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
                             <i class="fas fa-building" style="font-size: 24px;"></i>
                             <div>
@@ -467,19 +467,29 @@
                             <!-- Populated by JavaScript -->
                         </div>
                     </div>
-                    <div style="display: flex; gap: 8px;">
-                        <button style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 8px 16px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s;" 
-                                onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
-                            <i class="fas fa-envelope" style="margin-right: 6px;"></i>Email
-                        </button>
-                        <button style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 8px 16px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s;"
-                                onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
-                            <i class="fas fa-phone" style="margin-right: 6px;"></i>Call
-                        </button>
-                        <button style="background: white; border: none; color: var(--pbi-primary); padding: 8px 16px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s;"
-                                onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
-                            <i class="fas fa-calendar-plus" style="margin-right: 6px;"></i>Schedule
-                        </button>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <!-- 9 Box Matrix - Ultra Compact Badge -->
+                        <div style="background: rgba(255,255,255,0.15); border-radius: 4px; padding: 6px 10px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-th" style="font-size: 12px; color: rgba(255,255,255,0.9);"></i>
+                            <div style="display: flex; flex-direction: column; gap: 2px;">
+                                <div style="font-size: 8px; color: rgba(255,255,255,0.8); font-weight: 500;">Client Value Matrix</div>
+                                <span class="badge" id="nineBoxRatingCompact" style="background: rgba(255,255,255,0.25); font-size: 9px; padding: 2px 8px; color: white; font-weight: 600; border-radius: 3px;">High Value / Low Cost</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 8px 16px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s;" 
+                                    onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                                <i class="fas fa-envelope" style="margin-right: 6px;"></i>Email
+                            </button>
+                            <button style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 8px 16px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s;"
+                                    onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                                <i class="fas fa-phone" style="margin-right: 6px;"></i>Call
+                            </button>
+                            <button style="background: white; border: none; color: var(--pbi-primary); padding: 8px 16px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s;"
+                                    onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                                <i class="fas fa-calendar-plus" style="margin-right: 6px;"></i>Schedule
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -591,30 +601,8 @@
                 </div>
             </div>
 
-            <!-- Client Value & Health Section -->
-            <div class="grid-2" style="margin-bottom: 12px; gap: 12px;">
-                <!-- 9 Box Rating -->
-                <div class="viz-card" style="border-left: 4px solid var(--pbi-primary);">
-                    <div class="viz-title" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                        <span><i class="fas fa-th" style="color: var(--pbi-primary); margin-right: 6px;"></i>Client Value Matrix (9 Box)</span>
-                        <span class="badge" id="nineBoxRating" style="background: var(--chart-green); font-size: 10px; padding: 4px 8px;">High Value / Low Cost</span>
-                    </div>
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: 8px;">
-                        <div style="text-align: center; font-size: 9px; color: var(--pbi-text-secondary); padding: 4px;">High Cost</div>
-                        <div style="text-align: center; font-size: 9px; color: var(--pbi-text-secondary); padding: 4px;">Medium Cost</div>
-                        <div style="text-align: center; font-size: 9px; color: var(--pbi-text-secondary); padding: 4px;">Low Cost</div>
-                    </div>
-                    <div id="nineBoxGrid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; aspect-ratio: 1;">
-                        <!-- Populated by JavaScript -->
-                    </div>
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 4px;">
-                        <div style="text-align: center; font-size: 9px; color: var(--pbi-text-secondary); padding: 4px;">Low Value</div>
-                        <div style="text-align: center; font-size: 9px; color: var(--pbi-text-secondary); padding: 4px;">Medium Value</div>
-                        <div style="text-align: center; font-size: 9px; color: var(--pbi-text-secondary); padding: 4px;">High Value</div>
-                    </div>
-                </div>
-
-                <!-- Account Health & Quick Stats -->
+            <!-- Account Health & Quick Stats -->
+            <div style="margin-bottom: 12px;">
                 <div class="viz-card" style="border-left: 4px solid var(--chart-green);">
                     <div class="viz-title" style="margin-bottom: 12px;">
                         <i class="fas fa-heartbeat" style="color: var(--chart-green); margin-right: 6px;"></i>Account Health
@@ -1041,60 +1029,78 @@
 
         // 9 Box grid positions: [row][col] where row=value (0=low, 1=medium, 2=high), col=cost (0=high, 1=medium, 2=low)
         function renderNineBoxGrid(value, cost) {
-            const grid = document.getElementById('nineBoxGrid');
-            if (!grid) return;
+            const valueLabels = { 'low': 'Low', 'medium': 'Medium', 'high': 'High' };
+            const costLabels = { 'high': 'High', 'medium': 'Medium', 'low': 'Low' };
             
-            const valueMap = { 'low': 0, 'medium': 1, 'high': 2 };
-            const costMap = { 'high': 0, 'medium': 1, 'low': 2 };
-            const valueIndex = valueMap[value] || 1;
-            const costIndex = costMap[cost] || 1;
-            
-            grid.innerHTML = '';
-            
-            for (let row = 2; row >= 0; row--) { // High value at top
-                for (let col = 0; col < 3; col++) { // High cost on left
-                    const cell = document.createElement('div');
-                    const isActive = (row === valueIndex && col === costIndex);
-                    
-                    if (isActive) {
-                        cell.style.background = 'linear-gradient(135deg, var(--pbi-primary) 0%, var(--pbi-primary-dark) 100%)';
-                        cell.style.border = '2px solid var(--pbi-primary-dark)';
-                        cell.style.color = 'white';
-                        cell.style.fontWeight = '700';
-                        cell.innerHTML = '<i class="fas fa-check-circle" style="font-size: 20px;"></i>';
-                    } else {
-                        cell.style.background = 'var(--pbi-background)';
-                        cell.style.border = '1px solid var(--pbi-border)';
-                        cell.style.color = 'var(--pbi-text-tertiary)';
-                    }
-                    
-                    cell.style.borderRadius = '4px';
-                    cell.style.display = 'flex';
-                    cell.style.alignItems = 'center';
-                    cell.style.justifyContent = 'center';
-                    cell.style.cursor = 'pointer';
-                    cell.style.transition = 'all 0.2s';
-                    
-                    cell.onmouseover = function() {
-                        if (!isActive) {
-                            this.style.background = 'var(--pbi-hover)';
-                            this.style.borderColor = 'var(--pbi-border)';
-                        }
-                    };
-                    cell.onmouseout = function() {
-                        if (!isActive) {
-                            this.style.background = 'var(--pbi-background)';
-                            this.style.borderColor = 'var(--pbi-border)';
-                        }
-                    };
-                    
-                    grid.appendChild(cell);
+            // Update compact badge in header
+            const compactBadge = document.getElementById('nineBoxRatingCompact');
+            if (compactBadge) {
+                compactBadge.textContent = `${valueLabels[value]} Value / ${costLabels[cost]} Cost`;
+                // Color code badge based on value/cost combination
+                if (value === 'high' && cost === 'low') {
+                    compactBadge.style.background = 'rgba(16, 124, 16, 0.4)'; // Green tint
+                } else if (value === 'high' && cost === 'high') {
+                    compactBadge.style.background = 'rgba(255, 140, 0, 0.4)'; // Orange tint
+                } else if (value === 'low' && cost === 'high') {
+                    compactBadge.style.background = 'rgba(209, 52, 56, 0.4)'; // Red tint
+                } else {
+                    compactBadge.style.background = 'rgba(255,255,255,0.25)'; // Default
                 }
             }
             
-            // Update badge
-            const valueLabels = { 'low': 'Low', 'medium': 'Medium', 'high': 'High' };
-            const costLabels = { 'high': 'High', 'medium': 'Medium', 'low': 'Low' };
+            // Also render to old grid if it exists (for backwards compatibility)
+            const grid = document.getElementById('nineBoxGrid');
+            if (grid) {
+                const valueMap = { 'low': 0, 'medium': 1, 'high': 2 };
+                const costMap = { 'high': 0, 'medium': 1, 'low': 2 };
+                const valueIndex = valueMap[value] || 1;
+                const costIndex = costMap[cost] || 1;
+                
+                grid.innerHTML = '';
+                
+                for (let row = 2; row >= 0; row--) { // High value at top
+                    for (let col = 0; col < 3; col++) { // High cost on left
+                        const cell = document.createElement('div');
+                        const isActive = (row === valueIndex && col === costIndex);
+                        
+                        if (isActive) {
+                            cell.style.background = 'linear-gradient(135deg, var(--pbi-primary) 0%, var(--pbi-primary-dark) 100%)';
+                            cell.style.border = '2px solid var(--pbi-primary-dark)';
+                            cell.style.color = 'white';
+                            cell.style.fontWeight = '700';
+                            cell.innerHTML = '<i class="fas fa-check-circle" style="font-size: 20px;"></i>';
+                        } else {
+                            cell.style.background = 'var(--pbi-background)';
+                            cell.style.border = '1px solid var(--pbi-border)';
+                            cell.style.color = 'var(--pbi-text-tertiary)';
+                        }
+                        
+                        cell.style.borderRadius = '4px';
+                        cell.style.display = 'flex';
+                        cell.style.alignItems = 'center';
+                        cell.style.justifyContent = 'center';
+                        cell.style.cursor = 'pointer';
+                        cell.style.transition = 'all 0.2s';
+                        
+                        cell.onmouseover = function() {
+                            if (!isActive) {
+                                this.style.background = 'var(--pbi-hover)';
+                                this.style.borderColor = 'var(--pbi-border)';
+                            }
+                        };
+                        cell.onmouseout = function() {
+                            if (!isActive) {
+                                this.style.background = 'var(--pbi-background)';
+                                this.style.borderColor = 'var(--pbi-border)';
+                            }
+                        };
+                        
+                        grid.appendChild(cell);
+                    }
+                }
+            }
+            
+            // Update old badge if it exists
             const badge = document.getElementById('nineBoxRating');
             if (badge) {
                 badge.textContent = `${valueLabels[value]} Value / ${costLabels[cost]} Cost`;
