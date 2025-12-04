@@ -888,27 +888,37 @@
                           data-filter="all" 
                           data-pbi-filter="all"
                           data-pbi-slicer-value="*"
-                          onclick="filterOpportunities('all', this)">All (3)</span>
+                          onclick="filterOpportunities('all', this)">All</span>
                     <span class="filter-badge" 
                           data-filter="eligible" 
                           data-pbi-filter="CaseStatus"
                           data-pbi-slicer-value="ELIGIBLE"
-                          onclick="filterOpportunities('eligible', this)">Eligible (2)</span>
+                          onclick="filterOpportunities('eligible', this)">Eligible</span>
                     <span class="filter-badge" 
-                          data-filter="requested" 
+                          data-filter="participation-requested" 
                           data-pbi-filter="CaseStatus"
                           data-pbi-slicer-value="REQUESTED"
-                          onclick="filterOpportunities('requested', this)">Requested (1)</span>
+                          onclick="filterOpportunities('participation-requested', this)">PARTICIPATION requested</span>
+                    <span class="filter-badge" 
+                          data-filter="participation-confirmed" 
+                          data-pbi-filter="CaseStatus"
+                          data-pbi-slicer-value="CONFIRMED"
+                          onclick="filterOpportunities('participation-confirmed', this)">participation confirmed</span>
+                    <span class="filter-badge" 
+                          data-filter="registered" 
+                          data-pbi-filter="CaseStatus"
+                          data-pbi-slicer-value="REGISTERED"
+                          onclick="filterOpportunities('registered', this)">Registered</span>
                     <span class="filter-badge" 
                           data-filter="high-risk" 
                           data-pbi-filter="RiskLevel"
                           data-pbi-slicer-value="High"
-                          onclick="filterOpportunities('high-risk', this)">High Risk (2)</span>
+                          onclick="filterOpportunities('high-risk', this)">HIGH Risk</span>
                     <span class="filter-badge" 
                           data-filter="high-value" 
                           data-pbi-filter="OrganizerDamages"
                           data-pbi-slicer-value=">= 1000000"
-                          onclick="filterOpportunities('high-value', this)">High Value ($1M+)</span>
+                          onclick="filterOpportunities('high-value', this)">High Value</span>
                 </div>
                 
                 <div style="overflow-x: auto;">
@@ -1353,16 +1363,25 @@
                     case 'eligible':
                         show = row.classList.contains('eligible');
                         break;
-                    case 'requested':
+                    case 'participation-requested':
                         show = row.classList.contains('requested');
                         break;
+                    case 'participation-confirmed':
+                        show = row.classList.contains('confirmed');
+                        break;
+                    case 'registered':
+                        show = row.classList.contains('registered');
+                        break;
                     case 'high-risk':
-                        show = row.classList.contains('gb');
+                        const riskLevel = row.getAttribute('data-pbi-risk-level');
+                        show = riskLevel === 'high';
                         break;
                     case 'high-value':
-                        const damagesText = row.querySelector('.currency').textContent;
-                        const damages = parseFloat(damagesText.replace(/[^0-9.]/g, ''));
-                        show = damages >= 1 || damagesText.includes('M');
+                        const damagesText = row.querySelector('.currency')?.textContent;
+                        if (damagesText) {
+                            const damages = parseFloat(damagesText.replace(/[^0-9.]/g, ''));
+                            show = damages >= 1 || damagesText.includes('M');
+                        }
                         break;
                 }
                 
