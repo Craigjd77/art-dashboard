@@ -31,11 +31,6 @@
         .fade-in { animation: fadeIn 1s ease-in; }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .bounce { animation: bounce 1s infinite; }
-        /* Badge system */
-        .badge-display { position: fixed; top: 80px; right: 20px; z-index: 1000; background: white; padding: 15px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); max-width: 250px; }
-        .badge-item { display: inline-block; margin: 5px; padding: 8px 12px; background: #007bff; color: white; border-radius: 20px; font-size: 0.85em; }
-        .badge-item.earned { background: #28a745; }
-        .badge-item.locked { background: #6c757d; opacity: 0.5; }
         /* Video carousel */
         .video-carousel { margin: 20px 0; }
         .video-placeholder { background: #e9ecef; padding: 40px; text-align: center; border-radius: 10px; min-height: 300px; display: flex; align-items: center; justify-content: center; }
@@ -85,18 +80,13 @@
                     <li class="nav-item"><a class="nav-link" href="#pslra">PSLRA Simulator</a></li>
                     <li class="nav-item"><a class="nav-link" href="#recognized-loss">Loss Calculator</a></li>
                     <li class="nav-item"><a class="nav-link" href="#industry">Industry Modules</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#training">Training & Gamification</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#progress">My Progress</a></li>
+                    <li class="nav-item"><a class="nav-link" href="training.html">Training & Gamification</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#plan-allocation">Plan of Allocation</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Badge Display (Fixed) -->
-    <div class="badge-display" id="badgeDisplay">
-        <h5><i class="fas fa-trophy"></i> Your Badges</h5>
-        <div id="badgesContainer"></div>
-    </div>
 
     <!-- Search Box -->
     <div class="search-box container">
@@ -531,182 +521,14 @@
         </div>
     </section>
 
-    <!-- Training & Gamification Section -->
+    <!-- Training & Gamification Link Section -->
     <section id="training" class="section bg-light">
         <div class="container">
-            <h2 class="mb-4"><i class="fas fa-gamepad"></i> Training Modules & Gamification</h2>
-            <p class="fade-in">Complete quizzes, earn badges, and track your progress. Adaptive learning paths adjust difficulty based on your performance.</p>
-            
-            <!-- Expanded Quiz (10 Questions) -->
-            <div class="interactive-card fade-in">
-                <h3><i class="fas fa-question-circle"></i> Comprehensive Knowledge Quiz</h3>
-                <p>Answer 10 questions to test your understanding. Earn badges based on your score!</p>
-                
-                <div class="quiz-question">
-                    <p><strong>1. What matching method is standard in class actions?</strong></p>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q1" value="FIFO"><label class="form-check-label">FIFO</label></div>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q1" value="LIFO"><label class="form-check-label">LIFO</label></div>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q1" value="Specific"><label class="form-check-label">Specific Identification</label></div>
-                    <p class="feedback" id="q1-feedback">Correct! FIFO maximizes losses for class members.</p>
-                </div>
-
-                <div class="quiz-question">
-                    <p><strong>2. How does PSLRA 90-day lookback affect holdings?</strong></p>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q2" value="Caps"><label class="form-check-label">Caps loss at 90-day mean price</label></div>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q2" value="Increases"><label class="form-check-label">Increases recoverable damages</label></div>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q2" value="Ignores"><label class="form-check-label">Ignores holdings</label></div>
-                    <p class="feedback" id="q2-feedback">Correct! It caps at the mean trading price.</p>
-                </div>
-
-                <div class="quiz-question">
-                    <p><strong>3. What is the average recovery rate in securities class actions?</strong></p>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q3" value="10-15"><label class="form-check-label">10-15% of losses</label></div>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q3" value="2-5"><label class="form-check-label">2-5% of losses</label></div>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q3" value="20-30"><label class="form-check-label">20-30% of losses</label></div>
-                    <p class="feedback" id="q3-feedback">Correct! Average recovery is 2-5% of recognized losses.</p>
-                </div>
-
-                <div class="quiz-question">
-                    <p><strong>4. In the US, what type of system is used for class action participation?</strong></p>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q4" value="Opt-in"><label class="form-check-label">Opt-in (must actively join)</label></div>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q4" value="Opt-out"><label class="form-check-label">Opt-out (automatically included)</label></div>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q4" value="Hybrid"><label class="form-check-label">Hybrid system</label></div>
-                    <p class="feedback" id="q4-feedback">Correct! US uses opt-out, maximizing participation.</p>
-                </div>
-
-                <div class="quiz-question">
-                    <p><strong>5. What is a key red flag for potential class action litigation?</strong></p>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q5" value="Earnings"><label class="form-check-label">Earnings restatement</label></div>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q5" value="Dividend"><label class="form-check-label">Regular dividend payments</label></div>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q5" value="Growth"><label class="form-check-label">Steady growth</label></div>
-                    <p class="feedback" id="q5-feedback">Correct! Earnings restatements are major red flags.</p>
-                </div>
-
-                <div class="quiz-question">
-                    <p><strong>6. What does FIFO stand for?</strong></p>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q6" value="First"><label class="form-check-label">First-In, First-Out</label></div>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q6" value="Last"><label class="form-check-label">Last-In, First-Out</label></div>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q6" value="Fixed"><label class="form-check-label">Fixed-In, Fixed-Out</label></div>
-                    <p class="feedback" id="q6-feedback">Correct! FIFO matches oldest purchases first.</p>
-                </div>
-
-                <div class="quiz-question">
-                    <p><strong>7. How long is the typical timeline from filing to distribution?</strong></p>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q7" value="1"><label class="form-check-label">1 year</label></div>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q7" value="2-5"><label class="form-check-label">2-5 years</label></div>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q7" value="10"><label class="form-check-label">10+ years</label></div>
-                    <p class="feedback" id="q7-feedback">Correct! Typically 2-5 years from filing to distribution.</p>
-                </div>
-
-                <div class="quiz-question">
-                    <p><strong>8. What is the primary purpose of the PSLRA 90-day lookback?</strong></p>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q8" value="Prevent"><label class="form-check-label">Prevent windfalls from stock rebounds</label></div>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q8" value="Increase"><label class="form-check-label">Increase recoverable damages</label></div>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q8" value="Simplify"><label class="form-check-label">Simplify calculations</label></div>
-                    <p class="feedback" id="q8-feedback">Correct! It prevents windfalls by capping at mean price.</p>
-                </div>
-
-                <div class="quiz-question">
-                    <p><strong>9. What is a common pitfall in claim filing?</strong></p>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q9" value="Deadline"><label class="form-check-label">Missing deadlines</label></div>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q9" value="Early"><label class="form-check-label">Filing too early</label></div>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q9" value="Multiple"><label class="form-check-label">Filing multiple times</label></div>
-                    <p class="feedback" id="q9-feedback">Correct! Missing deadlines results in zero recovery.</p>
-                </div>
-
-                <div class="quiz-question">
-                    <p><strong>10. What emerging trend involves greenwashing cases?</strong></p>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q10" value="ESG"><label class="form-check-label">ESG-related litigation</label></div>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q10" value="Crypto"><label class="form-check-label">Crypto securities</label></div>
-                    <div class="form-check"><input class="form-check-input" type="radio" name="q10" value="Traditional"><label class="form-check-label">Traditional fraud</label></div>
-                    <p class="feedback" id="q10-feedback">Correct! ESG litigation includes greenwashing cases.</p>
-                </div>
-
-                <button class="btn btn-primary btn-lg" onclick="checkQuiz()"><i class="fas fa-check-circle"></i> Submit Quiz</button>
-                <p id="quizResult" class="mt-3 fw-bold"></p>
-            </div>
-
-            <!-- Client Pitch Practice -->
-            <div class="interactive-card fade-in mt-4">
-                <h3><i class="fas fa-microphone"></i> Client Pitch Practice: Record Your Explanation</h3>
-                <p>Practice explaining complex concepts to clients. Record yourself and review for clarity and accuracy.</p>
-                <div class="video-recorder">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h5>Select a Scenario:</h5>
-                            <select class="form-control mb-3" id="pitchScenario">
-                                <option>Explain FIFO matching to a hedge fund client</option>
-                                <option>Describe PSLRA 90-day lookback impact</option>
-                                <option>Present multi-fund aggregation strategy</option>
-                                <option>Explain opt-out vs opt-in systems</option>
-                            </select>
-                            <button class="btn btn-danger" id="recordBtn" onclick="startRecording()"><i class="fas fa-record-vinyl"></i> Start Recording</button>
-                            <button class="btn btn-secondary" id="stopBtn" onclick="stopRecording()" disabled><i class="fas fa-stop"></i> Stop Recording</button>
-                            <button class="btn btn-success" id="playBtn" onclick="playRecording()" disabled><i class="fas fa-play"></i> Play Recording</button>
-                        </div>
-                        <div class="col-md-6">
-                            <video id="recordedVideo" controls style="display: none;"></video>
-                            <div id="recordingStatus" class="mt-3"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Leaderboard -->
-            <div class="interactive-card fade-in mt-4">
-                <h3><i class="fas fa-trophy"></i> Leaderboard</h3>
-                <div class="leaderboard" id="leaderboard">
-                    <div class="leaderboard-item">
-                        <strong>#1</strong> Top Performer - 100% (10/10)
-                    </div>
-                    <div class="leaderboard-item">
-                        <strong>#2</strong> Expert Level - 90% (9/10)
-                    </div>
-                    <div class="leaderboard-item">
-                        <strong>#3</strong> Advanced - 80% (8/10)
-                    </div>
-                    <p class="mt-3"><small>Your best score will appear here after completing the quiz!</small></p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Progress Tracking Section -->
-    <section id="progress" class="section">
-        <div class="container">
-            <h2 class="mb-4"><i class="fas fa-chart-bar"></i> My Progress & Certification</h2>
-            <div class="interactive-card fade-in">
-                <h3>Learning Progress</h3>
-                <div class="progress-section">
-                    <label>Overall Completion:</label>
-                    <div class="progress mb-3">
-                        <div class="progress-bar bg-success" role="progressbar" id="overallProgress" style="width: 0%">0%</div>
-                    </div>
-                    <label>Video Library:</label>
-                    <div class="progress mb-3">
-                        <div class="progress-bar bg-info" role="progressbar" id="videoProgress" style="width: 0%">0%</div>
-                    </div>
-                    <label>Quizzes Completed:</label>
-                    <div class="progress mb-3">
-                        <div class="progress-bar bg-warning" role="progressbar" id="quizProgress" style="width: 0%">0%</div>
-                    </div>
-                    <label>Industry Modules:</label>
-                    <div class="progress mb-3">
-                        <div class="progress-bar bg-primary" role="progressbar" id="moduleProgress" style="width: 0%">0%</div>
-                    </div>
-                </div>
-                <button class="btn btn-primary" onclick="updateProgress()"><i class="fas fa-sync"></i> Refresh Progress</button>
-                <button class="btn btn-success" onclick="exportProgressPDF()"><i class="fas fa-file-pdf"></i> Export Progress Report</button>
-            </div>
-
-            <div class="interactive-card fade-in mt-4">
-                <h3><i class="fas fa-certificate"></i> Certification Status</h3>
-                <div id="certificationStatus">
-                    <p>Complete all modules and score 80%+ on the comprehensive quiz to earn your FRT Training Portal Certification!</p>
-                    <div class="progress mb-3">
-                        <div class="progress-bar bg-warning" role="progressbar" id="certProgress" style="width: 0%">0%</div>
-                    </div>
-                </div>
+            <div class="interactive-card fade-in text-center">
+                <h2 class="mb-4"><i class="fas fa-gamepad"></i> Training & Gamification</h2>
+                <p class="lead">Complete quizzes, earn badges, and track your progress on our dedicated training page.</p>
+                <p>Access comprehensive quizzes, client pitch practice, leaderboards, and progress tracking.</p>
+                <a href="training.html" class="btn btn-primary btn-lg mt-3"><i class="fas fa-arrow-right"></i> Go to Training & Gamification</a>
             </div>
         </div>
     </section>
@@ -741,26 +563,12 @@
         // Data structures
         let purchases = [];
         let sales = [];
-        let mediaRecorder;
-        let recordedChunks = [];
         let badges = JSON.parse(localStorage.getItem('frtBadges') || '[]');
         let progress = JSON.parse(localStorage.getItem('frtProgress') || '{"videos":0,"quizzes":0,"modules":0}');
-        let quizScores = JSON.parse(localStorage.getItem('frtQuizScores') || '[]');
 
-        // Initialize badges display
+        // Initialize badges (hidden, but still tracked in background)
         function initBadges() {
-            const container = document.getElementById('badgesContainer');
-            const allBadges = [
-                { id: 'fifo-expert', name: 'FIFO Expert', earned: badges.includes('fifo-expert') },
-                { id: 'pslra-master', name: 'PSLRA Master', earned: badges.includes('pslra-master') },
-                { id: 'quiz-ace', name: 'Quiz Ace', earned: badges.includes('quiz-ace') },
-                { id: 'video-watcher', name: 'Video Watcher', earned: badges.includes('video-watcher') },
-                { id: 'industry-expert', name: 'Industry Expert', earned: badges.includes('industry-expert') },
-                { id: 'certified', name: 'Certified Professional', earned: badges.includes('certified') }
-            ];
-            container.innerHTML = allBadges.map(b => 
-                `<span class="badge-item ${b.earned ? 'earned' : 'locked'}" title="${b.earned ? 'Earned!' : 'Locked'}">${b.name} ${b.earned ? '✓' : '🔒'}</span>`
-            ).join('');
+            // Badges are tracked but not displayed
         }
         initBadges();
 
@@ -896,12 +704,10 @@
                 options: { scales: { y: { beginAtZero: true } }, animation: { duration: 1000 } }
             });
 
-            // Award badge
+            // Award badge (tracked in background)
             if (!badges.includes('fifo-expert')) {
                 badges.push('fifo-expert');
                 localStorage.setItem('frtBadges', JSON.stringify(badges));
-                initBadges();
-                alert('🎉 Badge Earned: FIFO Expert!');
             }
         }
 
@@ -976,12 +782,10 @@
                 }
             });
 
-            // Award badge
+            // Award badge (tracked in background)
             if (!badges.includes('pslra-master')) {
                 badges.push('pslra-master');
                 localStorage.setItem('frtBadges', JSON.stringify(badges));
-                initBadges();
-                alert('🎉 Badge Earned: PSLRA Master!');
             }
         }
 
@@ -1104,145 +908,6 @@
             });
         }
 
-        // Expanded Quiz Check (10 questions)
-        function checkQuiz() {
-            const answers = {
-                q1: 'FIFO',
-                q2: 'Caps',
-                q3: '2-5',
-                q4: 'Opt-out',
-                q5: 'Earnings',
-                q6: 'First',
-                q7: '2-5',
-                q8: 'Prevent',
-                q9: 'Deadline',
-                q10: 'ESG'
-            };
-            
-            let score = 0;
-            let total = Object.keys(answers).length;
-            
-            Object.keys(answers).forEach(q => {
-                const selected = document.querySelector(`input[name="${q}"]:checked`);
-                const feedback = document.getElementById(`${q}-feedback`);
-                if (selected && selected.value === answers[q]) {
-                    score++;
-                    if (feedback) {
-                        feedback.style.display = 'block';
-                        feedback.classList.remove('error');
-                    }
-                } else {
-                    if (feedback) {
-                        feedback.style.display = 'block';
-                        feedback.classList.add('error');
-                        feedback.textContent = 'Incorrect. Review the material and try again.';
-                    }
-                }
-            });
-            
-            const percentage = (score / total) * 100;
-            const resultDiv = document.getElementById('quizResult');
-            
-            let message = `Score: ${score}/${total} (${percentage.toFixed(0)}%) - `;
-            if (percentage >= 90) {
-                message += 'Outstanding! You\'re an expert!';
-                if (!badges.includes('quiz-ace')) {
-                    badges.push('quiz-ace');
-                    localStorage.setItem('frtBadges', JSON.stringify(badges));
-                    initBadges();
-                }
-            } else if (percentage >= 80) {
-                message += 'Great job! You have strong understanding.';
-            } else if (percentage >= 70) {
-                message += 'Good work! Review the sections you missed.';
-            } else {
-                message += 'Keep studying! Review the material and try again.';
-            }
-            
-            resultDiv.innerHTML = message;
-            
-            // Save score
-            quizScores.push({ score, total, percentage, date: new Date().toISOString() });
-            localStorage.setItem('frtQuizScores', JSON.stringify(quizScores));
-            
-            // Adaptive learning: if score < 70%, suggest watching videos
-            if (percentage < 70) {
-                resultDiv.innerHTML += '<br><div class="alert alert-info mt-3"><strong>Tip:</strong> Score below 70%? Watch the video library and PSA cartoons to improve understanding!</div>';
-            }
-            
-            // Update progress
-            progress.quizzes = Math.max(progress.quizzes, percentage);
-            localStorage.setItem('frtProgress', JSON.stringify(progress));
-            updateProgress();
-        }
-
-        // Video Recording
-        async function startRecording() {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                mediaRecorder = new MediaRecorder(stream);
-                recordedChunks = [];
-                
-                mediaRecorder.ondataavailable = (e) => {
-                    if (e.data.size > 0) recordedChunks.push(e.data);
-                };
-                
-                mediaRecorder.onstop = () => {
-                    const blob = new Blob(recordedChunks, { type: 'video/webm' });
-                    const url = URL.createObjectURL(blob);
-                    document.getElementById('recordedVideo').src = url;
-                    document.getElementById('recordedVideo').style.display = 'block';
-                    document.getElementById('playBtn').disabled = false;
-                    document.getElementById('recordingStatus').innerHTML = '<div class="alert alert-success">Recording saved! Click Play to review.</div>';
-                };
-                
-                mediaRecorder.start();
-                document.getElementById('recordBtn').disabled = true;
-                document.getElementById('stopBtn').disabled = false;
-                document.getElementById('recordingStatus').innerHTML = '<div class="alert alert-info">Recording in progress... Click Stop when finished.</div>';
-            } catch (err) {
-                alert('Error accessing camera/microphone: ' + err.message);
-            }
-        }
-        
-        function stopRecording() {
-            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-                mediaRecorder.stop();
-                mediaRecorder.stream.getTracks().forEach(track => track.stop());
-                document.getElementById('recordBtn').disabled = false;
-                document.getElementById('stopBtn').disabled = true;
-            }
-        }
-        
-        function playRecording() {
-            document.getElementById('recordedVideo').play();
-        }
-
-        // Progress Tracking
-        function updateProgress() {
-            const overall = (progress.videos + progress.quizzes + progress.modules) / 3;
-            document.getElementById('overallProgress').style.width = overall + '%';
-            document.getElementById('overallProgress').textContent = overall.toFixed(0) + '%';
-            document.getElementById('videoProgress').style.width = progress.videos + '%';
-            document.getElementById('videoProgress').textContent = progress.videos.toFixed(0) + '%';
-            document.getElementById('quizProgress').style.width = progress.quizzes + '%';
-            document.getElementById('quizProgress').textContent = progress.quizzes.toFixed(0) + '%';
-            document.getElementById('moduleProgress').style.width = progress.modules + '%';
-            document.getElementById('moduleProgress').textContent = progress.modules.toFixed(0) + '%';
-            
-            // Certification progress
-            const certProgress = (progress.videos >= 80 && progress.quizzes >= 80 && progress.modules >= 80) ? 100 : overall;
-            document.getElementById('certProgress').style.width = certProgress + '%';
-            document.getElementById('certProgress').textContent = certProgress.toFixed(0) + '%';
-            
-            if (certProgress >= 100 && !badges.includes('certified')) {
-                badges.push('certified');
-                localStorage.setItem('frtBadges', JSON.stringify(badges));
-                initBadges();
-                document.getElementById('certificationStatus').innerHTML = '<div class="alert alert-success"><h4>🎉 Congratulations! You\'ve earned FRT Training Portal Certification!</h4></div>';
-            }
-        }
-        updateProgress();
 
         // Export to PDF
         function exportToPDF() {
@@ -1254,18 +919,6 @@
             doc.save('frt-loss-calculation-report.pdf');
         }
 
-        function exportProgressPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            doc.text('FRT Training Portal - Progress Report', 20, 20);
-            doc.text(`Overall Progress: ${progress.videos + progress.quizzes + progress.modules / 3}%`, 20, 30);
-            doc.text(`Videos: ${progress.videos}%`, 20, 40);
-            doc.text(`Quizzes: ${progress.quizzes}%`, 20, 50);
-            doc.text(`Modules: ${progress.modules}%`, 20, 60);
-            doc.text(`Badges Earned: ${badges.length}`, 20, 70);
-            doc.text('Generated: ' + new Date().toLocaleString(), 20, 80);
-            doc.save('frt-progress-report.pdf');
-        }
 
         // Initialize charts
         const matchingCtx = document.getElementById('matchingChart').getContext('2d');
@@ -1284,7 +937,6 @@
                     if (!badges.includes('video-watcher') && progress.videos >= 50) {
                         badges.push('video-watcher');
                         localStorage.setItem('frtBadges', JSON.stringify(badges));
-                        initBadges();
                     }
                     updateProgress();
                 }
@@ -1300,7 +952,6 @@
                     if (!badges.includes('industry-expert') && progress.modules >= 80) {
                         badges.push('industry-expert');
                         localStorage.setItem('frtBadges', JSON.stringify(badges));
-                        initBadges();
                     }
                     updateProgress();
                 }
