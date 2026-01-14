@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRT Training Portal: Revolutionary Securities Class Action Training</title>
+    <!-- Bootstrap CSS for modern, responsive design -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Chart.js for interactive charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4"></script>
+    <!-- jsPDF for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS for polished, professional look -->
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; color: #333; }
+        header { background-color: #007bff; color: white; padding: 40px 0; text-align: center; position: relative; }
+        .navbar { background-color: #0056b3; }
+        .section { padding: 60px 0; }
+        .interactive-card { background-color: white; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 30px; }
+        .btn-primary { background-color: #007bff; border: none; }
+        .btn-primary:hover { background-color: #0056b3; }
+        table { margin-top: 20px; }
+        canvas { max-width: 100%; height: auto; }
+        .quiz-question { margin-bottom: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 5px; }
+        .feedback { display: none; color: green; font-weight: bold; margin-top: 10px; }
+        .feedback.error { color: red; }
+        /* Animations for engagement */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .fade-in { animation: fadeIn 1s ease-in; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .bounce { animation: bounce 1s infinite; }
+        /* Badge system */
+        .badge-display { position: fixed; top: 80px; right: 20px; z-index: 1000; background: white; padding: 15px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); max-width: 250px; }
+        .badge-item { display: inline-block; margin: 5px; padding: 8px 12px; background: #007bff; color: white; border-radius: 20px; font-size: 0.85em; }
+        .badge-item.earned { background: #28a745; }
+        .badge-item.locked { background: #6c757d; opacity: 0.5; }
+        /* Video carousel */
+        .video-carousel { margin: 20px 0; }
+        .video-placeholder { background: #e9ecef; padding: 40px; text-align: center; border-radius: 10px; min-height: 300px; display: flex; align-items: center; justify-content: center; }
+        .video-placeholder iframe { width: 100%; height: 400px; border-radius: 10px; }
+        /* Cartoon character placeholders */
+        .character-box { text-align: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 10px; margin: 20px 0; }
+        .character-box h4 { margin-top: 10px; }
+        .character-icon { font-size: 80px; margin-bottom: 10px; }
+        /* Search functionality */
+        .search-box { position: sticky; top: 60px; z-index: 999; background: white; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        /* Progress tracking */
+        .progress-section { margin: 20px 0; }
+        .progress-bar { height: 25px; }
+        /* PSLRA Simulator */
+        .pslra-simulator { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 30px; border-radius: 10px; color: white; }
+        /* Litigation Radar */
+        .radar-scanner { background: #1a1a2e; color: #0f0; padding: 30px; border-radius: 10px; font-family: 'Courier New', monospace; }
+        .radar-line { animation: scan 2s linear infinite; }
+        @keyframes scan { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
+        /* Video recording */
+        .video-recorder { background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; }
+        #recordedVideo { width: 100%; max-width: 640px; border-radius: 10px; margin-top: 15px; }
+        /* Leaderboard */
+        .leaderboard { background: white; padding: 20px; border-radius: 10px; margin: 20px 0; }
+        .leaderboard-item { padding: 10px; border-bottom: 1px solid #e9ecef; }
+        .leaderboard-item:first-child { background: #ffd700; font-weight: bold; }
+        /* Adaptive learning indicator */
+        .difficulty-badge { display: inline-block; padding: 5px 10px; border-radius: 15px; font-size: 0.8em; margin-left: 10px; }
+        .difficulty-beginner { background: #28a745; color: white; }
+        .difficulty-intermediate { background: #ffc107; color: #333; }
+        .difficulty-advanced { background: #dc3545; color: white; }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-graduation-cap"></i> FRT Training Portal</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#intro">Introduction</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#videos">Video Library</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#matching">Matching Methods</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#pslra">PSLRA Simulator</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#recognized-loss">Loss Calculator</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#industry">Industry Modules</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#training">Training & Gamification</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#progress">My Progress</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Badge Display (Fixed) -->
+    <div class="badge-display" id="badgeDisplay">
+        <h5><i class="fas fa-trophy"></i> Your Badges</h5>
+        <div id="badgesContainer"></div>
+    </div>
+
+    <!-- Search Box -->
+    <div class="search-box container">
+        <input type="text" class="form-control" id="searchInput" placeholder="Search topics, cases, or concepts... (e.g., 'PSLRA', 'Enron', 'FIFO')">
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1 class="display-4">Revolutionary Securities Class Action Training</h1>
+            <p class="lead">Next-Generation Training for FRT Account Managers and Client Services</p>
+            <p>Transform passive learning into an immersive, engaging experience tailored for institutional investors, asset managers, hedge funds, and asset owners.</p>
+            <div class="mt-4">
+                <span class="badge bg-light text-dark me-2"><i class="fas fa-video"></i> Multimedia Learning</span>
+                <span class="badge bg-light text-dark me-2"><i class="fas fa-gamepad"></i> Gamification</span>
+                <span class="badge bg-light text-dark me-2"><i class="fas fa-chart-line"></i> Adaptive Learning</span>
+                <span class="badge bg-light text-dark"><i class="fas fa-certificate"></i> Certification Ready</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Introduction Section -->
+    <section id="intro" class="section bg-light">
+        <div class="container">
+            <h2 class="mb-4"><i class="fas fa-info-circle"></i> Introduction to Securities Class Actions</h2>
+            <p class="fade-in">Securities class actions involve allegations of fraud or misrepresentation impacting stock prices. Settlements use a "Plan of Allocation" to distribute funds based on "Recognized Loss," calculated via buy-sell matching. This revolutionary portal focuses on FIFO matching, standard in litigation, and includes multimedia tools, simulations, and gamification for enhanced retention.</p>
+            <p class="fade-in">For FRT teams: Use this to train on explaining complex calculations to clients with large, multi-account exposures, optimizing recoveries across funds. Studies show multimedia improves retention by up to 65%—this portal leverages that advantage.</p>
+            
+            <!-- Cartoon Characters Introduction -->
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="character-box">
+                        <div class="character-icon"><i class="fas fa-user-tie"></i></div>
+                        <h4>Litigation Larry</h4>
+                        <p>Your savvy hedge fund manager guide through complex scenarios</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="character-box">
+                        <div class="character-icon"><i class="fas fa-user-graduate"></i></div>
+                        <h4>Recovery Rita</h4>
+                        <p>Your FRT expert explaining PSLRA, matching, and recovery strategies</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Library Section -->
+    <section id="videos" class="section">
+        <div class="container">
+            <h2 class="mb-4"><i class="fas fa-video"></i> Video Library: Real Case Studies</h2>
+            <p class="fade-in">Explore landmark cases through engaging 2-5 minute videos. Each video breaks down key mechanics, settlement structures, and FRT-specific insights.</p>
+            
+            <!-- Video Carousel -->
+            <div id="videoCarousel" class="carousel slide video-carousel" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="video-placeholder">
+                            <div>
+                                <h4>Enron (2001): The $7.2B Settlement</h4>
+                                <p class="text-muted">How massive fraud led to PSLRA reforms and complex FIFO matching across thousands of investors</p>
+                                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                <p class="mt-2"><small><em>Video placeholder - Replace with actual Enron case study video</em></small></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="video-placeholder">
+                            <div>
+                                <h4>Volkswagen "Dieselgate" (2015): $15B Settlement</h4>
+                                <p class="text-muted">Complex allocation across international investors and the role of monitoring in detecting red flags</p>
+                                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                <p class="mt-2"><small><em>Video placeholder - Replace with actual VW case study video</em></small></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="video-placeholder">
+                            <div>
+                                <h4>FTX (2022): Crypto Collapse & Novel Monitoring</h4>
+                                <p class="text-muted">How blockchain monitoring and novel securities litigation intersect in the crypto era</p>
+                                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                <p class="mt-2"><small><em>Video placeholder - Replace with actual FTX case study video</em></small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#videoCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#videoCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+
+            <!-- PSA Cartoon Videos -->
+            <div class="interactive-card fade-in mt-4">
+                <h3><i class="fas fa-film"></i> PSA Cartoon Series: Learning Made Fun</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>PSA: PSLRA 90-Day Lookback Explained</h5>
+                        <div class="video-placeholder" style="min-height: 250px;">
+                            <div>
+                                <p><i class="fas fa-play-circle" style="font-size: 60px; color: #007bff;"></i></p>
+                                <p>Watch Litigation Larry and Recovery Rita explain how the 90-day mean price caps damages to prevent windfalls from rebounds.</p>
+                                <p><small><em>Video placeholder - Embed actual PSA cartoon video here</em></small></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>PSA: FIFO Matching in Action</h5>
+                        <div class="video-placeholder" style="min-height: 250px;">
+                            <div>
+                                <p><i class="fas fa-play-circle" style="font-size: 60px; color: #007bff;"></i></p>
+                                <p>Animated explanation of how First-In, First-Out matching maximizes recognized losses for class members.</p>
+                                <p><small><em>Video placeholder - Embed actual PSA cartoon video here</em></small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Matching Methods Section -->
+    <section id="matching" class="section bg-light">
+        <div class="container">
+            <h2 class="mb-4"><i class="fas fa-exchange-alt"></i> Buy-Sell Matching Methods</h2>
+            <p class="fade-in">In securities accounting, matching determines purchase-sale pairings for loss calculations. FIFO (First-In, First-Out) is prevalent in class actions to attribute losses to inflated prices.</p>
+            <ul class="list-group mb-4">
+                <li class="list-group-item"><strong>FIFO:</strong> Matches oldest buys to sales – maximizes recognized losses. <span class="difficulty-badge difficulty-beginner">Standard in Litigation</span></li>
+                <li class="list-group-item"><strong>LIFO:</strong> Matches newest buys – used in tax but rare in litigation.</li>
+                <li class="list-group-item"><strong>Specific Identification:</strong> For precise lots – complex for large portfolios.</li>
+            </ul>
+            <div class="interactive-card fade-in">
+                <h3>Interactive Matching Visualization</h3>
+                <canvas id="matchingChart"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- PSLRA Simulator Section -->
+    <section id="pslra" class="section">
+        <div class="container">
+            <h2 class="mb-4"><i class="fas fa-calculator"></i> PSLRA 90-Day Lookback Simulator</h2>
+            <p class="fade-in">The Private Securities Litigation Reform Act (PSLRA) caps damages for holdings at the 90-day mean trading price after disclosure. This prevents windfalls from stock rebounds. Use this simulator to understand the impact.</p>
+            
+            <div class="interactive-card fade-in">
+                <div class="pslra-simulator">
+                    <h3 class="text-white">Interactive PSLRA Simulator</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="text-white">Disclosure Date:</label>
+                            <input type="date" class="form-control mb-3" id="disclosureDate" value="2020-03-01">
+                            <label class="text-white">Stock Ticker:</label>
+                            <input type="text" class="form-control mb-3" id="stockTicker" placeholder="e.g., ZOOM" value="ZOOM">
+                            <label class="text-white">Purchase Price:</label>
+                            <input type="number" class="form-control mb-3" id="pslraPurchasePrice" placeholder="Purchase price per share" value="150">
+                            <label class="text-white">Shares Held:</label>
+                            <input type="number" class="form-control mb-3" id="pslraShares" placeholder="Number of shares" value="1000">
+                            <button class="btn btn-light btn-lg" onclick="simulatePSLRA()"><i class="fas fa-play"></i> Simulate PSLRA Impact</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="pslraResults" class="text-white">
+                                <h4>Results will appear here</h4>
+                                <p>Enter values and click "Simulate" to see how the 90-day lookback affects your recognized loss.</p>
+                            </div>
+                            <canvas id="pslraChart" class="mt-3" style="background: white; border-radius: 5px; padding: 10px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PSA Video for PSLRA -->
+            <div class="interactive-card fade-in mt-4">
+                <h3><i class="fas fa-video"></i> Watch: PSLRA Rebound Scenario Explained</h3>
+                <div class="video-placeholder" style="min-height: 300px;">
+                    <div>
+                        <p><i class="fas fa-play-circle" style="font-size: 80px; color: #007bff;"></i></p>
+                        <h4>Cartoon PSA: "Watch as the stock climbs—your loss shrinks!"</h4>
+                        <p>Litigation Larry buys inflated shares, then Recovery Rita explains how PSLRA caps damages with simple animations showing a stock price "bouncing back" like a cartoon ball.</p>
+                        <p><small><em>Video placeholder - Embed actual PSLRA PSA cartoon video here</em></small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recognized Loss Calculator Section -->
+    <section id="recognized-loss" class="section bg-light">
+        <div class="container">
+            <h2 class="mb-4"><i class="fas fa-chart-line"></i> Calculating Recognized Loss</h2>
+            <p class="fade-in">Recognized Loss is the eligible damage, often the lesser of (Purchase Price - Sale Price) or (Purchase Price - Post-Disclosure Value), with PSLRA 90-day lookback for holdings.</p>
+            <div class="interactive-card fade-in">
+                <h3>Advanced Loss Calculator (FIFO Method)</h3>
+                <p>Simulate for large clients: Upload CSV for multi-fund transactions or add manually. Format: Type (Purchase/Sale), Date (YYYY-MM-DD), Shares, Price, Account/Fund.</p>
+                <input type="file" id="csvUpload" accept=".csv" class="form-control mb-3">
+                <button class="btn btn-primary" onclick="uploadCSV()"><i class="fas fa-upload"></i> Upload CSV</button>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <h4>Add Purchase</h4>
+                        <input type="text" class="form-control mb-2" id="purchaseDate" placeholder="Date (YYYY-MM-DD)">
+                        <input type="number" class="form-control mb-2" id="purchaseShares" placeholder="Shares">
+                        <input type="number" class="form-control mb-2" id="purchasePrice" placeholder="Price per Share">
+                        <input type="text" class="form-control mb-2" id="purchaseAccount" placeholder="Account/Fund Name">
+                        <button class="btn btn-primary" onclick="addPurchase()">Add Purchase</button>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Add Sale</h4>
+                        <input type="text" class="form-control mb-2" id="saleDate" placeholder="Date (YYYY-MM-DD)">
+                        <input type="number" class="form-control mb-2" id="saleShares" placeholder="Shares">
+                        <input type="number" class="form-control mb-2" id="salePrice" placeholder="Price per Share">
+                        <input type="text" class="form-control mb-2" id="saleAccount" placeholder="Account/Fund Name">
+                        <button class="btn btn-primary" onclick="addSale()">Add Sale</button>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <label for="holdPrice">Post-Disclosure Hold Price (e.g., 90-day avg):</label>
+                    <input type="number" class="form-control mb-3" id="holdPrice" value="10" placeholder="Hold Price">
+                    <button class="btn btn-primary mt-2" onclick="calculateLoss()"><i class="fas fa-calculator"></i> Calculate Recognized Loss</button>
+                    <button class="btn btn-success mt-2" onclick="exportToPDF()"><i class="fas fa-file-pdf"></i> Export Report to PDF</button>
+                </div>
+                <table class="table table-striped" id="transactionsTable">
+                    <thead><tr><th>Type</th><th>Date</th><th>Shares</th><th>Price</th><th>Account/Fund</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+                <p id="result" class="mt-3 fw-bold"></p>
+                <canvas id="lossChart" class="mt-4"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- Industry Modules Section -->
+    <section id="industry" class="section">
+        <div class="container">
+            <h2 class="mb-4"><i class="fas fa-industry"></i> Industry Modules: Shareholder Litigation Deep Dive</h2>
+            
+            <!-- Monitoring Module -->
+            <div class="interactive-card fade-in">
+                <h3><i class="fas fa-radar"></i> Litigation Radar: Proactive Monitoring</h3>
+                <p>Learn how FRT uses AI and advanced tools to scan for red flags: unusual trading volumes, SEC filings, earnings restatements, and more.</p>
+                <div class="radar-scanner">
+                    <h4 class="text-success">SCANNING PORTFOLIO FOR RISKS...</h4>
+                    <div class="radar-line">
+                        <p>> Analyzing trading volumes... <span id="volumeStatus">✓ Normal</span></p>
+                        <p>> Checking SEC filings... <span id="secStatus">⚠ Earnings restatement detected!</span></p>
+                        <p>> Reviewing news sentiment... <span id="newsStatus">✓ No red flags</span></p>
+                        <p>> Cross-referencing class action database... <span id="databaseStatus">⚠ Potential match found!</span></p>
+                    </div>
+                    <button class="btn btn-success mt-3" onclick="scanPortfolio()"><i class="fas fa-search"></i> Run New Scan</button>
+                    <div id="scanResults" class="mt-3"></div>
+                </div>
+                <div class="mt-3">
+                    <h5>Red Flags to Monitor:</h5>
+                    <ul>
+                        <li>Earnings restatements or accounting irregularities</li>
+                        <li>Sudden CEO/CFO departures</li>
+                        <li>Unusual trading volume spikes</li>
+                        <li>SEC investigations or enforcement actions</li>
+                        <li>Negative analyst downgrades following positive news</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Filing Lifecycle Module -->
+            <div class="interactive-card fade-in mt-4">
+                <h3><i class="fas fa-file-contract"></i> The Filing Lifecycle: From Notice to Distribution</h3>
+                <p>Understand the complete journey of a securities class action claim.</p>
+                <div class="progress-section">
+                    <div class="progress mb-3" style="height: 40px;">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 20%" id="lifecycleStep1">
+                            <strong>1. Notice Receipt</strong>
+                        </div>
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 20%" id="lifecycleStep2">
+                            <strong>2. Claim Filing</strong>
+                        </div>
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: 20%" id="lifecycleStep3">
+                            <strong>3. Review</strong>
+                        </div>
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 20%" id="lifecycleStep4">
+                            <strong>4. Approval</strong>
+                        </div>
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 20%" id="lifecycleStep5">
+                            <strong>5. Distribution</strong>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="animateLifecycle()"><i class="fas fa-play"></i> Animate Lifecycle</button>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <h5>Key Statistics:</h5>
+                        <ul>
+                            <li><strong>Average Recovery Rate:</strong> 2-5% of recognized losses</li>
+                            <li><strong>Typical Timeline:</strong> 2-5 years from filing to distribution</li>
+                            <li><strong>Deadline Criticality:</strong> Missing deadlines = zero recovery</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Common Pitfalls:</h5>
+                        <ul>
+                            <li>Missing proof of loss documentation</li>
+                            <li>Incorrect account aggregation</li>
+                            <li>Filing after deadline</li>
+                            <li>Incomplete transaction history</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Opt-in vs Opt-out Module -->
+            <div class="interactive-card fade-in mt-4">
+                <h3><i class="fas fa-toggle-on"></i> Opt-in vs. Opt-out Systems</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <h4>US: Opt-out System</h4>
+                                <p>All eligible investors are automatically included unless they explicitly opt out. Maximizes participation and recovery pool.</p>
+                                <p><strong>Advantage:</strong> Higher participation rates, larger settlements</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card bg-warning">
+                            <div class="card-body">
+                                <h4>EU/Other: Opt-in System</h4>
+                                <p>Investors must actively opt in to participate. Lower participation, but potentially higher individual recoveries.</p>
+                                <p><strong>Consideration:</strong> Requires proactive client communication</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lead Plaintiff Module -->
+            <div class="interactive-card fade-in mt-4">
+                <h3><i class="fas fa-crown"></i> Lead Plaintiff Selection: The Competitive Process</h3>
+                <p>Large institutional investors can compete to become lead plaintiff, gaining influence over settlement terms and potentially higher recoveries.</p>
+                <div class="interactive-card" style="background: #f8f9fa;">
+                    <h5>Interactive Role-Play: Bid as a Hedge Fund</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Your Fund's Exposure (Recognized Loss):</label>
+                            <input type="number" class="form-control mb-3" id="fundExposure" placeholder="e.g., 5000000" value="5000000">
+                            <label>Your Proposed Settlement Strategy:</label>
+                            <select class="form-control mb-3" id="settlementStrategy">
+                                <option>Aggressive: Push for maximum recovery</option>
+                                <option>Moderate: Balance speed and recovery</option>
+                                <option>Conservative: Accept standard terms quickly</option>
+                            </select>
+                            <button class="btn btn-primary" onclick="simulateLeadPlaintiff()"><i class="fas fa-gavel"></i> Submit Lead Plaintiff Bid</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="leadPlaintiffResults"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fee Structures Module -->
+            <div class="interactive-card fade-in mt-4">
+                <h3><i class="fas fa-dollar-sign"></i> Fee Structures: Understanding Contingency Fees</h3>
+                <p>Class action attorneys typically work on contingency, taking a percentage of the settlement fund. FRT's value-add includes maximizing net recovery after fees.</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>Settlement Fund Amount:</label>
+                        <input type="number" class="form-control mb-3" id="settlementFund" placeholder="e.g., 100000000" value="100000000">
+                        <label>Attorney Fee Percentage:</label>
+                        <input type="number" class="form-control mb-3" id="attorneyFee" placeholder="e.g., 25" value="25" step="0.1">
+                        <button class="btn btn-primary" onclick="calculateFees()"><i class="fas fa-calculator"></i> Calculate Fee Impact</button>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="feeResults" class="mt-3">
+                            <canvas id="feeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ESG & Crypto Trends Module -->
+            <div class="interactive-card fade-in mt-4">
+                <h3><i class="fas fa-leaf"></i> Emerging Trends: ESG & Crypto Securities Litigation</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>ESG-Related Litigation</h5>
+                        <ul>
+                            <li><strong>Greenwashing Cases:</strong> Companies misrepresenting environmental credentials</li>
+                            <li><strong>Example:</strong> Volkswagen "Dieselgate" - environmental claims vs. reality</li>
+                            <li><strong>Monitoring Tip:</strong> Watch for sustainability report inconsistencies</li>
+                        </ul>
+                        <div class="video-placeholder" style="min-height: 200px; margin-top: 15px;">
+                            <p><i class="fas fa-play-circle" style="font-size: 40px; color: #007bff;"></i></p>
+                            <p><small>Video: ESG Litigation Trends</small></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Crypto Securities Litigation</h5>
+                        <ul>
+                            <li><strong>Blockchain Monitoring:</strong> Tracking transactions for fraud detection</li>
+                            <li><strong>Example:</strong> FTX collapse - novel securities issues in crypto</li>
+                            <li><strong>Challenge:</strong> Determining "securities" status of tokens</li>
+                        </ul>
+                        <div class="video-placeholder" style="min-height: 200px; margin-top: 15px;">
+                            <p><i class="fas fa-play-circle" style="font-size: 40px; color: #007bff;"></i></p>
+                            <p><small>Video: Crypto Securities Monitoring</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Risk Management Module -->
+            <div class="interactive-card fade-in mt-4">
+                <h3><i class="fas fa-shield-alt"></i> Risk Management: Diversification Strategies</h3>
+                <p>Advise clients on portfolio diversification to mitigate class action exposure. Concentrated positions increase risk.</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Diversification Calculator</h5>
+                        <label>Portfolio Value:</label>
+                        <input type="number" class="form-control mb-3" id="portfolioValue" placeholder="e.g., 10000000" value="10000000">
+                        <label>Single Stock Exposure (%):</label>
+                        <input type="number" class="form-control mb-3" id="singleStockExposure" placeholder="e.g., 30" value="30" step="0.1">
+                        <button class="btn btn-primary" onclick="calculateDiversificationRisk()"><i class="fas fa-chart-pie"></i> Assess Risk</button>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="diversificationResults" class="mt-3">
+                            <canvas id="diversificationChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Training & Gamification Section -->
+    <section id="training" class="section bg-light">
+        <div class="container">
+            <h2 class="mb-4"><i class="fas fa-gamepad"></i> Training Modules & Gamification</h2>
+            <p class="fade-in">Complete quizzes, earn badges, and track your progress. Adaptive learning paths adjust difficulty based on your performance.</p>
+            
+            <!-- Expanded Quiz (10 Questions) -->
+            <div class="interactive-card fade-in">
+                <h3><i class="fas fa-question-circle"></i> Comprehensive Knowledge Quiz</h3>
+                <p>Answer 10 questions to test your understanding. Earn badges based on your score!</p>
+                
+                <div class="quiz-question">
+                    <p><strong>1. What matching method is standard in class actions?</strong></p>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q1" value="FIFO"><label class="form-check-label">FIFO</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q1" value="LIFO"><label class="form-check-label">LIFO</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q1" value="Specific"><label class="form-check-label">Specific Identification</label></div>
+                    <p class="feedback" id="q1-feedback">Correct! FIFO maximizes losses for class members.</p>
+                </div>
+
+                <div class="quiz-question">
+                    <p><strong>2. How does PSLRA 90-day lookback affect holdings?</strong></p>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q2" value="Caps"><label class="form-check-label">Caps loss at 90-day mean price</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q2" value="Increases"><label class="form-check-label">Increases recoverable damages</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q2" value="Ignores"><label class="form-check-label">Ignores holdings</label></div>
+                    <p class="feedback" id="q2-feedback">Correct! It caps at the mean trading price.</p>
+                </div>
+
+                <div class="quiz-question">
+                    <p><strong>3. What is the average recovery rate in securities class actions?</strong></p>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q3" value="10-15"><label class="form-check-label">10-15% of losses</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q3" value="2-5"><label class="form-check-label">2-5% of losses</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q3" value="20-30"><label class="form-check-label">20-30% of losses</label></div>
+                    <p class="feedback" id="q3-feedback">Correct! Average recovery is 2-5% of recognized losses.</p>
+                </div>
+
+                <div class="quiz-question">
+                    <p><strong>4. In the US, what type of system is used for class action participation?</strong></p>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q4" value="Opt-in"><label class="form-check-label">Opt-in (must actively join)</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q4" value="Opt-out"><label class="form-check-label">Opt-out (automatically included)</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q4" value="Hybrid"><label class="form-check-label">Hybrid system</label></div>
+                    <p class="feedback" id="q4-feedback">Correct! US uses opt-out, maximizing participation.</p>
+                </div>
+
+                <div class="quiz-question">
+                    <p><strong>5. What is a key red flag for potential class action litigation?</strong></p>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q5" value="Earnings"><label class="form-check-label">Earnings restatement</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q5" value="Dividend"><label class="form-check-label">Regular dividend payments</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q5" value="Growth"><label class="form-check-label">Steady growth</label></div>
+                    <p class="feedback" id="q5-feedback">Correct! Earnings restatements are major red flags.</p>
+                </div>
+
+                <div class="quiz-question">
+                    <p><strong>6. What does FIFO stand for?</strong></p>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q6" value="First"><label class="form-check-label">First-In, First-Out</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q6" value="Last"><label class="form-check-label">Last-In, First-Out</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q6" value="Fixed"><label class="form-check-label">Fixed-In, Fixed-Out</label></div>
+                    <p class="feedback" id="q6-feedback">Correct! FIFO matches oldest purchases first.</p>
+                </div>
+
+                <div class="quiz-question">
+                    <p><strong>7. How long is the typical timeline from filing to distribution?</strong></p>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q7" value="1"><label class="form-check-label">1 year</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q7" value="2-5"><label class="form-check-label">2-5 years</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q7" value="10"><label class="form-check-label">10+ years</label></div>
+                    <p class="feedback" id="q7-feedback">Correct! Typically 2-5 years from filing to distribution.</p>
+                </div>
+
+                <div class="quiz-question">
+                    <p><strong>8. What is the primary purpose of the PSLRA 90-day lookback?</strong></p>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q8" value="Prevent"><label class="form-check-label">Prevent windfalls from stock rebounds</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q8" value="Increase"><label class="form-check-label">Increase recoverable damages</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q8" value="Simplify"><label class="form-check-label">Simplify calculations</label></div>
+                    <p class="feedback" id="q8-feedback">Correct! It prevents windfalls by capping at mean price.</p>
+                </div>
+
+                <div class="quiz-question">
+                    <p><strong>9. What is a common pitfall in claim filing?</strong></p>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q9" value="Deadline"><label class="form-check-label">Missing deadlines</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q9" value="Early"><label class="form-check-label">Filing too early</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q9" value="Multiple"><label class="form-check-label">Filing multiple times</label></div>
+                    <p class="feedback" id="q9-feedback">Correct! Missing deadlines results in zero recovery.</p>
+                </div>
+
+                <div class="quiz-question">
+                    <p><strong>10. What emerging trend involves greenwashing cases?</strong></p>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q10" value="ESG"><label class="form-check-label">ESG-related litigation</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q10" value="Crypto"><label class="form-check-label">Crypto securities</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="q10" value="Traditional"><label class="form-check-label">Traditional fraud</label></div>
+                    <p class="feedback" id="q10-feedback">Correct! ESG litigation includes greenwashing cases.</p>
+                </div>
+
+                <button class="btn btn-primary btn-lg" onclick="checkQuiz()"><i class="fas fa-check-circle"></i> Submit Quiz</button>
+                <p id="quizResult" class="mt-3 fw-bold"></p>
+            </div>
+
+            <!-- Client Pitch Practice -->
+            <div class="interactive-card fade-in mt-4">
+                <h3><i class="fas fa-microphone"></i> Client Pitch Practice: Record Your Explanation</h3>
+                <p>Practice explaining complex concepts to clients. Record yourself and review for clarity and accuracy.</p>
+                <div class="video-recorder">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Select a Scenario:</h5>
+                            <select class="form-control mb-3" id="pitchScenario">
+                                <option>Explain FIFO matching to a hedge fund client</option>
+                                <option>Describe PSLRA 90-day lookback impact</option>
+                                <option>Present multi-fund aggregation strategy</option>
+                                <option>Explain opt-out vs opt-in systems</option>
+                            </select>
+                            <button class="btn btn-danger" id="recordBtn" onclick="startRecording()"><i class="fas fa-record-vinyl"></i> Start Recording</button>
+                            <button class="btn btn-secondary" id="stopBtn" onclick="stopRecording()" disabled><i class="fas fa-stop"></i> Stop Recording</button>
+                            <button class="btn btn-success" id="playBtn" onclick="playRecording()" disabled><i class="fas fa-play"></i> Play Recording</button>
+                        </div>
+                        <div class="col-md-6">
+                            <video id="recordedVideo" controls style="display: none;"></video>
+                            <div id="recordingStatus" class="mt-3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leaderboard -->
+            <div class="interactive-card fade-in mt-4">
+                <h3><i class="fas fa-trophy"></i> Leaderboard</h3>
+                <div class="leaderboard" id="leaderboard">
+                    <div class="leaderboard-item">
+                        <strong>#1</strong> Top Performer - 100% (10/10)
+                    </div>
+                    <div class="leaderboard-item">
+                        <strong>#2</strong> Expert Level - 90% (9/10)
+                    </div>
+                    <div class="leaderboard-item">
+                        <strong>#3</strong> Advanced - 80% (8/10)
+                    </div>
+                    <p class="mt-3"><small>Your best score will appear here after completing the quiz!</small></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Progress Tracking Section -->
+    <section id="progress" class="section">
+        <div class="container">
+            <h2 class="mb-4"><i class="fas fa-chart-bar"></i> My Progress & Certification</h2>
+            <div class="interactive-card fade-in">
+                <h3>Learning Progress</h3>
+                <div class="progress-section">
+                    <label>Overall Completion:</label>
+                    <div class="progress mb-3">
+                        <div class="progress-bar bg-success" role="progressbar" id="overallProgress" style="width: 0%">0%</div>
+                    </div>
+                    <label>Video Library:</label>
+                    <div class="progress mb-3">
+                        <div class="progress-bar bg-info" role="progressbar" id="videoProgress" style="width: 0%">0%</div>
+                    </div>
+                    <label>Quizzes Completed:</label>
+                    <div class="progress mb-3">
+                        <div class="progress-bar bg-warning" role="progressbar" id="quizProgress" style="width: 0%">0%</div>
+                    </div>
+                    <label>Industry Modules:</label>
+                    <div class="progress mb-3">
+                        <div class="progress-bar bg-primary" role="progressbar" id="moduleProgress" style="width: 0%">0%</div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="updateProgress()"><i class="fas fa-sync"></i> Refresh Progress</button>
+                <button class="btn btn-success" onclick="exportProgressPDF()"><i class="fas fa-file-pdf"></i> Export Progress Report</button>
+            </div>
+
+            <div class="interactive-card fade-in mt-4">
+                <h3><i class="fas fa-certificate"></i> Certification Status</h3>
+                <div id="certificationStatus">
+                    <p>Complete all modules and score 80%+ on the comprehensive quiz to earn your FRT Training Portal Certification!</p>
+                    <div class="progress mb-3">
+                        <div class="progress-bar bg-warning" role="progressbar" id="certProgress" style="width: 0%">0%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Plan of Allocation Section (kept from original) -->
+    <section id="plan-allocation" class="section bg-light">
+        <div class="container">
+            <h2 class="mb-4"><i class="fas fa-percentage"></i> Plan of Allocation in Settlements</h2>
+            <p class="fade-in">Distributes funds pro-rata based on Recognized Loss. For large clients, aggregate across accounts for accurate claims.</p>
+            <div class="interactive-card fade-in">
+                <h3>Pro-Rata Allocation Simulator</h3>
+                <input type="number" class="form-control mb-2" id="yourLoss" placeholder="Your Total Recognized Loss">
+                <input type="number" class="form-control mb-2" id="totalLosses" placeholder="Total Class Losses">
+                <input type="number" class="form-control mb-2" id="fund" placeholder="Settlement Fund">
+                <button class="btn btn-primary" onclick="calculateAllocation()"><i class="fas fa-calculator"></i> Calculate Share</button>
+                <p id="allocationResult" class="mt-3 fw-bold"></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3">
+        <p>&copy; 2026 Financial Recovery Technologies. All rights reserved.</p>
+        <p><small>Revolutionary Training Portal - Next-Generation Learning for Securities Class Actions</small></p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Data structures
+        let purchases = [];
+        let sales = [];
+        let mediaRecorder;
+        let recordedChunks = [];
+        let badges = JSON.parse(localStorage.getItem('frtBadges') || '[]');
+        let progress = JSON.parse(localStorage.getItem('frtProgress') || '{"videos":0,"quizzes":0,"modules":0}');
+        let quizScores = JSON.parse(localStorage.getItem('frtQuizScores') || '[]');
+
+        // Initialize badges display
+        function initBadges() {
+            const container = document.getElementById('badgesContainer');
+            const allBadges = [
+                { id: 'fifo-expert', name: 'FIFO Expert', earned: badges.includes('fifo-expert') },
+                { id: 'pslra-master', name: 'PSLRA Master', earned: badges.includes('pslra-master') },
+                { id: 'quiz-ace', name: 'Quiz Ace', earned: badges.includes('quiz-ace') },
+                { id: 'video-watcher', name: 'Video Watcher', earned: badges.includes('video-watcher') },
+                { id: 'industry-expert', name: 'Industry Expert', earned: badges.includes('industry-expert') },
+                { id: 'certified', name: 'Certified Professional', earned: badges.includes('certified') }
+            ];
+            container.innerHTML = allBadges.map(b => 
+                `<span class="badge-item ${b.earned ? 'earned' : 'locked'}" title="${b.earned ? 'Earned!' : 'Locked'}">${b.name} ${b.earned ? '✓' : '🔒'}</span>`
+            ).join('');
+        }
+        initBadges();
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            if (searchTerm.length < 2) return;
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                const text = section.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    section.style.backgroundColor = '#fff3cd';
+                    setTimeout(() => section.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+                } else {
+                    section.style.backgroundColor = '';
+                }
+            });
+        });
+
+        // Add Purchase
+        function addPurchase() {
+            const date = document.getElementById('purchaseDate').value;
+            const shares = parseInt(document.getElementById('purchaseShares').value);
+            const price = parseFloat(document.getElementById('purchasePrice').value);
+            const account = document.getElementById('purchaseAccount').value || 'Default';
+            if (date && shares && price) {
+                purchases.push({ date, shares, price, account });
+                updateTable();
+            }
+        }
+
+        // Add Sale
+        function addSale() {
+            const date = document.getElementById('saleDate').value;
+            const shares = parseInt(document.getElementById('saleShares').value);
+            const price = parseFloat(document.getElementById('salePrice').value);
+            const account = document.getElementById('saleAccount').value || 'Default';
+            if (date && shares && price) {
+                sales.push({ date, shares, price, account });
+                updateTable();
+            }
+        }
+
+        // Update Table
+        function updateTable() {
+            const tbody = document.querySelector('#transactionsTable tbody');
+            tbody.innerHTML = '';
+            purchases.forEach(p => {
+                tbody.innerHTML += `<tr><td>Purchase</td><td>${p.date}</td><td>${p.shares}</td><td>${p.price}</td><td>${p.account}</td></tr>`;
+            });
+            sales.forEach(s => {
+                tbody.innerHTML += `<tr><td>Sale</td><td>${s.date}</td><td>${s.shares}</td><td>${s.price}</td><td>${s.account}</td></tr>`;
+            });
+        }
+
+        // CSV Upload
+        function uploadCSV() {
+            const file = document.getElementById('csvUpload').files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const lines = e.target.result.split('\n');
+                    lines.forEach((line, index) => {
+                        if (index === 0) return;
+                        const [type, date, shares, price, account] = line.split(',');
+                        if (type === 'Purchase') {
+                            purchases.push({ date, shares: parseInt(shares), price: parseFloat(price), account: account || 'Default' });
+                        } else if (type === 'Sale') {
+                            sales.push({ date, shares: parseInt(shares), price: parseFloat(price), account: account || 'Default' });
+                        }
+                    });
+                    updateTable();
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        // Calculate Loss (FIFO, with account aggregation)
+        function calculateLoss() {
+            const holdPrice = parseFloat(document.getElementById('holdPrice').value) || 10;
+            purchases.sort((a, b) => new Date(a.date) - new Date(b.date));
+            sales.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            let totalLoss = 0;
+            let purchaseQueue = [...purchases];
+            let lossData = { labels: [], data: [] };
+            let accountLosses = {};
+
+            sales.forEach(sale => {
+                let remainingShares = sale.shares;
+                while (remainingShares > 0 && purchaseQueue.length > 0) {
+                    let purchase = purchaseQueue[0];
+                    const sharesToMatch = Math.min(remainingShares, purchase.shares);
+                    const lossPerShare = purchase.price - sale.price;
+                    if (lossPerShare > 0) {
+                        const loss = lossPerShare * sharesToMatch;
+                        totalLoss += loss;
+                        lossData.labels.push(`${purchase.date} to ${sale.date} (${purchase.account})`);
+                        lossData.data.push(loss);
+                        accountLosses[purchase.account] = (accountLosses[purchase.account] || 0) + loss;
+                    }
+                    remainingShares -= sharesToMatch;
+                    purchase.shares -= sharesToMatch;
+                    if (purchase.shares === 0) purchaseQueue.shift();
+                }
+            });
+
+            // Holdings
+            purchaseQueue.forEach(purchase => {
+                const lossPerShare = purchase.price - holdPrice;
+                if (lossPerShare > 0) {
+                    const loss = lossPerShare * purchase.shares;
+                    totalLoss += loss;
+                    lossData.labels.push(`${purchase.date} (Held, ${purchase.account})`);
+                    lossData.data.push(loss);
+                    accountLosses[purchase.account] = (accountLosses[purchase.account] || 0) + loss;
+                }
+            });
+
+            let resultText = `Total Recognized Loss: $${totalLoss.toFixed(2)}<br>Aggregated by Account:<ul>`;
+            for (let acc in accountLosses) {
+                resultText += `<li>${acc}: $${accountLosses[acc].toFixed(2)}</li>`;
+            }
+            resultText += `</ul>`;
+            document.getElementById('result').innerHTML = resultText;
+
+            // Chart
+            const ctx = document.getElementById('lossChart').getContext('2d');
+            if (window.lossChart) window.lossChart.destroy();
+            window.lossChart = new Chart(ctx, {
+                type: 'bar',
+                data: { labels: lossData.labels, datasets: [{ label: 'Loss per Transaction', data: lossData.data, backgroundColor: '#007bff' }] },
+                options: { scales: { y: { beginAtZero: true } }, animation: { duration: 1000 } }
+            });
+
+            // Award badge
+            if (!badges.includes('fifo-expert')) {
+                badges.push('fifo-expert');
+                localStorage.setItem('frtBadges', JSON.stringify(badges));
+                initBadges();
+                alert('🎉 Badge Earned: FIFO Expert!');
+            }
+        }
+
+        // Calculate Allocation
+        function calculateAllocation() {
+            const yourLoss = parseFloat(document.getElementById('yourLoss').value);
+            const totalLosses = parseFloat(document.getElementById('totalLosses').value);
+            const fund = parseFloat(document.getElementById('fund').value);
+            if (yourLoss && totalLosses && fund) {
+                const share = (yourLoss / totalLosses) * fund;
+                document.getElementById('allocationResult').innerHTML = `Your Pro-Rata Share: $${share.toFixed(2)}`;
+            }
+        }
+
+        // PSLRA Simulator
+        function simulatePSLRA() {
+            const disclosureDate = new Date(document.getElementById('disclosureDate').value);
+            const ticker = document.getElementById('stockTicker').value;
+            const purchasePrice = parseFloat(document.getElementById('pslraPurchasePrice').value);
+            const shares = parseInt(document.getElementById('pslraShares').value);
+
+            // Simulate 90-day mean price (using placeholder data)
+            // In production, this would fetch real data from an API
+            const basePrice = purchasePrice * 0.6; // Assume 40% drop after disclosure
+            const reboundPrice = basePrice * 1.3; // 30% rebound
+            const meanPrice = (basePrice + reboundPrice) / 2;
+
+            const uncappedLoss = (purchasePrice - basePrice) * shares;
+            const cappedLoss = Math.max(0, (purchasePrice - meanPrice) * shares);
+
+            const resultsDiv = document.getElementById('pslraResults');
+            resultsDiv.innerHTML = `
+                <h4>PSLRA Impact Analysis</h4>
+                <p><strong>Stock:</strong> ${ticker}</p>
+                <p><strong>Disclosure Date:</strong> ${disclosureDate.toLocaleDateString()}</p>
+                <p><strong>Purchase Price:</strong> $${purchasePrice.toFixed(2)}</p>
+                <p><strong>90-Day Mean Price:</strong> $${meanPrice.toFixed(2)}</p>
+                <hr>
+                <p><strong>Uncapped Loss (if no PSLRA):</strong> $${uncappedLoss.toFixed(2)}</p>
+                <p><strong>Capped Loss (with PSLRA):</strong> $${cappedLoss.toFixed(2)}</p>
+                <p><strong>Difference:</strong> $${(uncappedLoss - cappedLoss).toFixed(2)}</p>
+                <p class="text-warning"><strong>PSLRA prevents windfall of $${(uncappedLoss - cappedLoss).toFixed(2)}</strong></p>
+            `;
+
+            // Chart
+            const ctx = document.getElementById('pslraChart').getContext('2d');
+            if (window.pslraChart) window.pslraChart.destroy();
+            const days = Array.from({length: 90}, (_, i) => i + 1);
+            const prices = days.map(d => {
+                if (d < 30) return basePrice + (d * (reboundPrice - basePrice) / 30);
+                return basePrice + (30 * (reboundPrice - basePrice) / 30) + ((d - 30) * 0.1);
+            });
+            window.pslraChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: days.map(d => `Day ${d}`),
+                    datasets: [{
+                        label: 'Stock Price',
+                        data: prices,
+                        borderColor: '#007bff',
+                        backgroundColor: 'rgba(0,123,255,0.1)'
+                    }, {
+                        label: '90-Day Mean',
+                        data: Array(90).fill(meanPrice),
+                        borderColor: '#dc3545',
+                        borderDash: [5, 5]
+                    }]
+                },
+                options: {
+                    scales: { y: { beginAtZero: false } },
+                    plugins: { title: { display: true, text: '90-Day Price Movement After Disclosure' } }
+                }
+            });
+
+            // Award badge
+            if (!badges.includes('pslra-master')) {
+                badges.push('pslra-master');
+                localStorage.setItem('frtBadges', JSON.stringify(badges));
+                initBadges();
+                alert('🎉 Badge Earned: PSLRA Master!');
+            }
+        }
+
+        // Litigation Radar Scanner
+        function scanPortfolio() {
+            const statuses = ['✓ Normal', '⚠ Warning', '🚨 Critical'];
+            document.getElementById('volumeStatus').textContent = statuses[Math.floor(Math.random() * 3)];
+            document.getElementById('secStatus').textContent = statuses[Math.floor(Math.random() * 3)];
+            document.getElementById('newsStatus').textContent = statuses[Math.floor(Math.random() * 3)];
+            document.getElementById('databaseStatus').textContent = statuses[Math.floor(Math.random() * 3)];
+            
+            const results = document.getElementById('scanResults');
+            const risks = Math.floor(Math.random() * 3);
+            if (risks > 0) {
+                results.innerHTML = `<div class="alert alert-warning"><strong>${risks} potential risk(s) detected!</strong> Review flagged items above.</div>`;
+            } else {
+                results.innerHTML = `<div class="alert alert-success"><strong>No immediate risks detected.</strong> Continue monitoring.</div>`;
+            }
+        }
+
+        // Animate Filing Lifecycle
+        function animateLifecycle() {
+            const steps = ['lifecycleStep1', 'lifecycleStep2', 'lifecycleStep3', 'lifecycleStep4', 'lifecycleStep5'];
+            steps.forEach((stepId, index) => {
+                setTimeout(() => {
+                    document.getElementById(stepId).classList.add('bounce');
+                    setTimeout(() => document.getElementById(stepId).classList.remove('bounce'), 1000);
+                }, index * 500);
+            });
+        }
+
+        // Lead Plaintiff Simulation
+        function simulateLeadPlaintiff() {
+            const exposure = parseFloat(document.getElementById('fundExposure').value);
+            const strategy = document.getElementById('settlementStrategy').value;
+            const resultsDiv = document.getElementById('leadPlaintiffResults');
+            
+            let chance = 0;
+            if (exposure > 10000000) chance += 40;
+            else if (exposure > 5000000) chance += 25;
+            else chance += 10;
+            
+            if (strategy.includes('Aggressive')) chance += 20;
+            else if (strategy.includes('Moderate')) chance += 10;
+            
+            const selected = Math.random() * 100 < chance;
+            
+            resultsDiv.innerHTML = `
+                <div class="card ${selected ? 'bg-success' : 'bg-warning'} text-white">
+                    <div class="card-body">
+                        <h5>${selected ? '✓ Selected as Lead Plaintiff!' : 'Not Selected'}</h5>
+                        <p><strong>Your Chance:</strong> ${chance.toFixed(1)}%</p>
+                        <p><strong>Strategy:</strong> ${strategy}</p>
+                        ${selected ? '<p>You will have significant influence over settlement terms!</p>' : '<p>Consider increasing exposure or adjusting strategy.</p>'}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Fee Calculator
+        function calculateFees() {
+            const fund = parseFloat(document.getElementById('settlementFund').value);
+            const feePercent = parseFloat(document.getElementById('attorneyFee').value);
+            const attorneyFees = fund * (feePercent / 100);
+            const netToClass = fund - attorneyFees;
+            
+            const ctx = document.getElementById('feeChart').getContext('2d');
+            if (window.feeChart) window.feeChart.destroy();
+            window.feeChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Attorney Fees', 'Net to Class Members'],
+                    datasets: [{
+                        data: [attorneyFees, netToClass],
+                        backgroundColor: ['#dc3545', '#28a745']
+                    }]
+                },
+                options: {
+                    plugins: {
+                        title: { display: true, text: 'Settlement Fund Distribution' },
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        // Diversification Risk Calculator
+        function calculateDiversificationRisk() {
+            const portfolioValue = parseFloat(document.getElementById('portfolioValue').value);
+            const singleStockPercent = parseFloat(document.getElementById('singleStockExposure').value);
+            const singleStockValue = portfolioValue * (singleStockPercent / 100);
+            
+            let riskLevel = 'Low';
+            let riskColor = '#28a745';
+            if (singleStockPercent > 30) {
+                riskLevel = 'High';
+                riskColor = '#dc3545';
+            } else if (singleStockPercent > 15) {
+                riskLevel = 'Medium';
+                riskColor = '#ffc107';
+            }
+            
+            const ctx = document.getElementById('diversificationChart').getContext('2d');
+            if (window.diversificationChart) window.diversificationChart.destroy();
+            window.diversificationChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Single Stock Exposure', 'Diversified Holdings'],
+                    datasets: [{
+                        data: [singleStockPercent, 100 - singleStockPercent],
+                        backgroundColor: [riskColor, '#6c757d']
+                    }]
+                },
+                options: {
+                    plugins: {
+                        title: { display: true, text: `Risk Level: ${riskLevel}` },
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        // Expanded Quiz Check (10 questions)
+        function checkQuiz() {
+            const answers = {
+                q1: 'FIFO',
+                q2: 'Caps',
+                q3: '2-5',
+                q4: 'Opt-out',
+                q5: 'Earnings',
+                q6: 'First',
+                q7: '2-5',
+                q8: 'Prevent',
+                q9: 'Deadline',
+                q10: 'ESG'
+            };
+            
+            let score = 0;
+            let total = Object.keys(answers).length;
+            
+            Object.keys(answers).forEach(q => {
+                const selected = document.querySelector(`input[name="${q}"]:checked`);
+                const feedback = document.getElementById(`${q}-feedback`);
+                if (selected && selected.value === answers[q]) {
+                    score++;
+                    if (feedback) {
+                        feedback.style.display = 'block';
+                        feedback.classList.remove('error');
+                    }
+                } else {
+                    if (feedback) {
+                        feedback.style.display = 'block';
+                        feedback.classList.add('error');
+                        feedback.textContent = 'Incorrect. Review the material and try again.';
+                    }
+                }
+            });
+            
+            const percentage = (score / total) * 100;
+            const resultDiv = document.getElementById('quizResult');
+            
+            let message = `Score: ${score}/${total} (${percentage.toFixed(0)}%) - `;
+            if (percentage >= 90) {
+                message += 'Outstanding! You\'re an expert!';
+                if (!badges.includes('quiz-ace')) {
+                    badges.push('quiz-ace');
+                    localStorage.setItem('frtBadges', JSON.stringify(badges));
+                    initBadges();
+                }
+            } else if (percentage >= 80) {
+                message += 'Great job! You have strong understanding.';
+            } else if (percentage >= 70) {
+                message += 'Good work! Review the sections you missed.';
+            } else {
+                message += 'Keep studying! Review the material and try again.';
+            }
+            
+            resultDiv.innerHTML = message;
+            
+            // Save score
+            quizScores.push({ score, total, percentage, date: new Date().toISOString() });
+            localStorage.setItem('frtQuizScores', JSON.stringify(quizScores));
+            
+            // Adaptive learning: if score < 70%, suggest watching videos
+            if (percentage < 70) {
+                resultDiv.innerHTML += '<br><div class="alert alert-info mt-3"><strong>Tip:</strong> Score below 70%? Watch the video library and PSA cartoons to improve understanding!</div>';
+            }
+            
+            // Update progress
+            progress.quizzes = Math.max(progress.quizzes, percentage);
+            localStorage.setItem('frtProgress', JSON.stringify(progress));
+            updateProgress();
+        }
+
+        // Video Recording
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                recordedChunks = [];
+                
+                mediaRecorder.ondataavailable = (e) => {
+                    if (e.data.size > 0) recordedChunks.push(e.data);
+                };
+                
+                mediaRecorder.onstop = () => {
+                    const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                    const url = URL.createObjectURL(blob);
+                    document.getElementById('recordedVideo').src = url;
+                    document.getElementById('recordedVideo').style.display = 'block';
+                    document.getElementById('playBtn').disabled = false;
+                    document.getElementById('recordingStatus').innerHTML = '<div class="alert alert-success">Recording saved! Click Play to review.</div>';
+                };
+                
+                mediaRecorder.start();
+                document.getElementById('recordBtn').disabled = true;
+                document.getElementById('stopBtn').disabled = false;
+                document.getElementById('recordingStatus').innerHTML = '<div class="alert alert-info">Recording in progress... Click Stop when finished.</div>';
+            } catch (err) {
+                alert('Error accessing camera/microphone: ' + err.message);
+            }
+        }
+        
+        function stopRecording() {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                document.getElementById('recordBtn').disabled = false;
+                document.getElementById('stopBtn').disabled = true;
+            }
+        }
+        
+        function playRecording() {
+            document.getElementById('recordedVideo').play();
+        }
+
+        // Progress Tracking
+        function updateProgress() {
+            const overall = (progress.videos + progress.quizzes + progress.modules) / 3;
+            document.getElementById('overallProgress').style.width = overall + '%';
+            document.getElementById('overallProgress').textContent = overall.toFixed(0) + '%';
+            document.getElementById('videoProgress').style.width = progress.videos + '%';
+            document.getElementById('videoProgress').textContent = progress.videos.toFixed(0) + '%';
+            document.getElementById('quizProgress').style.width = progress.quizzes + '%';
+            document.getElementById('quizProgress').textContent = progress.quizzes.toFixed(0) + '%';
+            document.getElementById('moduleProgress').style.width = progress.modules + '%';
+            document.getElementById('moduleProgress').textContent = progress.modules.toFixed(0) + '%';
+            
+            // Certification progress
+            const certProgress = (progress.videos >= 80 && progress.quizzes >= 80 && progress.modules >= 80) ? 100 : overall;
+            document.getElementById('certProgress').style.width = certProgress + '%';
+            document.getElementById('certProgress').textContent = certProgress.toFixed(0) + '%';
+            
+            if (certProgress >= 100 && !badges.includes('certified')) {
+                badges.push('certified');
+                localStorage.setItem('frtBadges', JSON.stringify(badges));
+                initBadges();
+                document.getElementById('certificationStatus').innerHTML = '<div class="alert alert-success"><h4>🎉 Congratulations! You\'ve earned FRT Training Portal Certification!</h4></div>';
+            }
+        }
+        updateProgress();
+
+        // Export to PDF
+        function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text('FRT Training Portal - Loss Calculation Report', 20, 20);
+            doc.text(`Total Recognized Loss: $${document.getElementById('result').textContent.match(/\$[\d,]+\.\d{2}/)?.[0] || 'N/A'}`, 20, 30);
+            doc.text('Generated: ' + new Date().toLocaleString(), 20, 40);
+            doc.save('frt-loss-calculation-report.pdf');
+        }
+
+        function exportProgressPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text('FRT Training Portal - Progress Report', 20, 20);
+            doc.text(`Overall Progress: ${progress.videos + progress.quizzes + progress.modules / 3}%`, 20, 30);
+            doc.text(`Videos: ${progress.videos}%`, 20, 40);
+            doc.text(`Quizzes: ${progress.quizzes}%`, 20, 50);
+            doc.text(`Modules: ${progress.modules}%`, 20, 60);
+            doc.text(`Badges Earned: ${badges.length}`, 20, 70);
+            doc.text('Generated: ' + new Date().toLocaleString(), 20, 80);
+            doc.save('frt-progress-report.pdf');
+        }
+
+        // Initialize charts
+        const matchingCtx = document.getElementById('matchingChart').getContext('2d');
+        new Chart(matchingCtx, {
+            type: 'doughnut',
+            data: { labels: ['FIFO (Standard)', 'LIFO', 'Specific'], datasets: [{ data: [70, 20, 10], backgroundColor: ['#007bff', '#ffc107', '#dc3545'] }] },
+            options: { plugins: { title: { display: true, text: 'Matching Methods Usage' } }, animation: { duration: 1000 } }
+        });
+
+        // Mark video as watched (simulate)
+        document.querySelectorAll('.video-placeholder iframe, .video-placeholder').forEach(el => {
+            el.addEventListener('click', () => {
+                if (progress.videos < 100) {
+                    progress.videos = Math.min(100, progress.videos + 10);
+                    localStorage.setItem('frtProgress', JSON.stringify(progress));
+                    if (!badges.includes('video-watcher') && progress.videos >= 50) {
+                        badges.push('video-watcher');
+                        localStorage.setItem('frtBadges', JSON.stringify(badges));
+                        initBadges();
+                    }
+                    updateProgress();
+                }
+            });
+        });
+
+        // Mark modules as completed
+        document.querySelectorAll('#industry .interactive-card').forEach((card, index) => {
+            card.addEventListener('click', () => {
+                if (progress.modules < 100) {
+                    progress.modules = Math.min(100, progress.modules + 15);
+                    localStorage.setItem('frtProgress', JSON.stringify(progress));
+                    if (!badges.includes('industry-expert') && progress.modules >= 80) {
+                        badges.push('industry-expert');
+                        localStorage.setItem('frtBadges', JSON.stringify(badges));
+                        initBadges();
+                    }
+                    updateProgress();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
