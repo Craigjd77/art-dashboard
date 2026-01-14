@@ -46,10 +46,6 @@
         .progress-bar { height: 25px; }
         /* PSLRA Simulator */
         .pslra-simulator { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 30px; border-radius: 10px; color: white; }
-        /* Litigation Radar */
-        .radar-scanner { background: #1a1a2e; color: #0f0; padding: 30px; border-radius: 10px; font-family: 'Courier New', monospace; }
-        .radar-line { animation: scan 2s linear infinite; }
-        @keyframes scan { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
         /* Video recording */
         .video-recorder { background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; }
         #recordedVideo { width: 100%; max-width: 640px; border-radius: 10px; margin-top: 15px; }
@@ -325,33 +321,6 @@
         <div class="container">
             <h2 class="mb-4"><i class="fas fa-industry"></i> Industry Modules: Shareholder Litigation Deep Dive</h2>
             
-            <!-- Monitoring Module -->
-            <div class="interactive-card fade-in">
-                <h3><i class="fas fa-radar"></i> Litigation Radar: Proactive Monitoring</h3>
-                <p>Learn how FRT uses AI and advanced tools to scan for red flags: unusual trading volumes, SEC filings, earnings restatements, and more.</p>
-                <div class="radar-scanner">
-                    <h4 class="text-success">SCANNING PORTFOLIO FOR RISKS...</h4>
-                    <div class="radar-line">
-                        <p>> Analyzing trading volumes... <span id="volumeStatus">✓ Normal</span></p>
-                        <p>> Checking SEC filings... <span id="secStatus">⚠ Earnings restatement detected!</span></p>
-                        <p>> Reviewing news sentiment... <span id="newsStatus">✓ No red flags</span></p>
-                        <p>> Cross-referencing class action database... <span id="databaseStatus">⚠ Potential match found!</span></p>
-                    </div>
-                    <button class="btn btn-success mt-3" onclick="scanPortfolio()"><i class="fas fa-search"></i> Run New Scan</button>
-                    <div id="scanResults" class="mt-3"></div>
-                </div>
-                <div class="mt-3">
-                    <h5>Red Flags to Monitor:</h5>
-                    <ul>
-                        <li>Earnings restatements or accounting irregularities</li>
-                        <li>Sudden CEO/CFO departures</li>
-                        <li>Unusual trading volume spikes</li>
-                        <li>SEC investigations or enforcement actions</li>
-                        <li>Negative analyst downgrades following positive news</li>
-                    </ul>
-                </div>
-            </div>
-
             <!-- Filing Lifecycle Module -->
             <div class="interactive-card fade-in mt-4">
                 <h3><i class="fas fa-file-contract"></i> The Filing Lifecycle: From Notice to Distribution</h3>
@@ -498,26 +467,6 @@
                 </div>
             </div>
 
-            <!-- Risk Management Module -->
-            <div class="interactive-card fade-in mt-4">
-                <h3><i class="fas fa-shield-alt"></i> Risk Management: Diversification Strategies</h3>
-                <p>Advise clients on portfolio diversification to mitigate class action exposure. Concentrated positions increase risk.</p>
-                <div class="row">
-                    <div class="col-md-6">
-                        <h5>Diversification Calculator</h5>
-                        <label>Portfolio Value:</label>
-                        <input type="number" class="form-control mb-3" id="portfolioValue" placeholder="e.g., 10000000" value="10000000">
-                        <label>Single Stock Exposure (%):</label>
-                        <input type="number" class="form-control mb-3" id="singleStockExposure" placeholder="e.g., 30" value="30" step="0.1">
-                        <button class="btn btn-primary" onclick="calculateDiversificationRisk()"><i class="fas fa-chart-pie"></i> Assess Risk</button>
-                    </div>
-                    <div class="col-md-6">
-                        <div id="diversificationResults" class="mt-3">
-                            <canvas id="diversificationChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 
@@ -789,23 +738,6 @@
             }
         }
 
-        // Litigation Radar Scanner
-        function scanPortfolio() {
-            const statuses = ['✓ Normal', '⚠ Warning', '🚨 Critical'];
-            document.getElementById('volumeStatus').textContent = statuses[Math.floor(Math.random() * 3)];
-            document.getElementById('secStatus').textContent = statuses[Math.floor(Math.random() * 3)];
-            document.getElementById('newsStatus').textContent = statuses[Math.floor(Math.random() * 3)];
-            document.getElementById('databaseStatus').textContent = statuses[Math.floor(Math.random() * 3)];
-            
-            const results = document.getElementById('scanResults');
-            const risks = Math.floor(Math.random() * 3);
-            if (risks > 0) {
-                results.innerHTML = `<div class="alert alert-warning"><strong>${risks} potential risk(s) detected!</strong> Review flagged items above.</div>`;
-            } else {
-                results.innerHTML = `<div class="alert alert-success"><strong>No immediate risks detected.</strong> Continue monitoring.</div>`;
-            }
-        }
-
         // Animate Filing Lifecycle
         function animateLifecycle() {
             const steps = ['lifecycleStep1', 'lifecycleStep2', 'lifecycleStep3', 'lifecycleStep4', 'lifecycleStep5'];
@@ -872,41 +804,6 @@
             });
         }
 
-        // Diversification Risk Calculator
-        function calculateDiversificationRisk() {
-            const portfolioValue = parseFloat(document.getElementById('portfolioValue').value);
-            const singleStockPercent = parseFloat(document.getElementById('singleStockExposure').value);
-            const singleStockValue = portfolioValue * (singleStockPercent / 100);
-            
-            let riskLevel = 'Low';
-            let riskColor = '#28a745';
-            if (singleStockPercent > 30) {
-                riskLevel = 'High';
-                riskColor = '#dc3545';
-            } else if (singleStockPercent > 15) {
-                riskLevel = 'Medium';
-                riskColor = '#ffc107';
-            }
-            
-            const ctx = document.getElementById('diversificationChart').getContext('2d');
-            if (window.diversificationChart) window.diversificationChart.destroy();
-            window.diversificationChart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: ['Single Stock Exposure', 'Diversified Holdings'],
-                    datasets: [{
-                        data: [singleStockPercent, 100 - singleStockPercent],
-                        backgroundColor: [riskColor, '#6c757d']
-                    }]
-                },
-                options: {
-                    plugins: {
-                        title: { display: true, text: `Risk Level: ${riskLevel}` },
-                        legend: { position: 'bottom' }
-                    }
-                }
-            });
-        }
 
 
         // Export to PDF
